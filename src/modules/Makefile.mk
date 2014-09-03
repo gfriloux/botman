@@ -10,6 +10,7 @@ src/modules/seen.la \
 src/modules/save.la \
 src/modules/spam.la \
 src/modules/rewrite.la \
+src/modules/sysinfo.la \
 src/modules/version.la
 
 src_modules_access_la_SOURCES = \
@@ -119,6 +120,22 @@ $(GOTHAM_LIBS)
 src_modules_rewrite_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_rewrite_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_sysinfo_la_SOURCES = \
+src/modules/sysinfo/alfred.c \
+src/modules/sysinfo/botman.c \
+src/modules/sysinfo/conf.c \
+src/modules/sysinfo/event.c \
+src/modules/sysinfo/sysinfo.c \
+src/modules/sysinfo/sysinfo.h
+src_modules_sysinfo_la_CFLAGS = \
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+src_modules_sysinfo_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_sysinfo_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_version_la_SOURCES = \
 src/modules/version/alfred.c \
