@@ -5,6 +5,7 @@ moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
 src/modules/access.la \
 src/modules/help.la \
+src/modules/module.la \
 src/modules/seen.la \
 src/modules/save.la \
 src/modules/spam.la \
@@ -27,7 +28,6 @@ src_modules_access_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
 
-
 src_modules_help_la_SOURCES = \
 src/modules/help/event.c \
 src/modules/help/help.c \
@@ -39,6 +39,20 @@ $(GOTHAM_LIBS)
 src_modules_help_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_help_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_module_la_SOURCES = \
+src/modules/module/actions.c \
+src/modules/module/event.c \
+src/modules/module/module.c \
+src/modules/module/module.h
+src_modules_module_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_module_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_module_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_module_la_LIBTOOLFLAGS = --tag=disable-static
+
 
 src_modules_seen_la_SOURCES = \
 src/modules/seen/seen.c \
