@@ -20,3 +20,4 @@ missing
 
 include src/bin/Makefile.mk
 include src/lib/Makefile.mk
+include src/modules/Makefile.mk
