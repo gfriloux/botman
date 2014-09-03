@@ -9,7 +9,8 @@ src/modules/module.la \
 src/modules/seen.la \
 src/modules/save.la \
 src/modules/spam.la \
-src/modules/rewrite.la
+src/modules/rewrite.la \
+src/modules/version.la
 
 src_modules_access_la_SOURCES = \
 src/modules/access/access.c \
@@ -40,6 +41,13 @@ src_modules_help_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_help_la_LIBTOOLFLAGS = --tag=disable-static
 
+src_modules_install_la_SOURCES = \
+src/modules/install/botman.c \
+src/modules/install/conf.c \
+src/modules/install/event.c \
+src/modules/install/install.c \
+src/modules/install/install.h
+
 src_modules_module_la_SOURCES = \
 src/modules/module/actions.c \
 src/modules/module/event.c \
@@ -52,7 +60,6 @@ $(GOTHAM_LIBS)
 src_modules_module_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_module_la_LIBTOOLFLAGS = --tag=disable-static
-
 
 src_modules_seen_la_SOURCES = \
 src/modules/seen/seen.c \
@@ -112,4 +119,22 @@ $(GOTHAM_LIBS)
 src_modules_rewrite_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_rewrite_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_version_la_SOURCES = \
+src/modules/version/alfred.c \
+src/modules/version/botman.c \
+src/modules/version/conf.c \
+src/modules/version/event.c \
+src/modules/version/find.c \
+src/modules/version/utils.c \
+src/modules/version/version.c \
+src/modules/version/version.h
+src_modules_version_la_CFLAGS = \
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+src_modules_version_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_version_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_version_la_LIBTOOLFLAGS = --tag=disable-static
 
