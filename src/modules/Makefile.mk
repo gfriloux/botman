@@ -3,11 +3,30 @@ src/lib/modules/seen/*.gc{no,da}
 
 moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
+src/modules/access.la \
 src/modules/help.la \
 src/modules/seen.la \
 src/modules/save.la \
 src/modules/spam.la \
 src/modules/rewrite.la
+
+src_modules_access_la_SOURCES = \
+src/modules/access/access.c \
+src/modules/access/access.h \
+src/modules/access/alfred.c \
+src/modules/access/botman.c \
+src/modules/access/citizen.c \
+src/modules/access/conf.c \
+src/modules/access/event.c \
+src/modules/access/modules.c
+src_modules_access_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_access_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_access_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
+
 
 src_modules_help_la_SOURCES = \
 src/modules/help/event.c \
