@@ -5,7 +5,8 @@ moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
 src/modules/seen.la \
 src/modules/save.la \
-src/modules/spam.la
+src/modules/spam.la \
+src/modules/rewrite.la
 
 src_modules_seen_la_SOURCES = \
 src/modules/seen/seen.c \
@@ -50,4 +51,19 @@ $(GOTHAM_LIBS)
 src_modules_spam_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_spam_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_rewrite_la_SOURCES = \
+src/modules/rewrite/conf.c \
+src/modules/rewrite/event.c \
+src/modules/rewrite/rewrite.c \
+src/modules/rewrite/rewrite.h \
+src/modules/rewrite/utils.c
+src_modules_rewrite_la_CFLAGS = \
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+src_modules_rewrite_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_rewrite_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_rewrite_la_LIBTOOLFLAGS = --tag=disable-static
 
