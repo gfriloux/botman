@@ -84,7 +84,7 @@ AC_ARG_ENABLE([gotham],
                    [want_gotham=$enableval]
 )
 if test "x$want_gotham" != "xno" ; then
-   GOTHAM_REQUIRES="shotgun eina >= $min_efl_version  ecore >= $min_efl_version eet >= $min_efl_version cjson"
+   GOTHAM_REQUIRES="shotgun eina >= $min_efl_version  ecore >= $min_efl_version eet >= $min_efl_version"
    PKG_CHECK_MODULES(GOTHAM, [$GOTHAM_REQUIRES], [build_gotham=yes], [build_gotham=no])
 else
    build_gotham=no
@@ -134,9 +134,12 @@ AM_CONDITIONAL(BUILD_GOTHAM, [test "x${build_gotham}" = "xyes"])
 AM_CONDITIONAL(BUILD_ALFRED, [test "x${build_alfred}" = "xyes"])
 AM_CONDITIONAL(BUILD_BOTMAN, [test "x${build_botman}" = "xyes"])
 
+AC_SUBST(GOTHAM_REQUIRES)
+
 AC_CONFIG_HEADER([config.h])
 
 AC_OUTPUT([
+gotham.pc
 ])
 
 echo

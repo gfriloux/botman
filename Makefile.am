@@ -1,6 +1,8 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = subdir-objects
 AM_MAKEFLAGS = --no-print-directory
+AM_CPPFLAGS = -DDATA_DIR=\"$(datadir)\" @CPPFLAGS@                             \
+   -I$(top_srcdir) -I$(top_srcdir)/src/include
 
 MAINTAINERCLEANFILES = \
 ABOUT-NLS \
