@@ -59,14 +59,14 @@ module_register(Gotham *gotham)
        (gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN))
      {
         NFO("Cant load for this gotham type");
-        return EINA_FALSE;
+        return NULL;
      }
 
    obj = calloc(1, sizeof(Module_Sysinfo));
    if (!obj)
      {
         ERR("Faild to alloc");
-        return EINA_FALSE;
+        return NULL;
      }
    obj->gotham = gotham;
 
