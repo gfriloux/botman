@@ -117,13 +117,12 @@ AC_ARG_ENABLE([botman],
                    [disable building botman daemon.
                    @<:@default=detect@:>@])],
    [want_botman=$enableval], [])
-if test -z "$want_botman" ; then
-   if test "x$build_gotham" = "xno" ; then
-      want_botman=no
-   fi
-fi
 if test "x$want_botman" != "xno" ; then
-   BOTMAN_REQUIRES="$GOTHAM_REQUIRES"
+   if test "x$build_gotham" = "xno" ; then
+      BOTMAN_REQUIRES="gotham"
+   else
+      BOTMAN_REQUIRES="eina ecore eet"
+   fi
    PKG_CHECK_MODULES(BOTMAN, [$BOTMAN_REQUIRES],
                      [build_botman=yes], [build_botman=no])
 else
