@@ -3,6 +3,7 @@
 #endif
 #define _GNU_SOURCE
 #include <stdio.h>
+#include <sys/wait.h>
 
 #include "rewrite.h"
 
