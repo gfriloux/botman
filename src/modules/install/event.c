@@ -23,8 +23,8 @@
  */
 Eina_Bool
 event_modules_ready(void *data,
-                    int type __UNUSED__,
-                    void *ev __UNUSED__)
+                    int type EINA_UNUSED,
+                    void *ev EINA_UNUSED)
 {
    Module_Install *install = data;
    install->access_allowed = gotham_modules_function_get("access",
@@ -44,7 +44,7 @@ event_modules_ready(void *data,
  */
 Eina_Bool
 event_citizen_command(void *data,
-                      int type __UNUSED__,
+                      int type EINA_UNUSED,
                       void *ev)
 {
    Module_Install *install = data;

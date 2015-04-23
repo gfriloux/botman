@@ -5,6 +5,7 @@ moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
 src/modules/access.la \
 src/modules/help.la \
+src/modules/install.la \
 src/modules/module.la \
 src/modules/seen.la \
 src/modules/save.la \
@@ -48,6 +49,14 @@ src/modules/install/conf.c \
 src/modules/install/event.c \
 src/modules/install/install.c \
 src/modules/install/install.h
+src_modules_install_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_install_la_LDFLAGS = \
+-no-undefined -module -avoid-version \
+$(GOTHAM_LIBS)
+src_modules_install_la_LIBADD = \
+src/lib/libgotham.la
+src_modules_install_la_LIBTOOLFLAGS = --tag=disable-static
+
 
 src_modules_module_la_SOURCES = \
 src/modules/module/actions.c \

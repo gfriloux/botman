@@ -98,7 +98,7 @@ _this_is_my_process(Module_Install *install, Ecore_Exe *process_exe)
  */
 static Eina_Bool
 _install_data_cb(void *data,
-                 int type __UNUSED__,
+                 int type EINA_UNUSED,
                  void *event)
 {
    Module_Install *install = data;
@@ -134,7 +134,7 @@ _install_data_cb(void *data,
  */
 static Eina_Bool
 _install_del_cb(void *data,
-                int type __UNUSED__,
+                int type EINA_UNUSED,
                 void *event)
 {
    Module_Install *install = data;
