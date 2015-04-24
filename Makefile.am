@@ -20,11 +20,12 @@ install-sh \
 ltmain.sh \
 missing
 
+include src/bin/Makefile.mk
+
 if BUILD_GOTHAM
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gotham.pc
-endif
 
-include src/bin/Makefile.mk
 include src/lib/Makefile.mk
 include src/modules/Makefile.mk
+endif
