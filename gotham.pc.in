@@ -8,5 +8,5 @@ Description: An XMPP library to manage bots
 Version: @VERSION@
 Libs: -L${libdir} -lgotham
 Requires.private: @GOTHAM_REQUIRES@
-Cflags: -I${includedir}/@PACKAGE@-@VMAJ@
+Cflags: -I${includedir}
 

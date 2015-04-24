@@ -14,8 +14,10 @@ src_bin_botman_botman_CFLAGS = \
 $(BOTMAN_CFLAGS) $(AM_CPPFLAGS) \
 -DDATA_DIR=\"$(datadir)\"
 src_bin_botman_botman_LDFLAGS = $(BOTMAN_LIBS)
+if BUILD_GOTHAM
 src_bin_botman_botman_LDADD = \
 src/lib/libgotham.la
+endif
 endif
 
 if BUILD_ALFRED

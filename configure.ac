@@ -54,8 +54,8 @@ esac
 AC_SUBST(MODULE_ARCH)
 AC_DEFINE_UNQUOTED(MODULE_ARCH, "${MODULE_ARCH}", "Module architecture")
 
-EFL_CHECK_FUNCS([botman], [fnmatch])
-EFL_CHECK_TESTS([botman], [enable_tests="yes"], [enable_tests="no"])
+EFL_CHECK_FUNCS([pbotman], [fnmatch])
+EFL_CHECK_TESTS([pbotman], [enable_tests="yes"], [enable_tests="no"])
 
 if test "x${enable_tests}" = "xyes" ; then
    CFLAGS="-W -Wall -g -O0 -DDEBUG -fprofile-arcs -ftest-coverage"
