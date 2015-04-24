@@ -84,7 +84,7 @@ AC_ARG_ENABLE([gotham],
                    [want_gotham=$enableval]
 )
 if test "x$want_gotham" != "xno" ; then
-   GOTHAM_REQUIRES="shotgun eina >= $min_efl_version  ecore >= $min_efl_version eet >= $min_efl_version"
+   GOTHAM_REQUIRES="shotgun eina >= $min_efl_version ecore >= $min_efl_version eet >= $min_efl_version"
    PKG_CHECK_MODULES(GOTHAM, [$GOTHAM_REQUIRES], [build_gotham=yes], [build_gotham=no])
 else
    build_gotham=no
@@ -118,10 +118,9 @@ AC_ARG_ENABLE([botman],
                    @<:@default=detect@:>@])],
    [want_botman=$enableval], [])
 if test "x$want_botman" != "xno" ; then
+   BOTMAN_REQUIRES+="eina ecore eet"
    if test "x$build_gotham" = "xno" ; then
       BOTMAN_REQUIRES="gotham"
-   else
-      BOTMAN_REQUIRES="eina ecore eet"
    fi
    PKG_CHECK_MODULES(BOTMAN, [$BOTMAN_REQUIRES],
                      [build_botman=yes], [build_botman=no])
