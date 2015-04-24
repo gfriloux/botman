@@ -118,10 +118,11 @@ AC_ARG_ENABLE([botman],
                    @<:@default=detect@:>@])],
    [want_botman=$enableval], [])
 if test "x$want_botman" != "xno" ; then
-   BOTMAN_REQUIRES+="eina ecore eet"
+   BOTMAN_REQUIRES="eina ecore eet"
    if test "x$build_gotham" = "xno" ; then
-      BOTMAN_REQUIRES="gotham"
+      BOTMAN_REQUIRES="${BOTMAN_REQUIRES} gotham"
    fi
+echo "BOTMAN REQUIRES=${BOTMAN_REQUIRES}"
    PKG_CHECK_MODULES(BOTMAN, [$BOTMAN_REQUIRES],
                      [build_botman=yes], [build_botman=no])
 else
