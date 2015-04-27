@@ -120,7 +120,6 @@ if test "x$want_botman" != "xno" ; then
    if test "x$build_gotham" = "xno" ; then
       BOTMAN_REQUIRES="${BOTMAN_REQUIRES} gotham"
    fi
-echo "BOTMAN REQUIRES=${BOTMAN_REQUIRES}"
    PKG_CHECK_MODULES(BOTMAN, [$BOTMAN_REQUIRES],
                      [build_botman=yes], [build_botman=no])
 else
