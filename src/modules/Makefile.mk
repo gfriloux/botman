@@ -47,12 +47,13 @@ src_modules_install_la_SOURCES = \
 src/modules/install/botman.c \
 src/modules/install/conf.c \
 src/modules/install/event.c \
+src/modules/install/jobs.c \
 src/modules/install/install.c \
 src/modules/install/install.h
 src_modules_install_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_install_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
-$(GOTHAM_LIBS)
+$(GOTHAM_LIBS) -Wl,-z,defs
 src_modules_install_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_install_la_LIBTOOLFLAGS = --tag=disable-static
