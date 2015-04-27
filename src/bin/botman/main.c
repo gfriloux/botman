@@ -68,7 +68,7 @@ int main(int argc, const char **argv) {
                              EINA_LOG_LEVEL_INFO);
 
    gotham = gotham_new(GOTHAM_CITIZEN_TYPE_BOTMAN,
-                       SYSCONF_DIR"/botman.conf");
+                       SYSCONF_DIR"/botman/botman.conf");
    if (!gotham)
      {
         CRI("Failed to create gotham object !");
