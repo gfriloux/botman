@@ -6,7 +6,7 @@
 
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
-#define MODULE_INSTALL_CONF "/etc/gotham/modules.conf.d/install.conf"
+#define MODULE_INSTALL_CONF SYSCONF_DIR"/gotham/modules.conf.d/install.conf"
 
 int _module_install_log_dom;
 

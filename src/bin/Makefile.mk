@@ -12,7 +12,8 @@ src/bin/botman/event.c \
 src/bin/botman/botman.h
 src_bin_botman_botman_CFLAGS = \
 $(BOTMAN_CFLAGS) $(AM_CPPFLAGS) \
--DDATA_DIR=\"$(datadir)\"
+-DDATA_DIR=\"$(datadir)\" \
+-DSYSCONF_DIR=\"$(sysconfdir)\"
 src_bin_botman_botman_LDFLAGS = $(BOTMAN_LIBS)
 if BUILD_GOTHAM
 src_bin_botman_botman_LDADD = \

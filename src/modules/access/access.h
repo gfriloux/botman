@@ -18,7 +18,7 @@
 /**
  * Path to acces module conf file
  */
-#define MODULE_ACCESS_CONF "/etc/gotham/modules.conf.d/access.conf"
+#define MODULE_ACCESS_CONF SYSCONF_DIR"/gotham/modules.conf.d/access.conf"
 
 int _module_access_log_dom;
 

@@ -23,7 +23,7 @@ src/modules/access/citizen.c \
 src/modules/access/conf.c \
 src/modules/access/event.c \
 src/modules/access/modules.c
-src_modules_access_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_access_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_access_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -49,7 +49,7 @@ src/modules/install/conf.c \
 src/modules/install/event.c \
 src/modules/install/install.c \
 src/modules/install/install.h
-src_modules_install_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_install_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_install_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -91,7 +91,7 @@ src/modules/save/save.c \
 src/modules/save/save.h \
 src/modules/save/utils.c
 src_modules_save_la_CFLAGS = \
-$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_save_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -138,7 +138,7 @@ src/modules/sysinfo/event.c \
 src/modules/sysinfo/sysinfo.c \
 src/modules/sysinfo/sysinfo.h
 src_modules_sysinfo_la_CFLAGS = \
-$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_sysinfo_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -156,7 +156,7 @@ src/modules/version/utils.c \
 src/modules/version/version.c \
 src/modules/version/version.h
 src_modules_version_la_CFLAGS = \
-$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_version_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
