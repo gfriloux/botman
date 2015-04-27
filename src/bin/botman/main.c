@@ -4,6 +4,10 @@
 
 #include "botman.h"
 
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 static const Ecore_Getopt optdesc = {
    "botman",
    NULL,
@@ -29,6 +33,47 @@ static const Ecore_Getopt optdesc = {
       ECORE_GETOPT_SENTINEL
  }
 };
+
+char *_pid_file = "/var/run/botman.pid";
+
+void
+botman_daemonize_pid(void)
+{
+   int fd;
+   char pid[10];
+   size_t size,
+          offset = 0;
+   ssize_t nb;
+
+   fd = open(_pid_file, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+   if (fd == -1)
+     {
+        ERR("Failed to create pid file : %s", strerror(errno));
+        return;
+     }
+
+   sprintf(pid, "%i", getpid());
+   size = strlen(pid);
+
+   do
+   {
+      nb = write(fd, pid + offset, size - offset);
+      if (nb == -1)
+        {
+           ERR("Failed to write to pid file : %s", strerror(errno));
+           goto close_fd;
+        }
+
+      offset += (size_t)nb;
+   } while (offset != size);
+
+   close(fd);
+   return;
+
+close_fd:
+   close(fd);
+   remove(_pid_file);
+}
 
 int main(int argc, const char **argv) {
    Eina_Bool opt_quit  = EINA_FALSE,
@@ -74,6 +119,8 @@ int main(int argc, const char **argv) {
         CRI("Failed to create gotham object !");
         return EXIT_FAILURE;
      }
+
+   botman_daemonize_pid();
 
    gotham_reconnect_set(gotham, EINA_TRUE);
 
