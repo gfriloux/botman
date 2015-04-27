@@ -35,8 +35,6 @@ AC_SUBST(release_info)
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 
-GCC_STACK_PROTECT_LIB
-GCC_STACK_PROTECT_CC
 AC_PROG_CXX
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
