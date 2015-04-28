@@ -41,14 +41,7 @@ AC_PROG_LN_S
 AC_PROG_CC
 AM_PROG_CC_C_O
 
-case "$host_os" in
-   mingw32ce*)
-      MODULE_ARCH="$host_os-$host_cpu"
-      ;;
-   *)
-      MODULE_ARCH="$host_os-$host_cpu-v_maj.v_min.v_mic"
-      ;;
-esac
+MODULE_ARCH="$host_os-$host_cpu"
 AC_SUBST(MODULE_ARCH)
 AC_DEFINE_UNQUOTED(MODULE_ARCH, "${MODULE_ARCH}", "Module architecture")
 
