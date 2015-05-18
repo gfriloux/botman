@@ -37,8 +37,9 @@ citizen_access_eval(Module_Access *access, Gotham_Citizen *citizen)
    Module_Access_Rule *rule;
    unsigned int level = 1;
    const char *pattern = "default";
+   Eina_List *l;
 
-   EINA_INLIST_FOREACH(access->citizens, rule)
+   EINA_LIST_FOREACH(access->citizens, l, rule)
      {
         if (fnmatch(rule->pattern, citizen->jid, FNM_NOESCAPE))
           continue;
@@ -65,11 +66,12 @@ citizen_access_list(Module_Access *access)
    unsigned int i = 0;
    Module_Access_Rule *rule;
    const char *answer;
+   Eina_List *l;
 
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of access rights :\n");
 
-   EINA_INLIST_FOREACH(access->citizens, rule)
+   EINA_LIST_FOREACH(access->citizens, l, rule)
      {
         eina_strbuf_append_printf(buf,
                                   "\t%d/\tPattern [%s] → Access level [%d]\n"
@@ -99,6 +101,7 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
                       *rule_found = NULL;
    void *data;
    const char **cmd = command->command;
+   Eina_List *l;
 
    if ((!cmd[2]) || (!cmd[3]) || (!_isnumber(cmd[3][0])))
      return strdup("Wrong use of “.access set”");
@@ -106,7 +109,7 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
    pattern = cmd[2];
    level = atoi(cmd[3]);
 
-   EINA_INLIST_FOREACH(access->citizens, rule)
+   EINA_LIST_FOREACH(access->citizens, l, rule)
      {
         DBG("rule->pattern=%s pattern=%s", rule->pattern, pattern);
 
@@ -157,7 +160,8 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
    const char **cmd = command->command;
    const char *pattern = cmd[2];
    Module_Access_Rule *rule;
-   Eina_Inlist *l;
+   Eina_List *l,
+             *l2;
    Eina_Bool found = EINA_FALSE;
 
    DBG("access[%p] command[%p]", access, command);
@@ -165,13 +169,12 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
    if (!pattern)
      return strdup("Wrong use of “.access del”");
 
-   EINA_INLIST_FOREACH_SAFE(access->citizens, l, rule)
+   EINA_LIST_FOREACH_SAFE(access->citizens, l, l2, rule)
      {
         if (strcasecmp(pattern, rule->pattern))
           continue;
 
-        access->citizens = eina_inlist_remove(access->citizens,
-                                              EINA_INLIST_GET(rule));
+        access->citizens = eina_list_remove(access->citizens, rule);
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
@@ -238,8 +241,7 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
 
    DBG("description : %s", rule->description);
 
-   access->citizens = eina_inlist_append(access->citizens,
-                                         EINA_INLIST_GET(rule));
+   access->citizens = eina_list_append(access->citizens, rule);
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))

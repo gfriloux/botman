@@ -24,7 +24,7 @@
  * @param list Eina_Inlist pointer to fill
  */
 void
-_access_conf_load_ruleset(cJSON *json_array, Eina_Inlist **list)
+_access_conf_load_ruleset(cJSON *json_array, Eina_List **list)
 {
    int size,
        i;
@@ -58,8 +58,7 @@ _access_conf_load_ruleset(cJSON *json_array, Eina_Inlist **list)
         arule->level = rule_level->valueint;
         arule->description = strdup(rule_desc->valuestring);
 
-        *list = eina_inlist_append(*list,
-                                   EINA_INLIST_GET(arule));
+        *list = eina_list_append(*list, arule);
      }
 }
 
@@ -69,13 +68,13 @@ _access_conf_load_ruleset(cJSON *json_array, Eina_Inlist **list)
  * @param list Eina_Inlist containing rules
  */
 void
-_access_conf_save_ruleset(cJSON *json_array, Eina_Inlist *list)
+_access_conf_save_ruleset(cJSON *json_array, Eina_List *list)
 {
    Module_Access_Rule *rule;
    cJSON *json_entry;
+   Eina_List *l;
 
-
-   EINA_INLIST_FOREACH(list, rule)
+   EINA_LIST_FOREACH(list, l, rule)
      {
         json_entry = cJSON_CreateObject();
 

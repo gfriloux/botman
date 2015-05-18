@@ -24,7 +24,6 @@ int _module_access_log_dom;
 
 typedef struct _Module_Access_Rule
 {
-   EINA_INLIST;
    const char *pattern,       /*!<  Pattern to match                         */
               *description;   /*!<  A short description                      */
    unsigned int level;        /*!<  Access level                             */
@@ -34,8 +33,8 @@ typedef struct _Module_Access
 {
    Gotham *gotham;            /*!<  Gotham structure                         */
    unsigned int revision;     /*!<  Access conf revision number              */
-   Eina_Inlist *citizens,     /*!<  Citizen access list                      */
-               *commands;     /*!<  Commands access list                     */
+   Eina_List *citizens,     /*!<  Citizen access list                      */
+             *commands;     /*!<  Commands access list                     */
 } Module_Access;
 
 void access_conf_load(Module_Access *access);

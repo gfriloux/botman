@@ -54,7 +54,7 @@ botman_access_alfred_add(Module_Access *access)
                                  alfred->nickname :
                                  "Alfred Pennyworth");
 
-   access->citizens = eina_inlist_append(access->citizens, EINA_INLIST_GET(arule));
+   access->citizens = eina_list_append(access->citizens, arule);
 
    return;
 }
@@ -99,19 +99,15 @@ botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
         return;
      }
 
-   EINA_INLIST_FOREACH_SAFE(access->citizens, l, rule)
+   EINA_LIST_FREE(access->citizens, rule)
      {
-        access->citizens = eina_inlist_remove(access->citizens,
-                                              EINA_INLIST_GET(rule));
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
      }
 
-   EINA_INLIST_FOREACH_SAFE(access->commands, l, rule)
+   EINA_LIST_FREE(access->commands, rule)
      {
-        access->commands = eina_inlist_remove(access->commands,
-                                              EINA_INLIST_GET(rule));
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);

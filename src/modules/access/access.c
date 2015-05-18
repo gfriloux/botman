@@ -83,24 +83,20 @@ module_unregister(void *data)
 {
    Module_Access *access = data;
    Module_Access_Rule *rule;
-   Eina_Inlist *l;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
 
    DBG("access[%p]", access);
-   EINA_INLIST_FOREACH_SAFE(access->citizens, l, rule)
+
+   EINA_LIST_FREE(access->citizens, rule)
      {
-        access->citizens = eina_inlist_remove(access->citizens,
-                                              EINA_INLIST_GET(rule));
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
      }
 
-   EINA_INLIST_FOREACH_SAFE(access->commands, l, rule)
+   EINA_LIST_FREE(access->commands, rule)
      {
-        access->commands = eina_inlist_remove(access->commands,
-                                              EINA_INLIST_GET(rule));
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
