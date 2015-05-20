@@ -12,7 +12,8 @@ src/modules/save.la \
 src/modules/spam.la \
 src/modules/rewrite.la \
 src/modules/sysinfo.la \
-src/modules/version.la
+src/modules/version.la \
+src/modules/ssh_tunnel.la
 
 src_modules_access_la_SOURCES = \
 src/modules/access/access.c \
@@ -165,3 +166,19 @@ src_modules_version_la_LIBADD = \
 src/lib/libgotham.la
 src_modules_version_la_LIBTOOLFLAGS = --tag=disable-static
 
+src_modules_ssh_tunnel_la_SOURCES = \
+   src/modules/ssh_tunnel/alfred.c \
+   src/modules/ssh_tunnel/ssh_tunnel.c \
+   src/modules/ssh_tunnel/ssh_tunnel.h \
+   src/modules/ssh_tunnel/botman.c \
+   src/modules/ssh_tunnel/conf.c \
+   src/modules/ssh_tunnel/event.c
+src_modules_ssh_tunnel_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_ssh_tunnel_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS) -Wl,-z,defs
+src_modules_ssh_tunnel_la_LIBADD = \
+   src/lib/libgotham.la
+src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
