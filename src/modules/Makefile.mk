@@ -13,7 +13,8 @@ src/modules/spam.la \
 src/modules/rewrite.la \
 src/modules/sysinfo.la \
 src/modules/version.la \
-src/modules/ssh_tunnel.la
+src/modules/ssh_tunnel.la \
+src/modules/gdb.la
 
 src_modules_access_la_SOURCES = \
 src/modules/access/access.c \
@@ -181,4 +182,21 @@ src_modules_ssh_tunnel_la_LDFLAGS = \
    $(GOTHAM_LIBS) -Wl,-z,defs
 src_modules_ssh_tunnel_la_LIBADD = \
    src/lib/libgotham.la
-src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
+src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_gdb_la_SOURCES = \
+   src/modules/gdb/backtrace.c \
+   src/modules/gdb/botman.c \
+   src/modules/gdb/conf.c \
+   src/modules/gdb/module.c \
+   src/modules/gdb/utils.c \
+   src/modules/gdb/gdb.h
+src_modules_gdb_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_gdb_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS) -Wl,-z,defs
+src_modules_gdb_la_LIBADD = \
+   src/lib/libgotham.la
+src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
