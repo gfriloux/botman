@@ -62,6 +62,7 @@ _backtrace_del(void *data,
    char *s;
    Eina_Array_Iterator it;
    Eina_Strbuf *buf;
+   Module_Gdb *gdb = b->gdb;
 
    DBG("End of backtrace analysis");
 
@@ -78,13 +79,13 @@ _backtrace_del(void *data,
      }
 
    module_json_answer(".gdb", "backtrace", EINA_TRUE, buf,
-                      b->gdb->gotham, b->gdb->gotham->alfred, EINA_FALSE);
+                      gdb->gotham, gdb->gotham->alfred, EINA_FALSE);
 
    eina_strbuf_free(buf);
 free_b:
    _backtrace_free(b);
-   conf_backup_save(b->gdb);
-   backtrace_get(b->gdb);
+   conf_backup_save(gdb);
+   backtrace_get(gdb);
    return EINA_TRUE;
 }
 
