@@ -238,7 +238,7 @@ gotham_modules_single_module_load(const char *name, Gotham *gotham)
    char *name_so;
    Eina_Module *module = NULL;
    Eina_Inlist *l;
-   Gotham_Module *m,
+   Gotham_Module *m = NULL,
                  *gothmod = NULL;
 
    name_so = calloc(1, strlen(name)+3);
@@ -294,7 +294,7 @@ void
 gotham_modules_unload(const char *name)
 {
    Eina_Inlist *l;
-   Gotham_Module *m;
+   Gotham_Module *m = NULL;
    Ecore_Event_Handler *ev;
 
    EINA_INLIST_FOREACH_SAFE(_gotham_modules_list, l, m)

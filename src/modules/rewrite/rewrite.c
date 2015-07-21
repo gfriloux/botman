@@ -89,7 +89,7 @@ void
 module_unregister(void *data)
 {
    Module_Rewrite *rewrite = data;
-   Module_Rewrite_Rule *rule;
+   Module_Rewrite_Rule *rule = NULL;
    Eina_Inlist *l;
 
    EINA_SAFETY_ON_NULL_RETURN(rewrite);

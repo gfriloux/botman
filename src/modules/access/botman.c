@@ -69,7 +69,6 @@ botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
 {
    cJSON *json;
    Module_Access_Rule *rule;
-   Eina_Inlist *l;
    const char *p;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
