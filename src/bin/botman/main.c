@@ -112,15 +112,18 @@ int main(int argc, const char **argv) {
                              opt_debug ? EINA_LOG_LEVEL_DBG :
                              EINA_LOG_LEVEL_INFO);
 
+   botman_daemonize_pid();
+
+new_gotham:
    gotham = gotham_new(GOTHAM_CITIZEN_TYPE_BOTMAN,
                        SYSCONF_DIR"/botman/botman.conf");
    if (!gotham)
      {
         CRI("Failed to create gotham object !");
-        return EXIT_FAILURE;
+        sleep(10);
+        goto new_gotham;
      }
 
-   botman_daemonize_pid();
 
    gotham_reconnect_set(gotham, EINA_TRUE);
 
