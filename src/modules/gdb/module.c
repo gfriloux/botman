@@ -44,6 +44,18 @@ module_register(Gotham *gotham)
 
    gdb->gotham = gotham;
 
+   gotham_modules_command_add("gdb", ".gdb list",
+                              "[.gdb list] - "
+                              "This command will list coredumps inside the coredumps directory.");
+   gotham_modules_command_add("gdb", ".gdb delete",
+                              "[.gdb delete <pattern>] - "
+                              "This command will delete coredumps matching given parttern.");
+   gotham_modules_command_add("gdb", ".gdb fetch",
+                              "[.gdb fetch <coredump>] - "
+                              "This command will retrieve the backtrace from a given coredump.");
+
+   gdb->access_allowed = gotham_modules_function_get("access",
+                                                     "access_allowed");
    return gdb;
 }
 
@@ -83,8 +95,11 @@ module_json_answer(const char *cmd,
 
    json_content = cJSON_CreateArray();
 
-   s = eina_strbuf_string_get(content);
-   cJSON_AddItemToArray(json_content, cJSON_CreateString(s));
+   if (content)
+     {
+        s = eina_strbuf_string_get(content);
+        if (s) cJSON_AddItemToArray(json_content, cJSON_CreateString(s));
+     }
 
    cJSON_AddItemToObject(json_obj, "content", json_content);
 

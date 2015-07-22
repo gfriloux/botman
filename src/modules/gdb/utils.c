@@ -50,3 +50,33 @@ utils_dupf(const char *s, ...)
    EINA_SAFETY_ON_TRUE_RETURN_VAL(len == -1, NULL);
    return str;
 }
+
+char *
+utils_coredump_report_format(char *coredump,
+                             size_t size,
+                             time_t date)
+{
+   char line[86],
+        s[25];
+   struct tm tm,
+             *ptm;
+
+   ptm = localtime_r(&date, &tm);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(ptm, NULL);
+
+   memset(line, 32, sizeof(line));
+   line[sizeof(line)-1] = 0;
+
+   strncpy(line, coredump, strlen(coredump));
+
+   sprintf(s, "%zu", size);
+
+   strncpy(line + 50, s, strlen(s));
+
+   sprintf(s, "%.4d/%.2d/%.2d %.2d:%.2d:%.2d",
+           tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+           tm.tm_hour, tm.tm_min, tm.tm_sec);
+   strncpy(line + 65, s, strlen(s));
+
+   return strdup(line);
+}

@@ -17,6 +17,8 @@ typedef struct _Module_Gdb
                 *check,
                 *queue;
    } dumps;
+
+   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Gdb;
 
 #define MODULE_GDB_CONF SYSCONF_DIR"/gotham/modules.conf.d/gdb.conf"
@@ -29,7 +31,11 @@ typedef struct _Module_Gdb
 #define ERR(...) EINA_LOG_DOM_ERR(_gdb_log_dom, __VA_ARGS__)
 
 void backtrace_get(void *data);
+Eina_Bool backtrace_new(Module_Gdb *gdb, const char *coredump, const char *jid, Eina_Bool report);
+void botman_delete_send(Module_Gdb *gdb, Gotham_Citizen_Command *command);
 Eina_Bool botman_dumps_poll(void *data);
+void botman_fetch_send(Module_Gdb *gdb, Gotham_Citizen_Command *command);
+void botman_list_send(Module_Gdb *gdb, Gotham_Citizen_Command *command);
 void conf_load(Module_Gdb *gdb);
 void conf_backup_load(Module_Gdb *gdb);
 void conf_backup_save(Module_Gdb *gdb);
@@ -37,3 +43,4 @@ void module_json_answer(const char *cmd, const char *params, Eina_Bool status, E
 Eina_Bool utils_dump_exist(Eina_List *list, char *s);
 char * utils_coredump_name_extract(const char *path);
 char * utils_dupf(const char *s, ...);
+char * utils_coredump_report_format(char *coredump, size_t size, time_t date);

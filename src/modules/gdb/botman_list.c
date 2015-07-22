@@ -1,0 +1,51 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gdb.h"
+
+void
+botman_list_send(Module_Gdb *gdb,
+                 Gotham_Citizen_Command *command)
+{
+   Eina_List *l;
+   char *s;
+   struct stat b;
+   int r;
+   Eina_Strbuf *buf;
+
+   buf = eina_strbuf_new();
+   EINA_SAFETY_ON_NULL_GOTO(buf, error);
+
+   eina_strbuf_append(buf, "\nList of coredumps :\n");
+
+   EINA_LIST_FOREACH(gdb->dumps.known, l, s)
+     {
+        DBG("s[%s]", s);
+
+        r = stat(s, &b);
+        if (r) continue;
+
+        s = utils_coredump_report_format(s, b.st_size, b.st_mtime);
+        EINA_SAFETY_ON_NULL_GOTO(s, end_loop);
+
+        DBG("s[%s]", s);
+        eina_strbuf_append_printf(buf, "\t%s\n", s);
+
+end_loop:
+        continue;
+     }
+
+   if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
+     gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
+   else module_json_answer(".gdb", "list", EINA_TRUE, buf, gdb->gotham, command->citizen, EINA_FALSE);
+
+   eina_strbuf_free(buf);
+   return;
+
+error:
+   if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
+     gotham_citizen_send(command->citizen, "Failed to list coredumps due to memory allocation error");
+   else
+     module_json_answer(".gdb", "list", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
+}

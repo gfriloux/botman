@@ -5,7 +5,9 @@ typedef struct _Backtrace
    Module_Gdb *gdb;
 
    Eina_Array *lines;
-   char *coredump;
+   Eina_Bool report;
+   char *coredump,
+        *jid;
 
    struct
    {
@@ -27,6 +29,7 @@ _backtrace_free(Backtrace *b)
    ecore_event_handler_del(b->ev.error);
 
    free(b->coredump);
+   free(b->jid);
 
    EINA_ARRAY_ITER_NEXT(b->lines, i, s, it)
      free(s);
@@ -63,6 +66,7 @@ _backtrace_del(void *data,
    Eina_Array_Iterator it;
    Eina_Strbuf *buf;
    Module_Gdb *gdb = b->gdb;
+   Gotham_Citizen *c;
 
    DBG("End of backtrace analysis");
 
@@ -78,9 +82,20 @@ _backtrace_del(void *data,
         eina_strbuf_append_char(buf, '\n');
      }
 
-   module_json_answer(".gdb", "backtrace", EINA_TRUE, buf,
-                      gdb->gotham, gdb->gotham->alfred, EINA_FALSE);
+   c = gotham_citizen_new(gdb->gotham, b->jid);
+   EINA_SAFETY_ON_NULL_GOTO(c, free_buf);
 
+   if (!strcmp(b->jid, gdb->gotham->alfred->jid))
+     {
+        module_json_answer(".gdb", b->report ? "backtrace" : "fetch", EINA_TRUE, buf,
+                           gdb->gotham, c, EINA_FALSE);
+     }
+   else
+     gotham_citizen_send(c, eina_strbuf_string_get(buf));
+
+   gotham_citizen_free(c);
+
+free_buf:
    eina_strbuf_free(buf);
 free_b:
    _backtrace_free(b);
@@ -102,16 +117,18 @@ _backtrace_error(void *data,
    return EINA_TRUE;
 }
 
-Backtrace *
-_backtrace_new(Module_Gdb *gdb,
-               const char *coredump)
+Eina_Bool
+backtrace_new(Module_Gdb *gdb,
+              const char *coredump,
+              const char *jid,
+              Eina_Bool report)
 {
    Backtrace *b;
    char *app,
         *cmd;
 
    app = utils_coredump_name_extract(coredump);
-   EINA_SAFETY_ON_NULL_RETURN_VAL(app, NULL);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(app, EINA_FALSE);
 
    cmd = utils_dupf("/usr/bin/gdb -batch -x "MODULE_GDB_CMD" "
                     "/usr/local/bin/%s -c %s", app, coredump);
@@ -122,10 +139,15 @@ _backtrace_new(Module_Gdb *gdb,
    b = calloc(1, sizeof(Backtrace));
    EINA_SAFETY_ON_NULL_GOTO(b, free_cmd);
 
+   b->report = report;
+
    b->gdb = gdb;
 
+   b->jid = strdup(jid);
+   EINA_SAFETY_ON_NULL_GOTO(b->jid, free_b);
+
    b->coredump = strdup(coredump);
-   EINA_SAFETY_ON_NULL_GOTO(b->coredump, free_b);
+   EINA_SAFETY_ON_NULL_GOTO(b->coredump, free_jid);
 
 #define _EV(_a, _b, _c, _d) _a = ecore_event_handler_add(ECORE_EXE_EVENT_##_b, _c, _d)
    _EV(b->ev.data, DATA, _backtrace_data, b);
@@ -147,7 +169,7 @@ _backtrace_new(Module_Gdb *gdb,
    free(cmd);
    free(app);
 
-   return b;
+   return EINA_TRUE;
 
 del_error:
    ecore_event_handler_del(b->ev.error);
@@ -157,13 +179,15 @@ del_data:
    ecore_event_handler_del(b->ev.data);
 free_coredump:
    free(b->coredump);
+free_jid:
+   free(b->jid);
 free_b:
    free(b);
 free_cmd:
    free(cmd);
 free_app:
    free(app);
-   return NULL;
+   return EINA_FALSE;
 }
 
 void
@@ -179,5 +203,5 @@ backtrace_get(void *data)
 
    gdb->dumps.queue = eina_list_remove(gdb->dumps.queue, s);
 
-   _backtrace_new(gdb, s);
+   backtrace_new(gdb, s, gdb->gotham->alfred->jid, EINA_TRUE);
 }
