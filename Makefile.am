@@ -20,6 +20,7 @@ install-sh \
 ltmain.sh \
 missing
 
+include doc/Makefile.mk
 include src/bin/Makefile.mk
 
 if BUILD_GOTHAM
