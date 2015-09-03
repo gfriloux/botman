@@ -126,17 +126,25 @@ botman_sysinfo_get(Module_Sysinfo *obj)
    while(eina_iterator_next(it, &data))
      {
         Eina_Hash_Tuple *t = data;
-        const char *value;
-        const char *name = t->key,
+        const char *value,
+                   *name = t->key,
                    *cmd = t->data;
-
+        Eina_Strbuf *buf;
         char item[strlen(name)+8];
 
         value = _botman_pipe_read(cmd);
         sprintf(item, "sysinfo_%s", name);
 
-        DBG("var : %s=%s", item, value);
-        VARSET(item, "%s", value);
+        buf = eina_strbuf_new();
+
+        eina_strbuf_append(buf, value);
+
+        eina_strbuf_trim(buf);
+        eina_strbuf_replace_all(buf, "\n", "");
+
+        DBG("var : %s=%s", item, eina_strbuf_string_get(buf));
+        VARSET(item, "%s", eina_strbuf_string_get(buf));
+        eina_strbuf_free(buf);
         free((char *)value);
      }
    eina_iterator_free(it);
