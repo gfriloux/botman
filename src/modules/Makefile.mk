@@ -14,7 +14,8 @@ src/modules/rewrite.la \
 src/modules/sysinfo.la \
 src/modules/version.la \
 src/modules/ssh_tunnel.la \
-src/modules/gdb.la
+src/modules/gdb.la \
+src/modules/info.la
 
 src_modules_access_la_SOURCES = \
 src/modules/access/access.c \
@@ -79,7 +80,7 @@ src/modules/seen/seen.c \
 src/modules/seen/utils.c \
 src/modules/seen/conf.c \
 src/modules/seen/event.c
-src_modules_seen_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_modules_seen_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_seen_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -110,7 +111,7 @@ src/modules/spam/spam.c \
 src/modules/spam/spam.h \
 src/modules/spam/utils.c
 src_modules_spam_la_CFLAGS = \
-$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_spam_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -125,7 +126,7 @@ src/modules/rewrite/rewrite.c \
 src/modules/rewrite/rewrite.h \
 src/modules/rewrite/utils.c
 src_modules_rewrite_la_CFLAGS = \
-$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\"
+$(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_rewrite_la_LDFLAGS = \
 -no-undefined -module -avoid-version \
 $(GOTHAM_LIBS)
@@ -204,3 +205,20 @@ src_modules_gdb_la_LDFLAGS = \
 src_modules_gdb_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
+
+src_modules_info_la_SOURCES = \
+   src/modules/info/alfred.c \
+   src/modules/info/conf.c \
+   src/modules/info/event.c \
+   src/modules/info/info.c \
+   src/modules/info/info.h
+src_modules_info_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_info_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS) -Wl,-z,defs
+src_modules_info_la_LIBADD = \
+   src/lib/libgotham.la
+src_modules_info_la_LIBTOOLFLAGS = --tag=disable-static
+   
