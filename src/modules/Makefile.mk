@@ -208,6 +208,7 @@ src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_info_la_SOURCES = \
    src/modules/info/alfred.c \
+   src/modules/info/botman.c \
    src/modules/info/conf.c \
    src/modules/info/event.c \
    src/modules/info/info.c \

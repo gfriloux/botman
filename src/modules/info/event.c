@@ -18,6 +18,7 @@ event_citizen_command(void *data,
 
    if (info->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      info_alfred_command(info, command);
+   else info_botman_command(info, command);
 
    return EINA_TRUE;
 }

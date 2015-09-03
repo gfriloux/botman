@@ -20,6 +20,8 @@ typedef struct _Module_Info
 {
    Gotham *gotham;
    Eina_Array *search_vars;
+
+   Ecore_Timer *sync;
 } Module_Info;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_info_log_dom, __VA_ARGS__)
@@ -29,5 +31,10 @@ typedef struct _Module_Info
 
 void info_alfred_command(Module_Info *info, Gotham_Citizen_Command *command);
 void info_conf_alfred_load(Module_Info *info);
+
+void info_botman_command(Module_Info *info, Gotham_Citizen_Command *command);
+Eina_Bool info_botman_sync(void *data);
+
+void module_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);
 
 #endif
