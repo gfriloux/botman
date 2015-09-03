@@ -13,6 +13,12 @@
  * @{
  */
 
+Eina_Iterator *
+gotham_citizen_var_iterate(Gotham_Citizen *citizen)
+{
+   return (Eina_Iterator *)eina_hash_iterator_tuple_new(citizen->vars);
+}
+
 /**
  * Free a custm var data
  * @param data Data to free
@@ -50,7 +56,7 @@ gotham_citizen_new(Gotham *gotham, const char *jid)
    citizen->subscribed = EINA_FALSE;
    citizen->gotham = gotham;
    citizen->vars = eina_hash_string_superfast_new(_gotham_citizen_var_free);
-   DBG("citizen[%p]", citizen);
+   DBG("citizen[%p] citizen->jid[%s] citizen->type[%d]", citizen, citizen->jid, citizen->type);
    return citizen;
 }
 

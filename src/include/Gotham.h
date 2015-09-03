@@ -27,7 +27,7 @@ typedef enum
    GOTHAM_CITIZEN_TYPE_UNIDENTIFIED = 1,
    GOTHAM_CITIZEN_TYPE_BOTMAN = 2,
    GOTHAM_CITIZEN_TYPE_ALFRED = 4,
-   GOTHAM_CITIZEN_TYPE_CIVILIAN = 8 
+   GOTHAM_CITIZEN_TYPE_CIVILIAN = 8
 } Gotham_Citizen_Type;
 
 typedef enum
@@ -143,6 +143,7 @@ Eina_Bool gotham_citizen_send(Gotham_Citizen *citizen, const char *msg);
 Eina_Bool gotham_citizen_var_set(Gotham_Citizen *citizen, const char *name, const char *value, ...);
 Eina_Bool gotham_citizen_var_del(Gotham_Citizen *citizen, const char *name);
 const char *gotham_citizen_var_get(Gotham_Citizen *citizen, const char *name);
+Eina_Iterator * gotham_citizen_var_iterate(Gotham_Citizen *citizen);
 Eina_List *gotham_citizen_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type flags_type, Eina_Array *vars);
 
 Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg);
