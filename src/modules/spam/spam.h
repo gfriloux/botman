@@ -4,7 +4,7 @@
 #include <Gotham.h>
 
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
-#define MODULE_SPAM_CONF "/etc/gotham/modules.conf.d/spam.conf"
+#define MODULE_SPAM_CONF SYSCONF_DIR"/gotham/modules.conf.d/spam.conf"
 
 int log_dom;
 

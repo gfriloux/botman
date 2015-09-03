@@ -5,7 +5,7 @@
 #include <Gotham.h>
 #include <cJSON.h>
 
-#define MODULE_REWRITE_CONF "/etc/gotham/modules.conf.d/rewrite.conf"
+#define MODULE_REWRITE_CONF SYSCONF_DIR"/gotham/modules.conf.d/rewrite.conf"
 int _module_rewrite_log_dom;
 
 typedef struct _Module_Rewrite
