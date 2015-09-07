@@ -99,7 +99,7 @@ free_buf:
    eina_strbuf_free(buf);
 free_b:
    _backtrace_free(b);
-   conf_backup_save(gdb);
+   conf_save(gdb);
    backtrace_get(gdb);
    return EINA_TRUE;
 }

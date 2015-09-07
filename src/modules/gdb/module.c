@@ -35,24 +35,10 @@ module_register(Gotham *gotham)
    gdb = calloc(1, sizeof(Module_Gdb));
    EINA_SAFETY_ON_NULL_RETURN_VAL(gdb, NULL);
 
-   gdb->dumps.poll = ecore_timer_add(20.0, botman_dumps_poll, gdb);
-
-   conf_load(gdb);
-   conf_backup_load(gdb);
-
-   botman_dumps_poll(gdb);
-
    gdb->gotham = gotham;
 
-   gotham_modules_command_add("gdb", ".gdb list",
-                              "[.gdb list] - "
-                              "This command will list coredumps inside the coredumps directory.");
-   gotham_modules_command_add("gdb", ".gdb delete",
-                              "[.gdb delete <pattern>] - "
-                              "This command will delete coredumps matching given parttern.");
-   gotham_modules_command_add("gdb", ".gdb fetch",
-                              "[.gdb fetch <coredump>] - "
-                              "This command will retrieve the backtrace from a given coredump.");
+   if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN) botman_register(gdb);
+   else alfred_register(gdb);
 
    gdb->access_allowed = gotham_modules_function_get("access",
                                                      "access_allowed");

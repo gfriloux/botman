@@ -38,10 +38,37 @@ event_citizen_command(void *data,
    if (gdb->gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN)
      return EINA_TRUE;
 
+   if (strncmp(command->name, ".gdb", 4))
+     return EINA_TRUE;
+
    command->handled = EINA_TRUE;
 
-   if (!command->command[1])
-     return EINA_TRUE;
+   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+     {
+        if (!command->command[1])
+          {
+             AUTH(gdb, gotham_modules_command_get(".gdb"), command->citizen);
+             alfred_command_list(gdb, command);
+          }
+        /**
+        * In this case, Botman is sending his backtrace to Alfred
+        * We should forward it to the nightwatchers
+        */
+        else if ((command->parameters) && (!strcmp(command->parameters, "backtrace")))
+          alfred_backtrace_forward(gdb, command);
+        else if ((command->parameters) && (!strcmp(command->parameters, "add")))
+          {
+             AUTH(gdb, gotham_modules_command_get(".gdb add"), command->citizen);
+             alfred_command_add(gdb, command);
+          }
+        else if ((command->parameters) && (!strcmp(command->parameters, "del")))
+          {
+             AUTH(gdb, gotham_modules_command_get(".gdb del"), command->citizen);
+             alfred_command_del(gdb, command);
+          }
+
+        return EINA_TRUE;
+     }
 
    if (!strcmp(command->command[1], "list"))
      {

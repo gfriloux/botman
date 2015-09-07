@@ -194,6 +194,7 @@ src_modules_gdb_la_SOURCES = \
    src/modules/gdb/botman_delete.c \
    src/modules/gdb/botman_fetch.c \
    src/modules/gdb/botman_list.c \
+   src/modules/gdb/alfred.c \
    src/modules/gdb/utils.c \
    src/modules/gdb/gdb.h
 src_modules_gdb_la_CFLAGS = \
