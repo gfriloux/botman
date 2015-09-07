@@ -42,9 +42,6 @@ event_citizen_command(void *data,
 
    if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
-DBG("command->command[1][%s] command->parameters[%s]",
-    command->command[1], command->parameters);
-
         if (!command->command[1])
           {
              AUTH(gdb, gotham_modules_command_get(".gdb"), command->citizen);
