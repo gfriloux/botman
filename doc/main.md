@@ -39,6 +39,7 @@ List of modules that comes by default :
 - [gdb](md_module_gdb.html)
 - [help](md_module_help.html)
 - [install](md_module_install.html)
+- [info](md_module_info.html)
 - [module](md_module_module.html)
 - [rewrite](md_module_rewrite.html)
 - [save](md_module_save.html)

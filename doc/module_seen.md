@@ -17,7 +17,7 @@ This could allow you to search for `degraded raids`, `ip blocs`, `global health 
 ## Configuration
 
 This module can work with an empty configuration.\n
-A valid empty configuration file (`/etc/gotham/modules.conf.d/seen.conf`) is :
+A valid empty configuration file (`/usr/local/etc/gotham/modules.conf.d/seen.conf`) is :
 <pre>
 {
    "vars" : [
