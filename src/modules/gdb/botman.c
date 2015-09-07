@@ -114,3 +114,14 @@ botman_register(Module_Gdb *gdb)
                               "This command will retrieve the backtrace from a given coredump.");
 }
 
+void
+botman_unregister(Module_Gdb *gdb)
+{
+   Eina_List *l;
+   char *s;
+
+   EINA_LIST_FOREACH(gdb->dumps.known, l, s)
+     free(s);
+
+   ecore_timer_del(gdb->dumps.poll);
+}

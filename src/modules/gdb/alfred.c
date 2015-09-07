@@ -154,3 +154,19 @@ alfred_register(Module_Gdb *gdb)
                               "[.gdb del jid] - "
                               "This command will remove a fallen heroe.");
 }
+
+void
+alfred_unregister(Module_Gdb *gdb)
+{
+   Eina_Array_Iterator iterator;
+   unsigned int i;
+   const char *heroe;
+
+   EINA_ARRAY_ITER_NEXT(gdb->heroes, i, heroe, iterator)
+     eina_stringshare_del(heroe);
+   eina_array_free(gdb->heroes);
+
+   gotham_modules_command_del("gdb", ".gdb");
+   gotham_modules_command_del("gdb", ".gdb add");
+   gotham_modules_command_del("gdb", ".gdb del");
+}

@@ -47,15 +47,9 @@ void
 module_unregister(void *data)
 {
    Module_Gdb *gdb = data;
-   Eina_List *l;
-   char *s;
 
-   EINA_LIST_FOREACH(gdb->dumps.known, l, s)
-     {
-        free(s);
-     }
-
-   ecore_timer_del(gdb->dumps.poll);
+   if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN) botman_unregister(gdb);
+   else alfred_unregister(gdb);
 }
 
 void
