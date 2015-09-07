@@ -30,8 +30,6 @@ module_register(Gotham *gotham)
 {
    Module_Gdb *gdb;
 
-   EINA_SAFETY_ON_TRUE_RETURN_VAL(gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN, NULL);
-
    gdb = calloc(1, sizeof(Module_Gdb));
    EINA_SAFETY_ON_NULL_RETURN_VAL(gdb, NULL);
 

@@ -69,6 +69,8 @@ void
 alfred_command_del(Module_Gdb *gdb,
                    Gotham_Citizen_Command *command)
 {
+   DBG("gdb[%p] command[%p]", gdb, command);
+
    if (!command->command[2]) return;
 
    eina_array_remove(gdb->heroes, _alfred_command_del_keep,
@@ -114,6 +116,8 @@ alfred_backtrace_forward(Module_Gdb *gdb,
 
    EINA_SAFETY_ON_NULL_RETURN(gdb);
    EINA_SAFETY_ON_NULL_RETURN(command);
+
+   DBG("gdb[%p] command[%p]", gdb, command);
 
    citizen = command->citizen;
 

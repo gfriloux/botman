@@ -35,16 +35,16 @@ event_citizen_command(void *data,
 
    DBG("gdb[%p] command[%p][%s]", gdb, command, command->name);
 
-   if (gdb->gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN)
-     return EINA_TRUE;
-
    if (strncmp(command->name, ".gdb", 4))
      return EINA_TRUE;
 
    command->handled = EINA_TRUE;
 
-   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+   if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
+DBG("command->command[1][%s] command->parameters[%s]",
+    command->command[1], command->parameters);
+
         if (!command->command[1])
           {
              AUTH(gdb, gotham_modules_command_get(".gdb"), command->citizen);
@@ -56,12 +56,12 @@ event_citizen_command(void *data,
         */
         else if ((command->parameters) && (!strcmp(command->parameters, "backtrace")))
           alfred_backtrace_forward(gdb, command);
-        else if ((command->parameters) && (!strcmp(command->parameters, "add")))
+        else if ((command->command[1]) && (!strcmp(command->command[1], "add")))
           {
              AUTH(gdb, gotham_modules_command_get(".gdb add"), command->citizen);
              alfred_command_add(gdb, command);
           }
-        else if ((command->parameters) && (!strcmp(command->parameters, "del")))
+        else if ((command->command[1]) && (!strcmp(command->command[1], "del")))
           {
              AUTH(gdb, gotham_modules_command_get(".gdb del"), command->citizen);
              alfred_command_del(gdb, command);
@@ -69,8 +69,7 @@ event_citizen_command(void *data,
 
         return EINA_TRUE;
      }
-
-   if (!strcmp(command->command[1], "list"))
+   else if ((!command->parameters) || (!strcmp(command->parameters, "list")))
      {
         AUTH(gdb, gotham_modules_command_get(".gdb list"), command->citizen);
         botman_list_send(gdb, command);
