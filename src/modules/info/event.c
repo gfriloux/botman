@@ -7,10 +7,8 @@ event_citizen_command(void *data,
 {
    Module_Info *info = data;
    Gotham_Citizen_Command *command = ev;
-
-   if ( (strcmp(command->name, ".info")) ||
-        (command->command[2])
-      )
+DBG("command->name[%s] command->command[1][%s]", command->name, command->command);
+   if (strcmp(command->name, ".info"))
      return EINA_TRUE;
 
    DBG("info[%p] command[%p]=%s info->gotham->me->type[%d]",

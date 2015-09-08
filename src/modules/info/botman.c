@@ -60,13 +60,9 @@ info_botman_command(Module_Info *info,
 
         buf = eina_strbuf_new();
         if (!buf)
-          {
-             free((char *)s);
-             goto memory_error;
-          }
+          goto memory_error;
 
         eina_strbuf_append_printf(buf, "%s : %s\n", command->command[2], s);
-        free((char *)s);
         if (strcmp(command->citizen->jid, info->gotham->alfred->jid))
           gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
         else
