@@ -24,10 +24,18 @@ typedef struct _Module_Info
    Ecore_Timer *sync;
 } Module_Info;
 
+typedef struct _Alfred_Sort Alfred_Sort;
+
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_info_log_dom, __VA_ARGS__)
 #define DBG(...) EINA_LOG_DOM_DBG(_module_info_log_dom, __VA_ARGS__)
 #define NFO(...) EINA_LOG_DOM_INFO(_module_info_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_info_log_dom, __VA_ARGS__)
+
+Alfred_Sort * alfred_sort_new(Module_Info *info);
+void alfred_sort_free(Alfred_Sort *as);
+void alfred_sort_add(Alfred_Sort *as, const char *value, Gotham_Citizen *citizen);
+char * alfred_sort_print(Alfred_Sort *as, const char *operation);
+
 
 void info_alfred_command(Module_Info *info, Gotham_Citizen_Command *command);
 void info_conf_alfred_load(Module_Info *info);
@@ -37,4 +45,5 @@ Eina_Bool info_botman_sync(void *data);
 
 void module_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);
 
+const char * utils_citizen_print(Module_Info *info, Gotham_Citizen *citizen);
 #endif

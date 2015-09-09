@@ -101,8 +101,8 @@ _citizen_result_print(Module_Info *info EINA_UNUSED,
 }
 
 void
-_info_alfred_command_citizen(Module_Info *info,
-                             Gotham_Citizen_Command *command)
+_info_alfred_command_citizen_list(Module_Info *info,
+                                  Gotham_Citizen_Command *command)
 {
    Gotham_Citizen *citizen;
    Eina_Strbuf *buf,
@@ -164,6 +164,70 @@ free_buf:
 }
 
 void
+_info_alfred_command_citizen_find(Module_Info *info,
+                                  Gotham_Citizen_Command *command)
+{
+   Eina_List *l_citizen,
+             *l;
+   Gotham_Citizen *citizen;
+   Eina_Bool found = EINA_FALSE;
+   Alfred_Sort *as;
+   char *s;
+
+   if (!command->command[2])
+     {
+        gotham_citizen_send(command->citizen, "Usage : .info find variable [(=|!=) value]");
+        return;
+     }
+
+   as = alfred_sort_new(info);
+
+   l_citizen = gotham_citizen_match(info->gotham, "*",
+                                    GOTHAM_CITIZEN_TYPE_BOTMAN, info->search_vars);
+   EINA_LIST_FOREACH(l_citizen, l, citizen)
+     {
+        Eina_Iterator *it;
+        void *data;
+
+        it = gotham_citizen_var_iterate(citizen);
+
+        while (eina_iterator_next(it, &data))
+          {
+             Eina_Hash_Tuple *t = data;
+             const char *name = t->key,
+                        *value = t->data;
+
+             if (strcmp(name, command->command[2]))
+               continue;
+
+             found = EINA_TRUE;
+             alfred_sort_add(as, value, citizen);
+          }
+
+        eina_iterator_free(it);
+     }
+
+   s = alfred_sort_print(as, command->command[2]);
+
+   gotham_citizen_send(command->citizen, found ? s : "Variable not found");
+   alfred_sort_free(as);
+}
+
+void
+_info_alfred_command_citizen(Module_Info *info,
+                             Gotham_Citizen_Command *command)
+{
+   DBG("info[%p] command[%p]", info, command);
+
+   if ( (command->command[1]) &&
+        (!strcmp(command->command[1], "find"))
+      )
+     _info_alfred_command_citizen_find(info, command);
+   else
+     _info_alfred_command_citizen_list(info, command);
+}
+
+void
 info_alfred_command(Module_Info *info,
                     Gotham_Citizen_Command *command)
 {
@@ -182,10 +246,15 @@ info_alfred_commands_register(void)
                               "[.info pattern] - "
                               "This command allows to access some custom "
                               "variables from botmans of a given pattern.");
+   gotham_modules_command_add("info", ".info find",
+                              "[.info find variable [(=|!=) value] - "
+                              "This command allows to search for custom variables "
+                              "and eventually a given value.");
 }
 
 void
 info_alfred_commands_unregister(void)
 {
    gotham_modules_command_del("info", ".info");
+   gotham_modules_command_del("info", ".info find");
 }
