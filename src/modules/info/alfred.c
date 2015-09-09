@@ -176,7 +176,7 @@ _info_alfred_command_citizen_find(Module_Info *info,
 
    if (!command->command[2])
      {
-        gotham_citizen_send(command->citizen, "Usage : .info find variable [(=|!=) value]");
+        gotham_citizen_send(command->citizen, "Usage : .info find variable");
         return;
      }
 
