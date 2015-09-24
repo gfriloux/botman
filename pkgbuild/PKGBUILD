@@ -1,0 +1,83 @@
+# Maintainer: Guillaume Friloux <guillaume@friloux.me>
+
+pkgname=('gotham' 'gotham-modules' 'botman' 'alfred')
+pkgver=1.2.12
+pkgrel=1
+arch=('i686' 'x86_64')
+url="https://github.com/gfriloux/botman"
+license=('All rights reserved')
+source=('alfred.service'
+        'botman.service')
+md5sums=('3b8aecec0c8aa19605977133d8bcc56e'
+         'e43a9e03c6cb3106ee150c2a63172336')
+options=(debug !strip libtool staticlibs emptydirs)
+
+tmpdir=""
+
+build()
+{
+   tmpdir="${pkgdir}.tmp"
+
+   cd ../..
+   ./autogen.sh || return 1
+   make || return 1
+}
+
+package_gotham()
+{
+   pkgdesc="Gotham, Alfred and Botmans playground"
+   provides=('gotham')
+   depends=('maelstrom-git')
+   options=(debug !strip)
+
+   tmpdir="${pkgdir}.tmp"
+
+   mkdir -p -m0755 ${pkgdir}/usr/local/{include,lib{,/pkgconfig}}
+   cd ../..
+   make DESTDIR="$tmpdir" install
+
+   cp -a ${tmpdir}/usr/local/lib/*.so* ${pkgdir}/usr/local/lib/
+   cp -a ${tmpdir}/usr/local/lib/pkgconfig/gotham.pc ${pkgdir}/usr/local/lib/pkgconfig/
+   cp -a ${tmpdir}/usr/local/include/* ${pkgdir}/usr/local/include/
+}
+
+package_gotham-modules()
+{
+   pkgdesc="Gotham modules, Alfred and Botmans functionnalities"
+   provides=('gotham-modules')
+   depends=('gotham' 'libssh')
+   options=(debug !strip)
+
+   mkdir -p -m0755 ${pkgdir}/usr/local/lib/gotham
+
+   cp -ar ${tmpdir}/usr/local/lib/gotham ${pkgdir}/usr/local/lib/
+}
+
+package_alfred()
+{
+   pkgdesc="Alfred, the REAL Botmans assistant"
+   provides=('alfred')
+   depends=('gotham')
+   options=(debug !strip)
+
+   mkdir -p -m0755 ${pkgdir}/usr/local/bin
+
+   cp -a ${tmpdir}/usr/local/bin/alfred ${pkgdir}/usr/local/bin/
+   /usr/bin/install -D -m 644 ${srcdir}/alfred.service                         \
+                    ${pkgdir}/usr/local/lib/systemd/system/alfred.service
+}
+
+package_botman()
+{
+   pkgdesc="Botman enforces the law in SDS city, and communicates a lot with Alfred, his faithful companion. Botman and Alfred are very good friends."
+   provides=('botman')
+   depends=('gotham')
+   options=(debug !strip)
+
+   mkdir -p -m0755 ${pkgdir}/usr/local/bin
+
+   cp -a ${tmpdir}/usr/local/bin/botman ${pkgdir}/usr/local/bin/
+   /usr/bin/install -D -m 644 ${srcdir}/botman.service                         \
+                    ${pkgdir}/usr/local/lib/systemd/system/botman.service
+}
+
