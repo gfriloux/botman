@@ -17,7 +17,7 @@ module_register(Gotham *gotham)
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      info_conf_alfred_load(info);
    else
-     info->sync = ecore_timer_add(20, info_botman_sync, info);
+     info->sync = ecore_timer_add(60, info_botman_sync, info);
 
    return info;
 }
