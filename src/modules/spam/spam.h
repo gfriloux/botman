@@ -26,7 +26,7 @@ typedef struct _Module_Spam
 #define ERR(...) EINA_LOG_DOM_ERR(log_dom, __VA_ARGS__)
 
 void conf_load(Module_Spam *spam);
-void queue_add(Module_Spam *spam, Gotham_Citizen *from, Gotham_Citizen *to, const char *command);
+void queue_add(Module_Spam *spam, Gotham_Citizen *from, Gotham_Citizen *to, const char *command, const char *jid);
 void queue_check(Module_Spam *spam, Gotham_Citizen_Command *command);
 Eina_Bool queue_timer(void *data);
 const char * utils_atos(const char **array, const char *d);

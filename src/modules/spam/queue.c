@@ -14,7 +14,8 @@ typedef struct _Queue
 {
    Gotham_Citizen *from,
                   *to;
-   const char *command;
+   const char *jid,
+              *command;
    time_t timestamp;
 } Queue; /*!< Queue commands structure */
 
@@ -29,7 +30,8 @@ typedef struct _Queue
 Queue *
 _queue_new(Gotham_Citizen *from,
            Gotham_Citizen *to,
-           const char *command)
+           const char *command,
+           const char *jid)
 {
    Queue *q;
 
@@ -38,6 +40,7 @@ _queue_new(Gotham_Citizen *from,
    q = calloc(1, sizeof(Queue));
    q->from = from;
    q->to = to;
+   q->jid = strdup(jid);
    q->command = strdup(command);
    q->timestamp = time(NULL);
    return q;
@@ -50,6 +53,7 @@ _queue_new(Gotham_Citizen *from,
 void
 _queue_free(Queue *q)
 {
+   free((char *)q->jid);
    free((char *)q->command);
    free(q);
 }
@@ -84,7 +88,11 @@ queue_timer(void *data)
         b = eina_strbuf_new();
         eina_strbuf_append_printf(b, "Command %s timed out on %s",
                                   q->command, q->to->jid);
-        gotham_citizen_send(q->from, eina_strbuf_string_get(b));
+        shotgun_message_send(q->from->gotham->shotgun,
+                             q->jid, eina_strbuf_string_get(b),
+                             SHOTGUN_MESSAGE_STATUS_ACTIVE,
+                             (q->from->features.xhtml) ?
+                             EINA_TRUE : EINA_FALSE);
         eina_strbuf_free(b);
         DBG("Removing queue for %s", q->command);
         spam->queue.l = eina_list_remove(spam->queue.l, q);
@@ -104,13 +112,14 @@ void
 queue_add(Module_Spam *spam,
           Gotham_Citizen *from,
           Gotham_Citizen *to,
-          const char *command)
+          const char *command,
+          const char *jid)
 {
    Queue *q;
    DBG("spam[%p] from[%p]=%s to[%p]=%s command[%p]=%s",
        spam, from, from->jid, to, to->jid, command, command);
 
-   q = _queue_new(from, to, command);
+   q = _queue_new(from, to, command, jid);
    spam->queue.l = eina_list_append(spam->queue.l, q);
 }
 
@@ -143,7 +152,12 @@ queue_check(Module_Spam *spam, Gotham_Citizen_Command *command)
         b = eina_strbuf_new();
         eina_strbuf_append_printf(b, "\nAnswer from %s :\n%s\n\n",
                                   q->to->jid, answer);
-        gotham_citizen_send(q->from, eina_strbuf_string_get(b));
+
+        shotgun_message_send(q->from->gotham->shotgun,
+                             q->jid, eina_strbuf_string_get(b),
+                             SHOTGUN_MESSAGE_STATUS_ACTIVE,
+                             (q->from->features.xhtml) ?
+                             EINA_TRUE : EINA_FALSE);
         eina_strbuf_free(b);
 
         DBG("Removing queue for %s", q->command);

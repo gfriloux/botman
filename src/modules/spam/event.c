@@ -160,7 +160,7 @@ event_citizen_command(void *data,
    EINA_LIST_FREE(lc, bot)
      {
         gotham_citizen_send(bot, m);
-        queue_add(spam, command->citizen, bot, command->command[2]);
+        queue_add(spam, command->citizen, bot, command->command[2], command->jid);
      }
    free((char *)m);
 
