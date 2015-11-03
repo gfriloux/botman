@@ -115,7 +115,7 @@ _info_alfred_command_citizen_list(Module_Info *info,
 
    if (!command->command[1])
      {
-        gotham_citizen_send(command->citizen, "Usage : .info pattern");
+        gotham_command_send(command, "Usage : .info pattern");
         return;
      }
 
@@ -150,7 +150,7 @@ _info_alfred_command_citizen_list(Module_Info *info,
    if (found)
      eina_strbuf_append_printf(buf, "\n%s", eina_strbuf_string_get(result_buf));
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        found ? eina_strbuf_string_get(buf) :
                                "No one matches given pattern");
 
@@ -176,7 +176,7 @@ _info_alfred_command_citizen_find(Module_Info *info,
 
    if (!command->command[2])
      {
-        gotham_citizen_send(command->citizen, "Usage : .info find variable");
+        gotham_command_send(command, "Usage : .info find variable");
         return;
      }
 
@@ -209,7 +209,7 @@ _info_alfred_command_citizen_find(Module_Info *info,
 
    s = alfred_sort_print(as, command->command[2]);
 
-   gotham_citizen_send(command->citizen, found ? s : "Variable not found");
+   gotham_command_send(command, found ? s : "Variable not found");
    alfred_sort_free(as);
 }
 

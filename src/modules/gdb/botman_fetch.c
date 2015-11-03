@@ -20,7 +20,7 @@ botman_fetch_send(Module_Gdb *gdb,
      ret = stat(coredump, &b);
      if (ret)
        {
-          gotham_citizen_send(command->citizen, "Given coredump file doesnt exist");
+          gotham_command_send(command, "Given coredump file doesnt exist");
           goto end;
        }
 
@@ -30,7 +30,7 @@ botman_fetch_send(Module_Gdb *gdb,
    if (!r)
      {
         if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
-          gotham_citizen_send(command->citizen, "Failed to fetch coredump.");
+          gotham_command_send(command, "Failed to fetch coredump.");
         else
           module_json_answer(".gdb", "fetch", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
      }

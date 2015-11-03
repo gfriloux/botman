@@ -37,7 +37,7 @@ end_loop:
      }
 
    if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
-     gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
+     gotham_command_send(command, eina_strbuf_string_get(buf));
    else module_json_answer(".gdb", "list", EINA_TRUE, buf, gdb->gotham, command->citizen, EINA_FALSE);
 
    eina_strbuf_free(buf);
@@ -45,7 +45,7 @@ end_loop:
 
 error:
    if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
-     gotham_citizen_send(command->citizen, "Failed to list coredumps due to memory allocation error");
+     gotham_command_send(command, "Failed to list coredumps due to memory allocation error");
    else
      module_json_answer(".gdb", "list", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
 }

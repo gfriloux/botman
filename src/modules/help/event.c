@@ -17,9 +17,9 @@
  */
 #define AUTH(_a, _b, _c)                                                       \
    {                                                                           \
-      if ((_a) && (!_a(_b, _c)))                                               \
+      if ((_a) && (!_a(_b, _c->citizen)))                                      \
         {                                                                      \
-           gotham_citizen_send(_c, "Access denied");                           \
+           gotham_command_send(_c, "Access denied");                           \
            return EINA_TRUE;                                                   \
         }                                                                      \
    }
@@ -81,7 +81,7 @@ event_citizen_command(void *data,
    command->handled = EINA_TRUE;
 
    AUTH(help->access_allowed, gotham_modules_command_get(".help"),
-        command->citizen);
+        command);
 
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of commands :\n");
@@ -125,9 +125,7 @@ event_citizen_command(void *data,
         eina_strbuf_free(mod_buf);
      }
 
-   gotham_citizen_send(command->citizen,
-                       eina_strbuf_string_get(buf));
-
+   gotham_command_send(command, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
    return EINA_TRUE;
 }

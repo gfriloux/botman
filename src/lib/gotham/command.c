@@ -23,7 +23,9 @@
  * @return Newly created structure
  */
 Gotham_Citizen_Command *
-gotham_command_new(Gotham_Citizen *citizen, const char *msg)
+gotham_command_new(Gotham_Citizen *citizen,
+                   const char *msg,
+                   const char *jid)
 {
    Gotham_Citizen_Command *command;
    cJSON *json_obj = NULL,
@@ -31,8 +33,10 @@ gotham_command_new(Gotham_Citizen *citizen, const char *msg)
 
    command = calloc(1, sizeof(Gotham_Citizen_Command));
    command->citizen = citizen;
+   command->jid = strdup(jid);
+
    if ((citizen->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED) &&
-       (msg[0] == '{')                                               &&
+       (msg[0] == '{')                                           &&
        (json_obj = cJSON_Parse(msg)))
      {
         json_var = json_obj->child;
@@ -67,6 +71,21 @@ gotham_command_new(Gotham_Citizen *citizen, const char *msg)
      }
    command->message = strdup(msg);
    return command;
+}
+
+Eina_Bool
+gotham_command_send(Gotham_Citizen_Command *command,
+                    const char *msg)
+{
+   if (!command->jid)
+     return gotham_citizen_send(command->citizen, msg);
+
+   return shotgun_message_send(command->citizen->gotham->shotgun,
+                               command->jid,
+                               msg,
+                               SHOTGUN_MESSAGE_STATUS_ACTIVE,
+                               (command->citizen->features.xhtml) ?
+                                 EINA_TRUE :EINA_FALSE);
 }
 
 /**

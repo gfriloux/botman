@@ -14,9 +14,9 @@
  */
 #define AUTH(_a, _b, _c)                                                       \
    {                                                                           \
-      if ((_a) && (!_a(gotham_modules_command_get(_b), _c)))                   \
+      if ((_a) && (!_a(gotham_modules_command_get(_b), _c->citizen)))          \
         {                                                                      \
-           gotham_citizen_send(_c, "Access denied");                           \
+           gotham_command_send(_c, "Access denied");                           \
            return EINA_TRUE;                                                   \
         }                                                                      \
    }
@@ -119,12 +119,12 @@ event_citizen_command(void *data,
 
    command->handled = EINA_TRUE;
 
-   AUTH(spam->access_allowed, ".spam", command->citizen);
+   AUTH(spam->access_allowed, ".spam", command);
 
    if (!spam_cmd[1] || !spam_cmd[2])
      {
-        gotham_citizen_send(command->citizen, "Wrong arguments. Usage : "
-                                              ".spam <pattern> <command>");
+        gotham_command_send(command, "Wrong arguments. Usage : "
+                                     ".spam <pattern> <command>");
         return EINA_TRUE;
      }
 
@@ -134,7 +134,7 @@ event_citizen_command(void *data,
                              spam->vars);
    if (!lc)
      {
-        gotham_citizen_send(command->citizen, "No one matches your query");
+        gotham_command_send(command, "No one matches your query");
         return EINA_TRUE;
      }
 
@@ -153,7 +153,7 @@ event_citizen_command(void *data,
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         free((char *)line);
      }
-   gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
+   gotham_command_send(command, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
 
    m = utils_atos(&spam_cmd[2], " ");

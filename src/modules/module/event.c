@@ -18,10 +18,10 @@
 #define _AUTH(_a, _b, _c)                                                      \
    {                                                                           \
       DBG("access_allowed[%p] mc[%p]=%s cit[%p]=%s", _a->access_allowed,       \
-          _b, _b->command, _c, _c->jid);                                       \
-      if ((_a->access_allowed) && (!_a->access_allowed(_b, _c)))               \
+          _b, _b->command, _c->citizen, _c->citizen->jid);                     \
+      if ((_a->access_allowed) && (!_a->access_allowed(_b, _c->citizen)))      \
         {                                                                      \
-           gotham_citizen_send(_c, "Access denied");                           \
+           gotham_command_send(_c, "Access denied");                           \
            return EINA_TRUE;                                                   \
         }                                                                      \
    }
@@ -64,7 +64,7 @@ event_citizen_command(void *data,
    if (!strcmp(module_command[1], #c))                                         \
      {                                                                         \
         command->handled = EINA_TRUE;                                          \
-        _AUTH(mod, gotham_modules_command_get(".module "#c), command->citizen);\
+        _AUTH(mod, gotham_modules_command_get(".module "#c), command);         \
         func = _module_##c;                                                    \
      }
    /* "debug" */
@@ -89,7 +89,7 @@ event_citizen_command(void *data,
    if (!module_command[1])
      {
         command->handled = EINA_TRUE;
-        _AUTH(mod, gotham_modules_command_get(".module"), command->citizen);
+        _AUTH(mod, gotham_modules_command_get(".module"), command);
         answer = _module_list(mod, module_command);
         goto citizen_answer;
      }
@@ -97,7 +97,7 @@ event_citizen_command(void *data,
    if ((module_command[2]) && !strcmp(module_command[2], "module"))
      {
         command->handled = EINA_TRUE;
-        gotham_citizen_send(command->citizen,
+        gotham_command_send(command,
                             "Cannot load or unload module “module”.");
         return EINA_TRUE;
      }
@@ -108,7 +108,7 @@ event_citizen_command(void *data,
 
    if (!func)
      {
-        gotham_citizen_send(command->citizen, "Wrong arguments");
+        gotham_command_send(command, "Wrong arguments");
         return EINA_TRUE;
      }
 

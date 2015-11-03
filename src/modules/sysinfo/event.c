@@ -109,7 +109,7 @@ event_citizen_connect(void *data,
        (citizen->subscribed))
      {
         NFO("Sending .sysinfo to Alfred");
-        command = gotham_command_new(obj->gotham->alfred, ".sysinfo");
+        command = gotham_command_new(obj->gotham->alfred, ".sysinfo", obj->gotham->alfred->jid);
         botman_sysinfo_send(obj, command);
         gotham_command_free(command);
      }

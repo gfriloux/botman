@@ -120,7 +120,7 @@ event_citizen_connect(void *data,
        (citizen->subscribed))
      {
         NFO("Sending .ssh to Alfred");
-        command = gotham_command_new(citizen, ".ssh");
+        command = gotham_command_new(citizen, ".ssh", citizen->jid);
         ssh_tunnel_get(obj, command);
         gotham_command_free(command);
      }

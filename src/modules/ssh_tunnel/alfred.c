@@ -123,7 +123,7 @@ alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
      }
    eina_iterator_free(it);
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (found) ? eina_strbuf_string_get(buf) :
                                  "No one has an opened tunnel");
 

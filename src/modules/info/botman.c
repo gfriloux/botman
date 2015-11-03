@@ -64,7 +64,7 @@ info_botman_command(Module_Info *info,
 
         eina_strbuf_append_printf(buf, "%s : %s\n", command->command[2], s);
         if (strcmp(command->citizen->jid, info->gotham->alfred->jid))
-          gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
+          gotham_command_send(command, eina_strbuf_string_get(buf));
         else
           module_json_answer(".info", "get", EINA_TRUE, buf, info->gotham, command->citizen, EINA_TRUE);
         eina_strbuf_free(buf);
@@ -76,7 +76,7 @@ info_botman_command(Module_Info *info,
 
 not_found_msg:
    if (strcmp(command->citizen->jid, info->gotham->alfred->jid))
-     gotham_citizen_send(command->citizen, "Given info variable not found.");
+     gotham_command_send(command, "Given info variable not found.");
    else
      {
         Eina_Strbuf *buf;

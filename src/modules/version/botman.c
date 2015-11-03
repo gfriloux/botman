@@ -192,7 +192,7 @@ version_botman_command(Module_Version *version,
 
    gotham_citizen_send(version->gotham->alfred, s);
    if (command->citizen != version->gotham->alfred)
-     gotham_citizen_send(command->citizen, s);
+     gotham_command_send(command, s);
 
    free(s);
    return;

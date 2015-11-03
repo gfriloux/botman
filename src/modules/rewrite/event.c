@@ -94,7 +94,7 @@ event_citizen_command(void *data,
      {
         command->handled = EINA_TRUE;
         const char *answer = _event_citizen_command_list(rewrite);
-        gotham_citizen_send(command->citizen,
+        gotham_command_send(command,
                             (answer) ? answer : "Failed to execute command");
         free((char *)answer);
         return EINA_TRUE;
@@ -117,7 +117,7 @@ event_citizen_command(void *data,
                                      command->citizen)))
           {
              command->handled = EINA_TRUE;
-             gotham_citizen_send(command->citizen, "Access denied");
+             gotham_command_send(command, "Access denied");
              return EINA_TRUE;
           }
 
@@ -129,7 +129,7 @@ event_citizen_command(void *data,
         DBG("New command : %s", s);
         command->handled = EINA_TRUE;
 
-        gcc = gotham_command_new(command->citizen, s);
+        gcc = gotham_command_new(command->citizen, s, command->jid);
         gotham_event_command_new(gcc);
         eina_hash_add(rewrite->rw, gcc, gcc);
 

@@ -117,7 +117,7 @@ version_alfred_command(Module_Version *version,
 
    if (!version_cmd[1])
      {
-        gotham_citizen_send(command->citizen, "Usage : .version pattern");
+        gotham_command_send(command, "Usage : .version pattern");
         return;
      }
 
@@ -150,7 +150,7 @@ version_alfred_command(Module_Version *version,
      eina_strbuf_append_printf(buf, "\n%s", eina_strbuf_string_get(result_buf));
 
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (found) ? eina_strbuf_string_get(buf) :
                                  "No one matches given pattern");
 

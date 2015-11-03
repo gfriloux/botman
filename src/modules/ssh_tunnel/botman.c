@@ -324,7 +324,7 @@ ssh_tunnel_open(Module_Ssh_Tunnel *obj,
 
    /* Duplicate citizen and command */
    ctz = gotham_citizen_new(obj->gotham, command->citizen->jid);
-   cmd = gotham_command_new(ctz, ".ssh on");
+   cmd = gotham_command_new(ctz, ".ssh on", command->jid);
 
    /* We start a new ssh tunnel */
    eina_strbuf_append_printf(buf,

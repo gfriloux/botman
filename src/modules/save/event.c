@@ -15,9 +15,9 @@
  */
 #define AUTH(_a, _b, _c)                                                       \
    {                                                                           \
-      if ((_a) && (!_a(gotham_modules_command_get(_b), _c)))                   \
+      if ((_a) && (!_a(gotham_modules_command_get(_b), _c->citizen)))          \
         {                                                                      \
-           gotham_citizen_send(_c, "Access denied");                           \
+           gotham_command_send(_c, "Access denied");                           \
            return EINA_TRUE;                                                   \
         }                                                                      \
    }
@@ -152,17 +152,17 @@ event_citizen_command(void *data,
    if (!save_command[1])
      {
         command->handled = EINA_TRUE;
-        AUTH(save->access_allowed, ".save", command->citizen);
+        AUTH(save->access_allowed, ".save", command);
         answer = _event_citizen_save_info(save, command);
      }
    else if (!strcmp(save_command[1], "set"))
      {
         command->handled = EINA_TRUE;
-        AUTH(save->access_allowed, ".save set", command->citizen);
+        AUTH(save->access_allowed, ".save set", command);
         answer = _event_citizen_save_set(save, save_command);
      }
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (answer) ? answer : "Failed to execute command");
    free((char *)answer);
    return EINA_TRUE;

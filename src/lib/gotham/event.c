@@ -202,7 +202,9 @@ _gotham_event_message(void *data,
      }
 
    jid = eina_stringshare_add_length(msg->jid, p - msg->jid);
+   resource = eina_stringshare_add(p + 1);
 
+   citizen = eina_hash_find(gotham->citizens, msg->jid);
    citizen = eina_hash_find(gotham->citizens, jid);
    eina_stringshare_del(jid);
    if (!citizen)
@@ -213,7 +215,6 @@ _gotham_event_message(void *data,
 
    if (citizen->type == GOTHAM_CITIZEN_TYPE_UNIDENTIFIED)
      {
-        resource = eina_stringshare_add(p + 1);
         if (!strncmp(resource, "botman", 6))
           {
              DBG("SETTING %s AS BEING A BOTMAN", citizen->jid);
@@ -222,7 +223,7 @@ _gotham_event_message(void *data,
         eina_stringshare_del(resource);
      }
 
-   command = gotham_command_new(citizen, msg->msg);
+   command = gotham_command_new(citizen, msg->msg, msg->jid);
    gotham_event_command_new(command);
 
    return EINA_TRUE;

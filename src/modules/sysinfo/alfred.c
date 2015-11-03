@@ -148,7 +148,7 @@ alfred_sysinfo_show(Module_Sysinfo *obj,
    if (found)
      eina_strbuf_append_printf(buf, "\n%s", eina_strbuf_string_get(result_buf));
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (found) ? eina_strbuf_string_get(buf) :
                                  "No one matches given pattern");
 

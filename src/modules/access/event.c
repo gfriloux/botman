@@ -16,12 +16,13 @@
  */
 #define AUTH(_a, _b)                                                           \
    {                                                                           \
-      if (!access_allowed(gotham_modules_command_get(_a), _b))                 \
+      if (!access_allowed(gotham_modules_command_get(_a), _b->citizen))        \
         {                                                                      \
-           gotham_citizen_send(_b, "Access denied");                           \
+           gotham_command_send(_b, "Access denied");                           \
            return EINA_TRUE;                                                   \
         }                                                                      \
    }
+/* "debug" */
 
 /**
  * @brief Callback when all modules are loaded.
@@ -128,7 +129,7 @@ event_citizen_command(void *data,
    if (!access_command[1])
      {
         command->handled = EINA_TRUE;
-        AUTH(".access", command->citizen);
+        AUTH(".access", command);
         answer = citizen_access_list(access);
      }
    else if (access->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
@@ -136,29 +137,29 @@ event_citizen_command(void *data,
    else if(!strcmp(access_command[1], "set"))
      {
         command->handled = EINA_TRUE;
-        AUTH(".access set", command->citizen);
+        AUTH(".access set", command);
         answer = citizen_access_set(access, command);
      }
    else if(!strcmp(access_command[1], "del"))
      {
         command->handled = EINA_TRUE;
-        AUTH(".access del", command->citizen);
+        AUTH(".access del", command);
         answer = citizen_access_del(access, command);
      }
    else if(!strcmp(access_command[1], "add"))
      {
         command->handled = EINA_TRUE;
-        AUTH(".access add", command->citizen);
+        AUTH(".access add", command);
         answer = citizen_access_add(access, command);
      }
    else if(!strcmp(access_command[1], "sync"))
      {
         command->handled = EINA_TRUE;
-        AUTH(".access sync", command->citizen);
+        AUTH(".access sync", command);
         answer = citizen_access_sync(access);
      }
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (answer) ? answer : "Failed to execute command");
    free((char *)answer);
    return EINA_TRUE;

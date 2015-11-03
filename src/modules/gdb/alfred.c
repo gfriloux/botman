@@ -18,7 +18,7 @@ alfred_command_list(Module_Gdb *gdb,
      eina_strbuf_append_printf(buf, "\t%s\n", heroe);
 
    p = eina_strbuf_string_get(buf);
-   gotham_citizen_send(command->citizen, p);
+   gotham_command_send(command, p);
    eina_strbuf_free(buf);
 }
 
@@ -43,14 +43,14 @@ alfred_command_add(Module_Gdb *gdb,
 
    eina_array_push(gdb->heroes, eina_stringshare_add(jid));
    conf_save(gdb);
-   gotham_citizen_send(command->citizen, "A new nightwatcher has arise");
+   gotham_command_send(command, "A new nightwatcher has arise");
    return;
 
 not_found:
-   gotham_citizen_send(command->citizen, "Unknown heroe specified");
+   gotham_command_send(command, "Unknown heroe specified");
    return;
 exists:
-   gotham_citizen_send(command->citizen, "This heroe is already a nightwatcher!");
+   gotham_command_send(command, "This heroe is already a nightwatcher!");
 }
 
 Eina_Bool
@@ -77,7 +77,7 @@ alfred_command_del(Module_Gdb *gdb,
                      (void *)command->command[2]);
    conf_save(gdb);
 
-   gotham_citizen_send(command->citizen, "Rest in pieces");
+   gotham_command_send(command, "Rest in pieces");
 }
 
 

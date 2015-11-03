@@ -131,13 +131,13 @@ event_citizen_command(void *data,
        (!seen->access_allowed(gotham_modules_command_get(".seen"),
                               command->citizen)))
      {
-        gotham_citizen_send(command->citizen, "Access denied");
+        gotham_command_send(command, "Access denied");
         return EINA_TRUE;
      }
 
    if (!seen_cmd[1])
      {
-        gotham_citizen_send(command->citizen, "Usage : .seen pattern");
+        gotham_command_send(command, "Usage : .seen pattern");
         return EINA_TRUE;
      }
 
@@ -159,7 +159,7 @@ event_citizen_command(void *data,
         free((char *)line);
      }
 
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        (found) ? eina_strbuf_string_get(buf) :
                                  "No one matches given pattern");
 

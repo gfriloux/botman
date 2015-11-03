@@ -85,7 +85,7 @@ event_citizen_command(void *data,
    if (!auth)
      {
         ERR("Access denied for %s", command->citizen->jid);
-        gotham_citizen_send(command->citizen, "Access denied");
+        gotham_command_send(command, "Access denied");
         return EINA_TRUE;
      }
 

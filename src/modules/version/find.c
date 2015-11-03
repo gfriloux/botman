@@ -338,7 +338,7 @@ version_alfred_find_command(Module_Version *version,
    DBG("Sending back to %s:\n%s",
        command->citizen->jid, eina_strbuf_string_get(buf));
 
-   gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
+   gotham_command_send(command, eina_strbuf_string_get(buf));
 
    eina_strbuf_free(buf);
    free(current_version);
@@ -347,7 +347,7 @@ version_alfred_find_command(Module_Version *version,
 free_software:
    free(software);
 send_usage:
-   gotham_citizen_send(command->citizen,
+   gotham_command_send(command,
                        "Usage : .version find software sign version\n"
                        "(ie : .software find nano < 2.2.1)");
 }

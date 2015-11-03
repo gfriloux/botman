@@ -78,7 +78,7 @@ event_citizen_command(void *data,
              AUTH(gdb, gotham_modules_command_get(".gdb delete"), command->citizen);
              botman_delete_send(gdb, command);
           }
-        else gotham_citizen_send(command->citizen, "Usage : .gdb delete coredump");
+        else gotham_command_send(command, "Usage : .gdb delete coredump");
      }
    else if (!strcmp(command->command[1], "fetch"))
      {
@@ -87,7 +87,7 @@ event_citizen_command(void *data,
              AUTH(gdb, gotham_modules_command_get(".gdb fetch"), command->citizen);
              botman_fetch_send(gdb, command);
           }
-        else gotham_citizen_send(command->citizen, "Usage : .gdb fetch coredump");
+        else gotham_command_send(command, "Usage : .gdb fetch coredump");
      }
    return EINA_TRUE;
 }

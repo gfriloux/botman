@@ -96,7 +96,8 @@ typedef struct _Gotham_Citizen_Command
               *parameters,
               *status,
               **command,
-              *message;
+              *message,
+              *jid;
 
    Eina_Bool handled : 1;
    Gotham_Citizen *citizen;
@@ -146,8 +147,9 @@ const char *gotham_citizen_var_get(Gotham_Citizen *citizen, const char *name);
 Eina_Iterator * gotham_citizen_var_iterate(Gotham_Citizen *citizen);
 Eina_List *gotham_citizen_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type flags_type, Eina_Array *vars);
 
-Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg);
+Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg, const char *jid);
 void gotham_command_free(Gotham_Citizen_Command *command);
+Eina_Bool gotham_command_send(Gotham_Citizen_Command *command, const char *msg);
 
 Eina_Bool gotham_emoticons_custom_add(Gotham *gotham, const char *file);
 
