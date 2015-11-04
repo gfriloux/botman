@@ -1,15 +1,15 @@
 # Maintainer: Guillaume Friloux <guillaume@friloux.me>
 
 pkgname=('gotham' 'gotham-modules' 'botman' 'alfred')
-pkgver=1.2.12
+pkgver=1.2.14
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/gfriloux/botman"
 license=('All rights reserved')
 source=('alfred.service'
         'botman.service')
-md5sums=('3b8aecec0c8aa19605977133d8bcc56e'
-         'e43a9e03c6cb3106ee150c2a63172336')
+md5sums=('0ee282c12d1966c2052021a3f9a4e11d'
+         '41664d1c81fea630142107157d5cb87c')
 options=(debug !strip libtool staticlibs emptydirs)
 
 tmpdir=""
