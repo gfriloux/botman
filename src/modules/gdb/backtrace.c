@@ -46,6 +46,9 @@ _backtrace_data(void *data,
    Ecore_Exe_Event_Data *d = (Ecore_Exe_Event_Data *)event;
    unsigned int i;
 
+   if (b != ecore_exe_data_get(d->exe))
+     return EINA_TRUE;
+
    DBG("b[%p]", b);
 
    for (i = 0; d->lines[i].line; i++)
@@ -58,7 +61,7 @@ _backtrace_data(void *data,
 Eina_Bool
 _backtrace_del(void *data,
                int type EINA_UNUSED,
-               void *event EINA_UNUSED)
+               void *event)
 {
    Backtrace *b = data;
    unsigned int i;
@@ -67,6 +70,10 @@ _backtrace_del(void *data,
    Eina_Strbuf *buf;
    Module_Gdb *gdb = b->gdb;
    Gotham_Citizen *c;
+   Ecore_Exe_Event_Del *d = event;
+
+   if (b != ecore_exe_data_get(d->exe))
+     return EINA_TRUE;
 
    DBG("End of backtrace analysis");
 
@@ -107,9 +114,13 @@ free_b:
 Eina_Bool
 _backtrace_error(void *data,
                  int type EINA_UNUSED,
-                 void *event EINA_UNUSED)
+                 void *event)
 {
    Backtrace *b = data;
+   Ecore_Exe_Event_Del *d = event;
+
+   if (b != ecore_exe_data_get(d->exe))
+     return EINA_TRUE;
 
    ERR("b[%p] : Failed to fetch backtrace", b);
 
