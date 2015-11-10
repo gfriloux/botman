@@ -51,6 +51,8 @@ _backtrace_data(void *data,
 
    DBG("b[%p]", b);
 
+   if (!d->lines) return EINA_TRUE;
+
    for (i = 0; d->lines[i].line; i++)
      {
         eina_array_push(b->lines, strdup(d->lines[i].line));
