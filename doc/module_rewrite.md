@@ -1,0 +1,148 @@
+# Rewrite module
+
+<span class="label label-success">Alfred</span>
+
+## Description
+
+This module allows you to declare some commands that will
+be rewritten internally into new commands.\n
+\n
+This is similar to what you can do with web servers.\n
+It's primary use is with the [spam module](md_module_spam.html).
+This will help writing commands sent to a variety of bots, without noticing
+you are using the spam module.\n
+\n
+Any rewrite rule will be added to the list of commands registered.\n
+This means they will automatically appear with .help command
+(see [help module](md_module_help.html)).\n
+\n
+This module also exports its own command : `.rewrite`.\n
+This command will give more detailed informations about registered
+rewrite rules.
+\n\n
+## Configuration
+
+This module uses a configuration file exposing an array of objets
+defining commands.\n
+
+Example configuration file (`/usr/local/etc/gotham/modules.conf.d/rewrite.conf`) :
+<pre>
+{
+   "rules" : [
+      {
+         "name" : ".install",
+         "filter" : ".install*",
+         "rule" : "sed -r 's/^.install *([^ ]*) (.*)/.spam \\1 .install \\2/'",
+         "description" : ".install <pattern> <softwarelist>"
+      }
+}
+</pre>
+
+This one rule allows you to declare a .install command inside alfred.\n
+When invoked, it will rewrite the command into a .spam command, with arguments put
+in the right order.
+
+This means that :
+> .install * curl
+
+Will be turned into :
+> .spam * .install curl
+
+Which means that any botman will receive the command `.install curl`.\n
+This module really is a convenient way to add capabilities to alfred (ease of
+work for you), without adding code to alfred (only modules into botmans).
+\n\n
+
+## Example use
+
+Here is an example configuration file I use :
+<pre>
+{
+   "rules" : [
+      {
+         "name" : ".install",
+         "filter" : ".install*",
+         "rule" : "sed -r 's/^.install *([^ ]*) (.*)/.spam \\1 .install \\2/'",
+         "description" : ".install <pattern> <softwarelist>"
+      },
+      {
+         "name" : ".upgrade",
+         "filter" : ".upgrade*",
+         "rule" : "sed -r 's/^.upgrade (.*)/.spam \\1 .upgrade/'",
+         "description" : ".upgrade <pattern>"
+      },
+      {
+         "name" : ".jobs",
+         "filter" : ".jobs*",
+         "rule" : "sed -r 's/^.jobs (.*)/.spam \\1 .jobs/'",
+         "description" : ".jobs <pattern>"
+      },
+      {
+         "name" : ".kill",
+         "filter" : ".kill * *",
+         "rule" : "sed -r 's/^.kill *([^ ]*) (.*)/.spam \\1 .kill \\2/'",
+         "description" : ".kill <pattern> <job_id>"
+      },
+      {
+         "name" : ".ssh on",
+         "filter" : ".ssh * on",
+         "rule" : "sed -r 's/^.ssh *([^ ]*) on/.spam \\1 .ssh on/'",
+         "description" : ".ssh <pattern> on"
+      },
+      {
+         "name" : ".ssh off",
+         "filter" : ".ssh * off",
+         "rule" : "sed -r 's/^.ssh *([^ ]*) off/.spam \\1 .ssh off/'",
+         "description" : ".ssh <pattern> off"
+      },
+      {
+         "name" : ".uptime",
+         "filter" : ".uptime *",
+         "rule" : "sed -r 's/^.uptime (.*)/.spam \\1 .uptime/'",
+         "description" : ".uptime <pattern>"
+      },
+      {
+         "name" : ".psax",
+         "filter" : ".psax *",
+         "rule" : "sed -r 's/^.psax (.*)/.spam \\1 .psax/'",
+         "description" : ".psax <pattern>"
+      },
+      {
+         "name" : ".reboot",
+         "filter" : ".reboot *",
+         "rule" : "sed -r 's/^.reboot (.*)/.spam \\1 .reboot/'",
+         "description" : ".reboot <pattern>"
+      },
+      {
+         "name" : ".gdb list",
+         "filter" : ".gdb list *",
+         "rule" : "sed -r 's/^.gdb list (.*)/.spam \\1 .gdb list/'",
+         "description" : ".gdb list <pattern>"
+      },
+      {
+         "name" : ".gdb delete",
+         "filter" : ".gdb delete *",
+         "rule" : "sed -r 's/^.gdb delete *([^ ]*) (.*)/.spam \\1 .gdb delete \\2/'",
+         "description" : ".gdb delete <licence_pattern> <coredump_pattern>"
+      },
+      {
+         "name" : ".gdb fetch",
+         "filter" : ".gdb fetch *",
+         "rule" : "sed -r 's/^.gdb fetch *([^ ]*) (.*)/.spam \\1 .gdb fetch \\2/'",
+         "description" : ".gdb fetch <licence_pattern> <coredump>"
+      },
+      {
+         "name" : ".info list",
+         "filter" : ".info * list",
+         "rule" : "sed -r 's/^.info *([^ ]*) list/.spam \\1 .info list/'",
+         "description" : ".info <pattern> list"
+      },
+      {
+         "name" : ".info get",
+         "filter" : ".info * get *",
+         "rule" : "sed -r 's/^.info *([^ ]*) get (.*)/.spam \\1 .info get \\2/'",
+         "description" : ".info <pattern> get <variable>"
+      }
+   ]
+}
+</pre>
