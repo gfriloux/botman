@@ -2,11 +2,6 @@
 #include "config.h"
 #endif
 
-#include <Eina.h>
-#include <Ecore.h>
-#include <Shotgun.h>
-#include <Gotham.h>
-
 #include "gotham_private.h"
 
 /**

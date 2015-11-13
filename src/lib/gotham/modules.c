@@ -3,8 +3,6 @@
 #endif
 
 #define _GNU_SOURCE
-#include <Eina.h>
-#include <Gotham.h>
 #include <ctype.h>
 
 #include "gotham_private.h"

@@ -5,6 +5,7 @@
 #include "config.h"
 #endif
 
+#include <Eet.h>
 #include <Gotham.h>
 #include <stdio.h>
 

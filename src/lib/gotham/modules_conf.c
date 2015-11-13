@@ -2,9 +2,6 @@
 #include "config.h"
 #endif
 
-#include <Eina.h>
-#include <Gotham.h>
-#include <cJSON.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>

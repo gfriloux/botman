@@ -2,10 +2,6 @@
 #include "config.h"
 #endif
 
-#define _GNU_SOURCE
-#include <Eina.h>
-#include <Gotham.h>
-
 #include "gotham_private.h"
 
 /**

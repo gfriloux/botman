@@ -1,3 +1,5 @@
+#ifndef GOTHAM
+#define GOTHAM
 #include <Eina.h>
 #include <Ecore.h>
 #include <Shotgun.h>
@@ -29,9 +31,6 @@
 # endif
 #endif /* ! _WIN32 */
 
-
-#ifndef GOTHAM
-#define GOTHAM
 EAPI extern int GOTHAM_EVENT_CONNECT;
 EAPI extern int GOTHAM_EVENT_DISCONNECT;
 EAPI extern int GOTHAM_EVENT_MODULES_SINGLE_READY;
