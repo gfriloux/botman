@@ -23,7 +23,9 @@ src_lib_libgotham_la_SOURCES =                                                 \
    src/lib/gotham/utils.c                                                      \
    src/include/Gotham.h
 src_lib_libgotham_la_CFLAGS =                                                  \
-   $(GOTHAM_CFLAGS) $(AM_CPPFLAGS) -DEFL_GOTHAM_BUILD                          \
+   $(GOTHAM_CFLAGS)
+src_lib_libgotham_la_CPPFLAGS =                                                \
+   $(AM_CPPFLAGS) -DEFL_GOTHAM_BUILD                                           \
    -DGOTHAM_MODULE_PATH=\"$(libdir)/gotham/$(MODULE_ARCH)\"
 src_lib_libgotham_la_LDFLAGS = $(GOTHAM_LIBS)                                  \
    version-info @version_info@ -no-undefined

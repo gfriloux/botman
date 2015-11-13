@@ -5,13 +5,13 @@
 #include "config.h"
 #endif
 
-#include <Eet.h>
-#include <Gotham.h>
 #include <stdio.h>
 
 #ifdef HAVE_EVIL
 # include <Evil.h>
 #endif
+#include <Eet.h>
+#include <Gotham.h>
 
 int gotham_log_dom;
 
