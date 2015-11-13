@@ -5,44 +5,44 @@
 #include <Shotgun.h>
 #include <cJSON.h>
 
-#ifdef EAPI
-# undef EAPI
+#ifdef GOTHAM_API
+# undef GOTHAM_API
 #endif
 
 #ifdef _WIN32
 # ifdef EFL_GOTHAM_BUILD
 #  ifdef DLL_EXPORT
-#   define EAPI __declspec(dllexport)
+#   define GOTHAM_API __declspec(dllexport)
 #  else
-#   define EAPI
+#   define GOTHAM_API
 #  endif /* ! DLL_EXPORT */
 # else
-#  define EAPI __declspec(dllimport)
+#  define GOTHAM_API __declspec(dllimport)
 # endif /* ! EFL_GOTHAM_BUILD */
 #else
 # ifdef __GNUC__
 #  if __GNUC__ >= 4
-#   define EAPI __attribute__ ((visibility("default")))
+#   define GOTHAM_API __attribute__ ((visibility("default")))
 #  else
-#   define EAPI
+#   define GOTHAM_API
 #  endif
 # else
-#  define EAPI
+#  define GOTHAM_API
 # endif
 #endif /* ! _WIN32 */
 
-EAPI extern int GOTHAM_EVENT_CONNECT;
-EAPI extern int GOTHAM_EVENT_DISCONNECT;
-EAPI extern int GOTHAM_EVENT_MODULES_SINGLE_READY;
-EAPI extern int GOTHAM_EVENT_MODULES_READY;
-EAPI extern int GOTHAM_EVENT_CITIZEN_CONNECT;
-EAPI extern int GOTHAM_EVENT_CITIZEN_DISCONNECT;
-EAPI extern int GOTHAM_EVENT_CITIZEN_COMMAND;
-EAPI extern int GOTHAM_EVENT_CITIZEN_LIST;
-EAPI extern int GOTHAM_EVENT_CITIZEN_INFO;
-EAPI extern int GOTHAM_EVENT_CITIZEN_IDLE;
-EAPI extern int GOTHAM_EVENT_CITIZEN_NEW;
-EAPI extern int GOTHAM_EVENT_CITIZEN_LEAVE;
+GOTHAM_API extern int GOTHAM_EVENT_CONNECT;
+GOTHAM_API extern int GOTHAM_EVENT_DISCONNECT;
+GOTHAM_API extern int GOTHAM_EVENT_MODULES_SINGLE_READY;
+GOTHAM_API extern int GOTHAM_EVENT_MODULES_READY;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_CONNECT;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_DISCONNECT;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_COMMAND;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_LIST;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_INFO;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_IDLE;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_NEW;
+GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_LEAVE;
 
 typedef struct _Gotham Gotham;
 typedef struct _Gotham_Citizen Gotham_Citizen;
@@ -163,48 +163,48 @@ typedef struct _Gotham_Module_Command
 } Gotham_Module_Command;
 #endif
 
-Gotham_Citizen *gotham_citizen_new(Gotham *gotham, const char *jid);
-Eina_Bool gotham_citizen_exist(Gotham *gotham, const char *jid);
-void gotham_citizen_free(Gotham_Citizen *citizen);
-Eina_Bool gotham_citizen_send(Gotham_Citizen *citizen, const char *msg);
-Eina_Bool gotham_citizen_var_set(Gotham_Citizen *citizen, const char *name, const char *value, ...);
-Eina_Bool gotham_citizen_var_del(Gotham_Citizen *citizen, const char *name);
-const char *gotham_citizen_var_get(Gotham_Citizen *citizen, const char *name);
-Eina_Iterator * gotham_citizen_var_iterate(Gotham_Citizen *citizen);
-Eina_List *gotham_citizen_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type flags_type, Eina_Array *vars);
+GOTHAM_API Gotham_Citizen *gotham_citizen_new(Gotham *gotham, const char *jid);
+GOTHAM_API Eina_Bool gotham_citizen_exist(Gotham *gotham, const char *jid);
+GOTHAM_API void gotham_citizen_free(Gotham_Citizen *citizen);
+GOTHAM_API Eina_Bool gotham_citizen_send(Gotham_Citizen *citizen, const char *msg);
+GOTHAM_API Eina_Bool gotham_citizen_var_set(Gotham_Citizen *citizen, const char *name, const char *value, ...);
+GOTHAM_API Eina_Bool gotham_citizen_var_del(Gotham_Citizen *citizen, const char *name);
+GOTHAM_API const char *gotham_citizen_var_get(Gotham_Citizen *citizen, const char *name);
+GOTHAM_API Eina_Iterator * gotham_citizen_var_iterate(Gotham_Citizen *citizen);
+GOTHAM_API Eina_List *gotham_citizen_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type flags_type, Eina_Array *vars);
 
-Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg, const char *jid);
-void gotham_command_free(Gotham_Citizen_Command *command);
-Eina_Bool gotham_command_send(Gotham_Citizen_Command *command, const char *msg);
+GOTHAM_API Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg, const char *jid);
+GOTHAM_API void gotham_command_free(Gotham_Citizen_Command *command);
+GOTHAM_API Eina_Bool gotham_command_send(Gotham_Citizen_Command *command, const char *msg);
 
-Eina_Bool gotham_emoticons_custom_add(Gotham *gotham, const char *file);
+GOTHAM_API Eina_Bool gotham_emoticons_custom_add(Gotham *gotham, const char *file);
 
-void gotham_event_command_new(Gotham_Citizen_Command *command);
+GOTHAM_API void gotham_event_command_new(Gotham_Citizen_Command *command);
 
-Eina_Inlist *gotham_modules_list(void);
-Gotham_Module *gotham_modules_single_module_load(const char *name, Gotham *gotham);
-void gotham_modules_unload(const char *name);
-Eina_Bool gotham_modules_command_add(const char *module_name, const char *command, const char *desc);
-void gotham_modules_command_del(const char *module_name, const char *command);
-Eina_Bool gotham_modules_command_var_set(Gotham_Module_Command *command, const char *name, const char *value, ...);
-const char *gotham_modules_command_var_get(Gotham_Module_Command *command, const char *name);
-Gotham_Module_Command *gotham_modules_command_get(const char *cmd);
-void * gotham_modules_function_get(const char *module, const char *function);
-void gotham_modules_register(Gotham *gotham, Gotham_Module *module);
+GOTHAM_API Eina_Inlist *gotham_modules_list(void);
+GOTHAM_API Gotham_Module *gotham_modules_single_module_load(const char *name, Gotham *gotham);
+GOTHAM_API void gotham_modules_unload(const char *name);
+GOTHAM_API Eina_Bool gotham_modules_command_add(const char *module_name, const char *command, const char *desc);
+GOTHAM_API void gotham_modules_command_del(const char *module_name, const char *command);
+GOTHAM_API Eina_Bool gotham_modules_command_var_set(Gotham_Module_Command *command, const char *name, const char *value, ...);
+GOTHAM_API const char *gotham_modules_command_var_get(Gotham_Module_Command *command, const char *name);
+GOTHAM_API Gotham_Module_Command *gotham_modules_command_get(const char *cmd);
+GOTHAM_API void * gotham_modules_function_get(const char *module, const char *function);
+GOTHAM_API void gotham_modules_register(Gotham *gotham, Gotham_Module *module);
 
-cJSON *gotham_modules_conf_load(const char *file);
-Eina_Bool gotham_modules_conf_save(const char *file, cJSON *json);
+GOTHAM_API cJSON *gotham_modules_conf_load(const char *file);
+GOTHAM_API Eina_Bool gotham_modules_conf_save(const char *file, cJSON *json);
 
-const char **gotham_utils_msgtocommand(const char *msg);
-const char **gotham_utils_json_array_stringify(cJSON *json_var);
+GOTHAM_API const char **gotham_utils_msgtocommand(const char *msg);
+GOTHAM_API const char **gotham_utils_json_array_stringify(cJSON *json_var);
 
-int gotham_init(void);
-void gotham_free(Gotham *gotham);
-Gotham *gotham_new(Gotham_Citizen_Type type, const char *conf_file);
-void gotham_reconnect_set(Gotham *gotham, Eina_Bool bool);
-void gotham_shutdown(void);
+GOTHAM_API int gotham_init(void);
+GOTHAM_API void gotham_free(Gotham *gotham);
+GOTHAM_API Gotham *gotham_new(Gotham_Citizen_Type type, const char *conf_file);
+GOTHAM_API void gotham_reconnect_set(Gotham *gotham, Eina_Bool bool);
+GOTHAM_API void gotham_shutdown(void);
 
-Eina_Bool gotham_avatar_file_set(Gotham *gotham, const char *avatar_file, const char *mime_type);
-Eina_Bool gotham_avatar_data_set(Gotham *gotham, const char *avatar_data, const char *mime_type);
-Eina_Bool gotham_nickname_set(Gotham *gotham, const char *nickname);
-Eina_Bool gotham_vcard_send(Gotham *gotham);
+GOTHAM_API Eina_Bool gotham_avatar_file_set(Gotham *gotham, const char *avatar_file, const char *mime_type);
+GOTHAM_API Eina_Bool gotham_avatar_data_set(Gotham *gotham, const char *avatar_data, const char *mime_type);
+GOTHAM_API Eina_Bool gotham_nickname_set(Gotham *gotham, const char *nickname);
+GOTHAM_API Eina_Bool gotham_vcard_send(Gotham *gotham);
