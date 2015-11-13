@@ -35,6 +35,7 @@ AC_SUBST(release_info)
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 
+LT_INIT([win32-dll disable-static])
 AC_PROG_CXX
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
@@ -66,6 +67,18 @@ min_efl_version=1.7
 GOTHAM_REQUIRES=
 ALFRED_REQUIRES=
 BOTMAN_REQUIRES=
+build_windows="no"
+build_unix="no"
+
+case "$host_os" in
+  mingw*)
+    build_windows="yes"
+    AC_DEFINE([HAVE_EVIL], [1], [Set to 1 if Evil package is installed])
+  ;;
+  *)
+    build_unix="yes"
+  ;;
+esac
 
 want_gotham=
 build_gotham=
@@ -122,6 +135,8 @@ fi
 AM_CONDITIONAL(BUILD_GOTHAM, [test "x${build_gotham}" = "xyes"])
 AM_CONDITIONAL(BUILD_ALFRED, [test "x${build_alfred}" = "xyes"])
 AM_CONDITIONAL(BUILD_BOTMAN, [test "x${build_botman}" = "xyes"])
+AM_CONDITIONAL(BUILD_WINDOWS, [test "x${build_windows}" = "xyes"])
+AM_CONDITIONAL(BUILD_UNIX, [test "x${build_unix}" = "xyes"])
 
 AC_SUBST(GOTHAM_REQUIRES)
 

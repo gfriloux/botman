@@ -8,6 +8,10 @@
 #include <Gotham.h>
 #include <stdio.h>
 
+#ifdef HAVE_EVIL
+# include <Evil.h>
+#endif
+
 int gotham_log_dom;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(gotham_log_dom, __VA_ARGS__)
