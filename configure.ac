@@ -39,6 +39,11 @@ AC_PROG_LN_S
 AC_PROG_CC
 AM_PROG_CC_C_O
 
+AC_PROG_MAKE_SET
+
+AC_HEADER_STDBOOL
+AC_C_INLINE
+
 MODULE_ARCH="$host_os-$host_cpu"
 AC_SUBST(MODULE_ARCH)
 AC_DEFINE_UNQUOTED(MODULE_ARCH, "${MODULE_ARCH}", "Module architecture")
@@ -48,10 +53,10 @@ EFL_CHECK_TESTS([pbotman], [enable_tests="yes"], [enable_tests="no"])
 
 if test "x${enable_tests}" = "xyes" ; then
    CFLAGS="-W -Wall -g -O0 -DDEBUG -fprofile-arcs -ftest-coverage"
-   LDFLAGS="-lgcov -rdynamic -fvisibility=default"
+   LDFLAGS="-lgcov -fvisibility=default"
 else
    CFLAGS="$CFLAGS -W -Wall -O2"
-   LDFLAGS="-Wl,--as-needed -rdynamic -fvisibility=default"
+   LDFLAGS="-Wl,--as-needed -fvisibility=default"
 fi
 
 CPK_CHECK_TESTING([enable_testing="yes"], [enable_testing="no"])

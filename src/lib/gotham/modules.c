@@ -214,8 +214,26 @@ _gotham_modules_load(Gotham *gotham)
    Eina_Array *mods;
    DBG("Looking for modules in %s", GOTHAM_MODULE_PATH);
 
+#ifndef _WIN32
    mods = eina_module_list_get(NULL, GOTHAM_MODULE_PATH, EINA_FALSE,
                                _gotham_module_check, gotham);
+#else
+   {
+      char path[1024],
+           module_dir[1024],
+           *p;
+
+      GetModuleFileName(NULL, path, sizeof(path));
+
+      p = strrchr(path, '\\');
+
+      sprintf(module_dir, "%.*s\\modules", p - path, path);
+      DBG("Loading modules in %s", module_dir);
+
+      mods = eina_module_list_get(NULL, module_dir, EINA_FALSE,
+                               _gotham_module_check, gotham);
+   }
+#endif
    eina_array_free(mods);
    DBG("Loaded %d modules", eina_inlist_count(_gotham_modules_list));
 }

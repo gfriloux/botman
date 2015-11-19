@@ -20,8 +20,7 @@ src_lib_libgotham_la_SOURCES =                                                 \
    src/lib/gotham/event.c                                                      \
    src/lib/gotham/modules.c                                                    \
    src/lib/gotham/modules_conf.c                                               \
-   src/lib/gotham/utils.c                                                      \
-   src/include/Gotham.h
+   src/lib/gotham/utils.c
 src_lib_libgotham_la_CFLAGS =                                                  \
    $(GOTHAM_CFLAGS)
 src_lib_libgotham_la_CPPFLAGS =                                                \

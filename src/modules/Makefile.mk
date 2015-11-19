@@ -25,7 +25,8 @@ src_modules_access_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_access_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_help_la_SOURCES = \
@@ -64,7 +65,8 @@ src_modules_seen_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_seen_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
 src_modules_seen_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_save_la_SOURCES = \
@@ -79,7 +81,8 @@ src_modules_save_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_save_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
 src_modules_save_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_spam_la_SOURCES = \
@@ -95,7 +98,8 @@ src_modules_spam_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_spam_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
 src_modules_spam_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_info_la_SOURCES = \
@@ -112,9 +116,10 @@ src_modules_info_la_CFLAGS = \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_info_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
-   $(GOTHAM_LIBS) -Wl,-z,defs
+   $(GOTHAM_LIBS)
 src_modules_info_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
 src_modules_info_la_LIBTOOLFLAGS = --tag=disable-static
    
 if BUILD_UNIX
