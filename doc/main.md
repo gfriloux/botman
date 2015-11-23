@@ -35,7 +35,7 @@ Modules can talk to each others if needed.\n
 \n
 
 List of modules that comes by default :
-- [access](md_module_access.html) **TODO**
+- [access](md_module_access.html)
 - [gdb](md_module_gdb.html)
 - [help](md_module_help.html)
 - [install](md_module_install.html)
