@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include <Eina.h>
 #include <Eet.h>
 #include <Ecore.h>
@@ -6,6 +10,12 @@
 
 int botman_log_dom;
 Eina_Bool connected;
+
+#ifdef WIN32
+SERVICE_STATUS ServiceStatus;
+SERVICE_STATUS_HANDLE hServiceStatus;
+BOOL ServiceStarted;
+#endif
 
 #define CRI(...) EINA_LOG_DOM_CRIT(botman_log_dom, __VA_ARGS__)
 #define DBG(...) EINA_LOG_DOM_DBG(botman_log_dom, __VA_ARGS__)
