@@ -40,11 +40,11 @@ List of modules that comes by default :
 - [help](md_module_help.html)
 - [install](md_module_install.html)
 - [info](md_module_info.html)
-- [module](md_module_module.html) **TODO**
+- [module](md_module_module.html)
 - [rewrite](md_module_rewrite.html)
 - [save](md_module_save.html)
 - [seen](md_module_seen.html)
 - [spam](md_module_spam.html)
-- [ssh_tunnel](md_module_ssh_tunnel.html) **TODO**
+- [ssh_tunnel](md_module_ssh_tunnel.html)
 - [sysinfo](md_module_sysinfo.html) **TODO**
-- [version](md_module_version.html) **TODO**
+- [version](md_module_version.html)
