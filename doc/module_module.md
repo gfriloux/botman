@@ -19,6 +19,9 @@ There isnt any configuration to be done for this module.
 ### List modules
 
 <span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span>
+
+This command only shows loaded module.
+
 > <span style="color:blue">(16:58:10) guillaume.friloux@botnet.master.com:</span> .module\n
 > <span style="color:red">(16:58:10) botman:</span>\n
 > Loaded modules :\n
