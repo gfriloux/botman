@@ -208,15 +208,21 @@ _gotham_event_message(void *data,
         return EINA_TRUE;
      }
 
-   if (citizen->type == GOTHAM_CITIZEN_TYPE_UNIDENTIFIED)
-     {
+   //if (citizen->type == GOTHAM_CITIZEN_TYPE_UNIDENTIFIED)
+   //  {
         if (!strncmp(resource, "botman", 6))
           {
              DBG("SETTING %s AS BEING A BOTMAN", citizen->jid);
              citizen->type = GOTHAM_CITIZEN_TYPE_BOTMAN;
           }
+        else if (gotham->alfred)
+          {
+             if (strncmp(gotham->alfred->jid, citizen->jid, strlen(gotham->alfred->jid)))
+               citizen->type = GOTHAM_CITIZEN_TYPE_CIVILIAN;
+          }
+        else citizen->type = GOTHAM_CITIZEN_TYPE_CIVILIAN;
         eina_stringshare_del(resource);
-     }
+   //  }
 
    command = gotham_command_new(citizen, msg->msg, msg->jid);
    gotham_event_command_new(command);
