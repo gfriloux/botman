@@ -46,5 +46,5 @@ List of modules that comes by default :
 - [seen](md_module_seen.html)
 - [spam](md_module_spam.html)
 - [ssh_tunnel](md_module_ssh_tunnel.html)
-- [sysinfo](md_module_sysinfo.html) **TODO**
+- [sysinfo](md_module_sysinfo.html)
 - [version](md_module_version.html)
