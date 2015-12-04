@@ -146,6 +146,21 @@ close_fd:
    close(fd);
    remove(_pid_file);
 }
+
+Eina_Bool
+exit_func(void *data EINA_UNUSED,
+          int ev_type EINA_UNUSED,
+          void *ev)
+{
+   Ecore_Event_Signal_Exit *e;
+
+   DBG("Received exit signal");
+
+   e = (Ecore_Event_Signal_Exit *)ev;
+   if ((e->interrupt) || (e->quit) || (e->terminate))
+     ecore_main_loop_quit();
+   return EINA_TRUE;
+}
 #endif
 
 void
@@ -226,6 +241,7 @@ int main(int argc, const char **argv) {
 
 #ifndef _WIN32
    botman_daemonize_pid();
+   ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, exit_func, NULL);
 #endif
 
 new_gotham:
