@@ -14,60 +14,6 @@
  */
 
 /**
- * @brief Print a line for the given citizen.
- * Will show his online status, xmpp account and some custom vars
- * @param seen Module_Seen object
- * @param citizen Gotham_Citizen to print
- * @return const char line representing citizen
- */
-const char *
-_citizen_print(Module_Seen *seen,
-               Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_Array_Iterator it;
-   unsigned int i;
-   const char *item,
-              *ptr,
-              *last_time;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "\t%s %s ",
-                             (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_ARRAY_ITER_NEXT(seen->vars, i, item, it)
-     {
-        const char *var = VARGET(item);
-
-        if (!var)
-          continue;
-
-        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   if (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE)
-     {
-        double timestamp;
-        const char *seen_last = NULL;
-
-        seen_last = VARGET("seen_last");
-
-        timestamp = time(0) - ((seen_last) ? atof(seen_last) : 0);
-        last_time = seen_utils_elapsed_time(timestamp);
-        eina_strbuf_append_printf(buf, "time %s", last_time);
-        free((char *)last_time);
-     }
-
-   eina_strbuf_append(buf, "\n");
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
-/**
  * @brief Callback when all modules are loaded.
  * Set the function pointer for access_allwed using
  * @ref gotham_modules_function_get
@@ -103,21 +49,14 @@ event_citizen_command(void *data,
                       void *ev)
 {
    Module_Seen *seen = data;
-   Gotham *gotham;
-   Gotham_Citizen *citizen;
    Gotham_Citizen_Command *command = ev;
-   Eina_Strbuf *buf;
-   const char **seen_cmd = command->command;
-   Eina_Bool found = EINA_FALSE;
-   Eina_List *l_citizen,
-             *l;
+   const char **seen_cmd = command->command,
+              *s;
 
    EINA_SAFETY_ON_NULL_RETURN_VAL(seen, EINA_TRUE);
    EINA_SAFETY_ON_NULL_RETURN_VAL(command, EINA_TRUE);
 
    DBG("seen[%p] command[%p]=%s", seen, command, command->name);
-
-   gotham = seen->gotham;
 
    if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      return EINA_TRUE;
@@ -141,30 +80,11 @@ event_citizen_command(void *data,
         return EINA_TRUE;
      }
 
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "\nContacts that matched :\n");
+   s = seen_query(seen, seen_cmd[1]);
 
-   l_citizen = gotham_citizen_match(gotham,
-                                    seen_cmd[1],
-                                    GOTHAM_CITIZEN_TYPE_BOTMAN,
-                                    seen->vars);
+   gotham_command_send(command, s);
 
-   EINA_LIST_FOREACH(l_citizen, l, citizen)
-     {
-        const char *line;
-
-        found = EINA_TRUE;
-        line = _citizen_print(seen, citizen);
-        eina_strbuf_append(buf, line);
-        free((char *)line);
-     }
-
-   gotham_command_send(command,
-                       (found) ? eina_strbuf_string_get(buf) :
-                                 "No one matches given pattern");
-
-   eina_strbuf_free(buf);
-   eina_list_free(l_citizen);
+   free((char *)s);
    return EINA_TRUE;
 }
 

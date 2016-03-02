@@ -23,4 +23,5 @@ typedef struct _Module_Seen
 
 char * seen_utils_elapsed_time(double timestamp);
 void seen_conf_load(Module_Seen *seen);
+const char * seen_query(Module_Seen *seen, const char *pattern);
 #endif

@@ -430,6 +430,20 @@ gotham_modules_function_get(const char *module, const char *function)
    return NULL;
 }
 
+void *
+gotham_modules_data_get(const char *module)
+{
+   Gotham_Module *m;
+
+   EINA_INLIST_FOREACH(_gotham_modules_list, m)
+     {
+        if (strcasecmp(m->name, module)) continue;
+        return m->module_data;
+     }
+
+   return NULL;
+}
+
 /**
  * Register a module to the Gotham structure, by registering
  * every GOTHAM_EVENT the module could need

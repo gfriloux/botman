@@ -59,6 +59,7 @@ src_modules_seen_la_SOURCES = \
    src/modules/seen/utils.c \
    src/modules/seen/conf.c \
    src/modules/seen/event.c \
+   src/modules/seen/seen_query.c \
    src/modules/seen/seen.h
 src_modules_seen_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_seen_la_LDFLAGS = \
