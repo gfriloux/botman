@@ -190,6 +190,7 @@ GOTHAM_API Eina_Bool gotham_modules_command_var_set(Gotham_Module_Command *comma
 GOTHAM_API const char *gotham_modules_command_var_get(Gotham_Module_Command *command, const char *name);
 GOTHAM_API Gotham_Module_Command *gotham_modules_command_get(const char *cmd);
 GOTHAM_API void * gotham_modules_function_get(const char *module, const char *function);
+GOTHAM_API void * gotham_modules_data_get(const char *module);
 GOTHAM_API void gotham_modules_register(Gotham *gotham, Gotham_Module *module);
 
 GOTHAM_API cJSON *gotham_modules_conf_load(const char *file);
