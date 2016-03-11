@@ -378,9 +378,10 @@ ssh_tunnel_close(Module_Ssh_Tunnel *obj,
         return;
      }
 
-   cmd = eina_stringshare_printf("kill -9 $(pgrep -P %d)",
-                                 obj->tunnel.pid);
+   cmd = eina_stringshare_printf("kill -9 $(pgrep -P %d) %d",
+                                 obj->tunnel.pid, obj->tunnel.pid);
    DBG("cmd[%p][%s]", cmd, cmd);
+
    system((char *)cmd);
    eina_stringshare_del(cmd);
 
