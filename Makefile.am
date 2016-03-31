@@ -4,6 +4,8 @@ AM_MAKEFLAGS = --no-print-directory
 AM_CPPFLAGS = -DDATA_DIR=\"$(datadir)\" @CPPFLAGS@                             \
    -I$(top_srcdir) -I$(top_srcdir)/src/include
 
+EXTRA_DIST = rpmbuild/SPECS/@PACKAGE@.spec.in
+
 MAINTAINERCLEANFILES = \
 ABOUT-NLS \
 Makefile.in \
