@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# Botman
+#
+# description: Botman init script
+#
+# chkconfig: 345 91 9
+#
+### BEGIN INIT INFO
+# Provides: botman
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start: 3 4 5
+# Short-Description: Botman is a server management system using XMPP
+# Description: Botman is daemon used to manage a system via XMPP
+### END INIT INFO
+
+RETVAL=0
+
+prog="botman"
+path=/usr/bin/$prog
+pidfile=/var/run/$prog.pid
+lockfile=/var/lock/subsys/$prog
+logfile=/var/log/$prog
+
+# Source function library.
+. /etc/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+
+start() {
+	# Check that networking is up.
+	[ ${NETWORKING} = "yes" ] || exit 6
+	
+	[ -x $path ] || exit 5
+	
+	# Make sure the deamon is not already running.
+	if status $prog > /dev/null ; then
+		exit 0
+	fi
+	
+	echo -n $"Starting $prog: "
+	daemon --pidfile=$pidfile "nohup $path >> $logfile 2>&1 &"
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ] ; then
+		touch $lockfile
+		[ ! -f $pidfile ] && /sbin/pidof $prog > $pidfile
+	fi
+	return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $prog
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ] ; then
+		rm -f $lockfile
+		rm -f $pidfile
+	fi
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+	start)
+		start
+		RETVAL=$?
+		;;
+	stop)
+		stop
+		RETVAL=$?
+		;;
+	status)
+		status $prog
+		RETVAL=$?
+		;;
+	restart | reload | force-reload)
+		stop
+		start
+		RETVAL=$?
+		;;
+	condrestart | try-restart)
+		if [ -f /var/lock/subsys/$prog ]; then
+			stop
+			start
+			RETVAL=$?
+		fi
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+		RETVAL=2
+		;;
+esac
+
+exit $RETVAL
+

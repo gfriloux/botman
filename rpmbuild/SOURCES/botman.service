@@ -1,0 +1,10 @@
+[Unit]
+Description=Botman
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/botman
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,231 @@
+%if 0%{?rhel} >= 7
+%global with_systemd 1
+%else
+%global with_systemd 0
+%endif
+
+%define EFL_version 1.7
+
+Name:      @PACKAGE@
+Summary:   Server management system using XMPP
+Version:   @VERSION@
+Release:   2%{?dist}
+Group:     System Environment/Daemons
+URL:       https://github.com/gfriloux/botman/
+License:   GPLv2
+Source0:   %{name}-%{version}.tar.gz
+Source1:   alfred.service
+Source2:   %{name}.service
+Source3:   alfred.init
+Source4:   %{name}.init
+Source5:   %{name}.conf
+Source6:   alfred.conf
+Source7:   emoticons.tar.gz
+Patch0:    %{name}-remove-platform-dir-from-gotham-modules.patch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires: autoconf automake gcc pkgconfig libtool
+BuildRequires: eina-devel >= %{EFL_version}
+BuildRequires: ecore-devel >= %{EFL_version}
+BuildRequires: eet-devel >= %{EFL_version}
+BuildRequires: eio-devel >= %{EFL_version}
+BuildRequires: maelstrom-devel
+BuildRequires: libssh2-devel
+Requires:  libgotham = %{version}-%{release}
+Requires:  eina >= %{EFL_version}
+Requires:  ecore >= %{EFL_version}
+
+%description
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks.
+
+
+%package alfred
+Summary:	Alfred, the REAL Botman’s assistant
+Group:		System Environment/Daemons
+Requires:	libgotham = %{version}-%{release}
+Requires:	eina >= %{EFL_version}
+Requires:	ecore >= %{EFL_version}
+
+%description alfred
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks. Alfred is an
+assistant that sends the real orders to one or several Botman daemons.
+
+
+%package -n libgotham
+Summary:	Gotham libraries, the playground of Alfred and Botman
+Group:		System/Libraries
+Requires:	eina >= %{EFL_version}
+Requires:	ecore >= %{EFL_version}
+Requires:	eet >= %{EFL_version}
+Requires:	eio >= %{EFL_version}
+Requires:	maelstrom
+
+%description -n libgotham
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks. Gotham is a set
+of libraries needed by Botman and Alfred deamons.
+
+
+%package -n libgotham-devel
+Summary:	Gotham, Alfred and Botmans development files
+Requires:	libgotham = %{version}-%{release}
+Group:		Development/Libraries
+
+%description -n libgotham-devel
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks. Gotham is a set
+of libraries needed by Botman and Alfred deamons. These are the development 
+files of the Gotham libraries.
+
+
+%package -n libgotham-modules
+Summary:	Gotham modules, Alfred and Botman functionalities
+Group:		System/Libraries
+Requires:	libssh2
+Requires:	libgotham = %{version}-%{release}
+Requires:	eina >= %{EFL_version}
+Requires:	ecore >= %{EFL_version}
+
+%description -n libgotham-modules
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks. Gotham is a set
+of libraries needed by Botman and Alfred deamons. These are the extension 
+modules used by the Gotham library.
+
+
+%package -n libgotham-modules-devel
+Summary:	Gotham modules, Alfred and Botmans functionnalities
+Group:		Development/Libraries
+Requires:	libssh2
+Requires:	libgotham-devel = %{version}-%{release}
+Requires:	libgotham-modules = %{version}-%{release}
+Requires:	eina-devel >= %{EFL_version}
+Requires:	ecore-devel >= %{EFL_version}
+
+%description -n libgotham-modules-devel
+Botman is a project that aims to ease management of servers throught the use of 
+the XMPP messaging system. We chose to use XMPP to avoid various problems like 
+having delays in sending commands, or the use of NATed networks. Gotham is a set
+of libraries needed by Botman and Alfred deamons. These are development files 
+of the extension modules used by the Gotham library.
+
+
+%prep
+%setup -q -a7
+%patch0 -p1
+%__mkdir resources
+install %{SOURCE1} resources/
+install %{SOURCE2} resources/
+install %{SOURCE3} resources/
+install %{SOURCE4} resources/
+
+
+%build
+# Inutilisable, car automake nécessite --add-missing --copy
+#%%GNUconfigure
+%__aclocal -I m4
+%__autoheader
+%__autoconf
+%__libtoolize --force --automake
+%__automake --add-missing --copy
+
+%configure
+%__make
+
+
+%install
+%{__rm} -rf %{buildroot}
+%make_install
+
+%if 0%{?with_systemd}
+install -d %{buildroot}%{_unitdir}
+install -m0644 resources/%{name}.service %{buildroot}%{_unitdir}/
+install -m0644 resources/alfred.service %{buildroot}%{_unitdir}/
+%else
+install -d %{buildroot}%{_initrddir}
+install -m0755 resources/%{name}.init %{buildroot}%{_initrddir}/%{name}
+install -m0755 resources/alfred.init %{buildroot}%{_initrddir}/alfred
+%endif
+
+# Create config directories and files
+%__mkdir -p %{buildroot}%{_sysconfdir}/%{name}
+install -m0640 %{SOURCE5} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+install -m0640 %{SOURCE6} %{buildroot}%{_sysconfdir}/alfred.conf
+
+%__mkdir -p %{buildroot}%{_sysconfdir}/gotham/modules.conf.d/
+# Create empty module config files
+find %{buildroot}%{_libdir}/gotham -name "*.so" \
+	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_sysconfdir}/gotham/modules.conf.d/\1.conf|p' \
+	| xargs touch
+
+# Create Alfred’s emoticon dir with its files
+%__mkdir -p %{buildroot}%{_datadir}/alfred/emoticons
+install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
+
+
+%clean
+%{__rm} -rf %{buildroot}
+
+
+%files
+%defattr(-,root,root,-)
+%dir %{_sysconfdir}/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
+%{_bindir}/%{name}
+%if 0%{?with_systemd}
+%{_unitdir}/%{name}.service
+%else
+%{_initrddir}/%{name}
+%endif
+
+%files alfred
+%defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/alfred.conf
+%{_bindir}/alfred
+%dir %{_datadir}/alfred
+%{_datadir}/alfred/emoticons/*
+%if 0%{?with_systemd}
+%{_unitdir}/alfred.service
+%else
+%{_initrddir}/alfred
+%endif
+
+%files -n libgotham
+%defattr(-,root,root,-)
+%doc AUTHORS COPYING INSTALL
+%dir %{_sysconfdir}/gotham
+%dir %{_sysconfdir}/gotham/modules.conf.d
+%{_libdir}/*.so*
+
+%files -n libgotham-modules
+%defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/gotham/modules.conf.d/*
+%dir %{_libdir}/gotham
+%{_libdir}/gotham/*.so*
+
+%files -n libgotham-devel
+%defattr(-,root,root,-)
+%{_libdir}/*.la
+%{_libdir}/pkgconfig/gotham.pc
+%{_includedir}/*
+
+%files -n libgotham-modules-devel
+%defattr(-,root,root,-)
+%{_libdir}/gotham/*.la
+
+
+%changelog
+* Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-2.el6
+- Add emoticons as Source7 for Alfred
+
+* Mon Mar  7 2016 Davy Defaud <davy@defaud.net> - 1.2.17-el6
+- New version 1.2.17
+
+* Tue Feb 16 2016 Davy Defaud <davy@defaud.net> - 1.2.16-el6
+- Initial spec file creation

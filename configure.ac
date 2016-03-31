@@ -146,6 +146,7 @@ AC_CONFIG_HEADER([config.h])
 
 AC_OUTPUT([
 gotham.pc
+rpmbuild/SPECS/$PACKAGE.spec
 ])
 
 echo

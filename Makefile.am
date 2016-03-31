@@ -18,7 +18,8 @@ config.cache-env \
 depcomp \
 install-sh \
 ltmain.sh \
-missing
+missing \
+rpmbuild/SPECS/@PACKAGE@.spec
 
 include doc/Makefile.mk
 include src/bin/Makefile.mk
