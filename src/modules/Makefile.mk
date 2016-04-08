@@ -92,6 +92,7 @@ src_modules_spam_la_SOURCES = \
    src/modules/spam/queue.c \
    src/modules/spam/spam.c \
    src/modules/spam/spam.h \
+   src/modules/spam/spam_query.c \
    src/modules/spam/utils.c
 src_modules_spam_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
