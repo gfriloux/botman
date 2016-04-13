@@ -227,8 +227,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 
 %changelog
 * Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-3
-- Add Recommends libgotham-modules to libgotham subpackage for future RHEL >= 8
- and fallback to a hard Requires for RHEL versions up to 7 (rpm-4.12.0+ needed)
+- Add Recommends libgotham-modules to libgotham subpackage
 
 * Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-2
 - Add emoticons as Source7 for Alfred
