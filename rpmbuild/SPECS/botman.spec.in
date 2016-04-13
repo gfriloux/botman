@@ -9,7 +9,7 @@
 Name:      @PACKAGE@
 Summary:   Server management system using XMPP
 Version:   @VERSION@
-Release:   2%{?dist}
+Release:   3%{?dist}
 Group:     System Environment/Daemons
 URL:       https://github.com/gfriloux/botman/
 License:   GPLv2
@@ -62,6 +62,11 @@ Requires:	ecore >= %{EFL_version}
 Requires:	eet >= %{EFL_version}
 Requires:	eio >= %{EFL_version}
 Requires:	maelstrom
+%if 0%{?rhel} >= 8
+Recommends:	libgotham-modules
+%else
+Requires:	libgotham-modules
+%endif
 
 %description -n libgotham
 Botman is a project that aims to ease management of servers throught the use of 
@@ -221,10 +226,14 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 
 
 %changelog
-* Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-2.el6
+* Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-3
+- Add Recommends libgotham-modules to libgotham subpackage for future RHEL >= 8
+ and fallback to a hard Requires for RHEL versions up to 7 (rpm-4.12.0+ needed)
+
+* Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-2
 - Add emoticons as Source7 for Alfred
 
-* Mon Mar  7 2016 Davy Defaud <davy@defaud.net> - 1.2.17-el6
+* Mon Mar  7 2016 Davy Defaud <davy@defaud.net> - 1.2.17-1
 - New version 1.2.17
 
 * Tue Feb 16 2016 Davy Defaud <davy@defaud.net> - 1.2.16-el6
