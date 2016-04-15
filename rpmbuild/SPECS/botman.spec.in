@@ -9,7 +9,7 @@
 Name:      @PACKAGE@
 Summary:   Server management system using XMPP
 Version:   @VERSION@
-Release:   3%{?dist}
+Release:   1%{?dist}
 Group:     System Environment/Daemons
 URL:       https://github.com/gfriloux/botman/
 License:   GPLv2
