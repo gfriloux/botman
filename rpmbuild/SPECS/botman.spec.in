@@ -169,6 +169,12 @@ find %{buildroot}%{_libdir}/gotham -name "*.so" \
 	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_sysconfdir}/gotham/modules.conf.d/\1.conf|p' \
 	| xargs touch
 
+# Create a data directory for each module in /usr/share/gotham/modules.conf.d/
+%__mkdir -p %{buildroot}%{_datadir}/gotham/modules.conf.d/
+find %{buildroot}%{_libdir}/gotham -name "*.so" \
+	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_datadir}/gotham/modules.conf.d/\1|p' \
+	| xargs mkdir
+
 # Create Alfred’s emoticon dir with its files
 %__mkdir -p %{buildroot}%{_datadir}/alfred/emoticons
 install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
@@ -206,6 +212,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 %doc AUTHORS COPYING INSTALL
 %dir %{_sysconfdir}/gotham
 %dir %{_sysconfdir}/gotham/modules.conf.d
+%dir %{_datadir}/gotham/modules.conf.d
 %{_libdir}/*.so*
 
 %files -n libgotham-modules
@@ -213,6 +220,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 %config(noreplace) %{_sysconfdir}/gotham/modules.conf.d/*
 %dir %{_libdir}/gotham
 %{_libdir}/gotham/*.so*
+%dir %{_datadir}/gotham/modules.conf.d/*
 
 %files -n libgotham-devel
 %defattr(-,root,root,-)
@@ -228,6 +236,9 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 %changelog
 * %(LANG=C date "+%a %b %d %Y") Auto RPM build - %{version}-%{release}
 - version %{version}
+
+* Wed Apr 15 2016 Davy Defaud <davy@defaud.net> - 1.2.17-4
+- Add a /usr/share/gotham/modules.conf.d/<module> for each module
 
 * Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-3
 - Add Recommends libgotham-modules to libgotham subpackage
