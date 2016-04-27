@@ -525,6 +525,20 @@ _gotham_event_presence(void *data,
      }
    else
      {
+        char *p;
+        DBG("Citizen [%s] is online !", presence->jid);
+
+        p = strchr(presence->jid, '/');
+        if (p)
+          {
+             resource = eina_stringshare_add(p + 1);
+             DBG("Resource[%s]", resource);
+
+             if (!strncmp(resource, "botman", 6))
+               citizen->type = GOTHAM_CITIZEN_TYPE_BOTMAN;
+          }
+
+
         citizen->status = GOTHAM_CITIZEN_STATUS_ONLINE;
         shotgun_iq_disco_info_get(citizen->gotham->shotgun, presence->jid);
         ecore_event_add(GOTHAM_EVENT_CITIZEN_CONNECT, citizen,

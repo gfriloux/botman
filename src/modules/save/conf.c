@@ -419,8 +419,10 @@ _conf_restore_citizens(cJSON *json, Gotham *gotham)
              eina_stringshare_replace(&citizen->nickname, nickname);
           }
 
-        if ((citizen->type == GOTHAM_CITIZEN_TYPE_UNIDENTIFIED) &&
-           ((Gotham_Citizen_Type)type != citizen->type))
+        DBG("Citizen JID[%s] Type[%d] Save type[%d]",
+            citizen->jid, citizen->type, type);
+
+        if ((Gotham_Citizen_Type)type != citizen->type)
           citizen->type = type;
 
         /* Gettings vars */
