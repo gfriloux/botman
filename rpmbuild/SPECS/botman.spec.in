@@ -18,9 +18,11 @@ Source1:   alfred.service
 Source2:   %{name}.service
 Source3:   alfred.init
 Source4:   %{name}.init
-Source5:   %{name}.conf
-Source6:   alfred.conf
-Source7:   emoticons.tar.gz
+Source5:   alfred.sysconfig
+Source6:   %{name}.sysconfig
+Source7:   alfred.conf
+Source8:   %{name}.conf
+Source9:   emoticons.tar.gz
 Patch0:    %{name}-remove-platform-dir-from-gotham-modules.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: autoconf automake gcc pkgconfig libtool
@@ -122,7 +124,7 @@ of the extension modules used by the Gotham library.
 
 
 %prep
-%setup -q -a7
+%setup -q -a9
 %patch0 -p1
 %__mkdir resources
 install %{SOURCE1} resources/
@@ -154,20 +156,25 @@ install -m0644 resources/%{name}.service %{buildroot}%{_unitdir}/
 install -m0644 resources/alfred.service %{buildroot}%{_unitdir}/
 %else
 install -d %{buildroot}%{_initrddir}
-install -m0755 resources/%{name}.init %{buildroot}%{_initrddir}/%{name}
 install -m0755 resources/alfred.init %{buildroot}%{_initrddir}/alfred
+install -m0755 resources/%{name}.init %{buildroot}%{_initrddir}/%{name}
 %endif
+
+# Create sysconfig files
+%__mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
+install -m0640 %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/alfred
+install -m0640 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
 # Create config directories and files
 %__mkdir -p %{buildroot}%{_sysconfdir}/%{name}
-install -m0640 %{SOURCE5} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
-install -m0640 %{SOURCE6} %{buildroot}%{_sysconfdir}/alfred.conf
+install -m0640 %{SOURCE7} %{buildroot}%{_sysconfdir}/alfred.conf
+install -m0640 %{SOURCE8} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
 %__mkdir -p %{buildroot}%{_sysconfdir}/gotham/modules.conf.d/
 # Create empty module config files
 find %{buildroot}%{_libdir}/gotham -name "*.so" \
 	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_sysconfdir}/gotham/modules.conf.d/\1.conf|p' \
-	| xargs touch
+	| xargs -I{} sh -c 'echo -e "{\n\t\"vars\": [\n\t]\n}" > "$1"' -- {}
 
 # Create a data directory for each module in /usr/share/gotham/modules.conf.d/
 %__mkdir -p %{buildroot}%{_datadir}/gotham/modules.d/
@@ -186,6 +193,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 
 %files
 %defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 %{_bindir}/%{name}
@@ -197,6 +205,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 
 %files alfred
 %defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/sysconfig/alfred
 %config(noreplace) %{_sysconfdir}/alfred.conf
 %{_bindir}/alfred
 %dir %{_datadir}/alfred
@@ -237,6 +246,12 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 * %(LANG=C date "+%a %b %d %Y") Auto RPM build - %{version}-%{release}
 - version %{version}
 
+* Tue May  3 2016 Davy Defaud <davy@defaud.net> - 1.2.17-5
+- Add a sysconfig file for alfred and botman daemons. The sysconfig file is
+ read by the init script or systemd unit to define environment variables before
+ starting the daemon (mostly for debugging purpose)
+- Create a default JSON file for each Gotham module instead of an empty file
+
 * Wed Apr 15 2016 Davy Defaud <davy@defaud.net> - 1.2.17-4
 - Add a /usr/share/gotham/modules.d/<module> for each module
 
@@ -244,7 +259,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 - Add Recommends libgotham-modules to libgotham subpackage
 
 * Wed Mar 16 2016 Davy Defaud <davy@defaud.net> - 1.2.17-2
-- Add emoticons as Source7 for Alfred
+- Add emoticons as Source9 for Alfred
 
 * Mon Mar  7 2016 Davy Defaud <davy@defaud.net> - 1.2.17-1
 - New version 1.2.17

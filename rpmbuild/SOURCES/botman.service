@@ -3,6 +3,7 @@ Description=Botman
 After=network.target
 
 [Service]
+EnvironmentFile=-/etc/sysconfig/botman
 ExecStart=/usr/bin/botman
 Restart=always
 

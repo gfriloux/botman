@@ -29,6 +29,10 @@ logfile=/var/log/$prog
 # Source networking configuration.
 . /etc/sysconfig/network
 
+# Source config
+if [ -f /etc/sysconfig/$prog ] ; then
+	. /etc/sysconfig/$prog
+fi
 
 start() {
 	# Check that networking is up.

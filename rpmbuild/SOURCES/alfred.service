@@ -3,6 +3,7 @@ Description=Alfred
 After=network.target
 
 [Service]
+EnvironmentFile=-/etc/sysconfig/alfred
 ExecStart=/usr/bin/alfred
 Restart=always
 
