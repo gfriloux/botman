@@ -23,7 +23,6 @@ Source6:   %{name}.sysconfig
 Source7:   alfred.conf
 Source8:   %{name}.conf
 Source9:   emoticons.tar.gz
-Patch0:    %{name}-remove-platform-dir-from-gotham-modules.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: autoconf automake gcc pkgconfig libtool
 BuildRequires: eina-devel >= %{EFL_version}
@@ -125,13 +124,16 @@ of the extension modules used by the Gotham library.
 
 %prep
 %setup -q -a9
-%patch0 -p1
+
 %__mkdir resources
 install %{SOURCE1} resources/
 install %{SOURCE2} resources/
 install %{SOURCE3} resources/
 install %{SOURCE4} resources/
 
+# Remove MODULE_ARCH sub dir from the library path (replace a patch)
+sed -ri 's|(\$\(libdir\)/gotham)(/\$\(MODULE_ARCH\))|\1|' \
+	src/{lib,modules}/Makefile.mk
 
 %build
 # Inutilisable, car automake nécessite --add-missing --copy
@@ -251,6 +253,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
  read by the init script or systemd unit to define environment variables before
  starting the daemon (mostly for debugging purpose)
 - Create a default JSON file for each Gotham module instead of an empty file
+- Drop Patch1 replaced by a sed command to avoid potential patch invalidity
 
 * Wed Apr 15 2016 Davy Defaud <davy@defaud.net> - 1.2.17-4
 - Add a /usr/share/gotham/modules.d/<module> for each module
