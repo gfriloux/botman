@@ -31,7 +31,11 @@ botman_event_disconnect(void *data EINA_UNUSED,
    if (!connected)
      {
         sleep(10);
+#ifndef _WIN32
         ecore_app_restart();
+#else
+        ecore_main_loop_quit();
+#endif
      }
    else
      connected = EINA_FALSE;
