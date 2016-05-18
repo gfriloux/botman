@@ -32,3 +32,4 @@ missing
 src/bin/alfred/alfred
 src/bin/botman/botman
 ABOUT-NLS
+rpmbuild/SPECS/botman.spec
