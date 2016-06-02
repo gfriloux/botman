@@ -24,4 +24,5 @@ typedef struct _Module_Seen
 char * seen_utils_elapsed_time(double timestamp);
 void seen_conf_load(Module_Seen *seen);
 const char * seen_query(Module_Seen *seen, const char *pattern);
+Eina_List * seen_query_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type citizen_type, Module_Seen *seen);
 #endif

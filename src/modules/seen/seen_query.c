@@ -52,6 +52,15 @@ _seen_query_citizen_print(Module_Seen *seen,
    return ptr;
 }
 
+Eina_List *
+seen_query_match(Gotham *gotham,
+                 const char *pattern,
+                 Gotham_Citizen_Type citizen_type,
+                 Module_Seen *seen)
+{
+   return gotham_citizen_match(gotham, pattern, citizen_type, seen->vars);
+}
+
 const char *
 seen_query(Module_Seen *seen,
            const char *pattern)
