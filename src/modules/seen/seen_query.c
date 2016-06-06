@@ -52,6 +52,10 @@ _seen_query_citizen_print(Module_Seen *seen,
    return ptr;
 }
 
+/* This function has been added to have the HTTPd module
+ * able to expose a /seen URI answering JSON data instead
+ * of plaintext.
+ */
 Eina_List *
 seen_query_match(Gotham *gotham,
                  const char *pattern,
