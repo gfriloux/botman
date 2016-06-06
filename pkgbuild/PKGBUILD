@@ -1,7 +1,7 @@
 # Maintainer: Guillaume Friloux <guillaume@friloux.me>
 
 pkgname=('gotham' 'gotham-modules' 'botman' 'alfred')
-pkgver=1.2.18
+pkgver=1.2.19
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://github.com/gfriloux/botman"
