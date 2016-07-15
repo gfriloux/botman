@@ -75,6 +75,7 @@ build_unix="no"
 case "$host_os" in
   mingw*)
     build_windows="yes"
+    GOTHAM_REQUIRES="evil"
     AC_DEFINE([HAVE_EVIL], [1], [Set to 1 if Evil package is installed])
   ;;
   *)
@@ -90,7 +91,7 @@ AC_ARG_ENABLE([gotham],
                    [want_gotham=$enableval]
 )
 if test "x$want_gotham" != "xno" ; then
-   GOTHAM_REQUIRES="shotgun eina >= $min_efl_version ecore >= $min_efl_version eet >= $min_efl_version eio >= $min_efl_version"
+   GOTHAM_REQUIRES="${GOTHAM_REQUIRES} shotgun eina >= $min_efl_version ecore >= $min_efl_version eet >= $min_efl_version eio >= $min_efl_version"
    PKG_CHECK_MODULES(GOTHAM, [$GOTHAM_REQUIRES], [build_gotham=yes], [build_gotham=no])
 else
    build_gotham=no
