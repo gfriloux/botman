@@ -1,8 +1,8 @@
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 ##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##--##
 m4_define([v_maj], [1])
-m4_define([v_min], [2])
-m4_define([v_mic], [19])
+m4_define([v_min], [3])
+m4_define([v_mic], [0])
 
 m4_define([v_ver], [v_maj.v_min.v_mic])
 m4_define([lt_rev], m4_eval(v_maj + v_min))
@@ -91,7 +91,7 @@ AC_ARG_ENABLE([gotham],
                    [want_gotham=$enableval]
 )
 if test "x$want_gotham" != "xno" ; then
-   GOTHAM_REQUIRES="${GOTHAM_REQUIRES} shotgun eina >= $min_efl_version ecore >= $min_efl_version eet >= $min_efl_version eio >= $min_efl_version"
+   GOTHAM_REQUIRES="${GOTHAM_REQUIRES} azy shotgun eina >= $min_efl_version ecore >= $min_efl_version eet >= $min_efl_version eio >= $min_efl_version"
    PKG_CHECK_MODULES(GOTHAM, [$GOTHAM_REQUIRES], [build_gotham=yes], [build_gotham=no])
 else
    build_gotham=no
