@@ -2,6 +2,7 @@
 #define GOTHAM
 #include <Eina.h>
 #include <Ecore.h>
+#include <Azy.h>
 #include <Shotgun.h>
 #include <cJSON.h>
 
@@ -47,6 +48,9 @@ GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_LEAVE;
 typedef struct _Gotham Gotham;
 typedef struct _Gotham_Citizen Gotham_Citizen;
 typedef struct _Gotham_Module Gotham_Module;
+
+typedef Eina_Bool (*Gotham_Deserialization_Function)(const Eina_Value *, void **);
+typedef Eina_Value * (*Gotham_Serialization_Function)(const void *);
 
 typedef enum
 {
@@ -198,6 +202,8 @@ GOTHAM_API Eina_Bool gotham_modules_conf_save(const char *file, cJSON *json);
 
 GOTHAM_API const char **gotham_utils_msgtocommand(const char *msg);
 GOTHAM_API const char **gotham_utils_json_array_stringify(cJSON *json_var);
+GOTHAM_API char * gotham_utils_file_data_read(const char *file, size_t *size);
+GOTHAM_API Eina_Bool gotham_utils_file_data_write(const char *file, const char *data, size_t size);
 
 GOTHAM_API int gotham_init(void);
 GOTHAM_API void gotham_free(Gotham *gotham);
@@ -209,3 +215,8 @@ GOTHAM_API Eina_Bool gotham_avatar_file_set(Gotham *gotham, const char *avatar_f
 GOTHAM_API Eina_Bool gotham_avatar_data_set(Gotham *gotham, const char *avatar_data, const char *mime_type);
 GOTHAM_API Eina_Bool gotham_nickname_set(Gotham *gotham, const char *nickname);
 GOTHAM_API Eina_Bool gotham_vcard_send(Gotham *gotham);
+
+GOTHAM_API void * gotham_serialize_string_to_struct(const char *s, size_t len, Gotham_Deserialization_Function func);
+GOTHAM_API char * gotham_serialize_struct_to_string(void *data, Gotham_Serialization_Function func);
+GOTHAM_API void * gotham_serialize_file_to_struct(const char *file, Gotham_Deserialization_Function func);
+GOTHAM_API Eina_Bool gotham_serialize_struct_to_file(void *data, const char *file, Gotham_Serialization_Function func);
