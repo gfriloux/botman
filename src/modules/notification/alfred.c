@@ -94,9 +94,13 @@ alfred_user_add(Module_Notification *notification,
 {
    Module_Notification_Conf_Group *group;
    const char *username;
+   Gotham_Citizen *citizen;
 
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
+
+   citizen = eina_hash_find(notification->gotham->citizens, user);
+   _IF_SEND(!citizen, "This user is not known to me.");
 
    group = utils_group_find(notification, command->command[2]);
    _IF_SEND(!group, "Group not found.");
