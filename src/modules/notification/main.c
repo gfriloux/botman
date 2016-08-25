@@ -58,6 +58,16 @@ module_register(Gotham *gotham)
                               "[.notification useradd groupname username] - "
                               "This command allows you to add a given JID "
                               "into a group.");
+
+   gotham_modules_command_add("notification", ".notification userdel",
+                              "[.notification userdel groupname username] - "
+                              "This command allows you to delete a given JID "
+                              "from a group.");
+
+   gotham_modules_command_add("notification", ".notification send",
+                              "[.notification send groupname message] - "
+                              "This command allows you to send a message to "
+                              "a group of users.");
    return notification;
 
 free_notification:
@@ -72,7 +82,9 @@ module_unregister(void *data)
 
    gotham_modules_command_del("notification", ".notification groupadd");
    gotham_modules_command_del("notification", ".notification groupdel");
-   gotham_modules_command_del("notification", ".notification addtogroup");
+   gotham_modules_command_del("notification", ".notification useradd");
+   gotham_modules_command_del("notification", ".notification userdel");
+   gotham_modules_command_del("notification", ".notification send");
 
    Module_Notification_Conf_free(notification->conf);
    free(notification);
