@@ -68,6 +68,9 @@ module_register(Gotham *gotham)
                               "[.notification send groupname message] - "
                               "This command allows you to send a message to "
                               "a group of users.");
+
+   notification->access_allowed = gotham_modules_function_get("access", "access_allowed");
+
    return notification;
 
 free_notification:

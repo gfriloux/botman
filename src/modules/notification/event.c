@@ -1,5 +1,20 @@
 #include "main.h"
 
+#define AUTH(_a, _b, _c)                                                       \
+{                                                                              \
+   if ((_a->access_allowed) && (!_a->access_allowed(_b, _c)))                  \
+     {                                                                         \
+        ERR("%s is not autorized", _c->jid);                                   \
+        Eina_Strbuf *buf = eina_strbuf_new();                                  \
+        eina_strbuf_append(buf, "Access denied");                              \
+        module_json_answer(".notification", "", EINA_FALSE,                    \
+                           buf, _a->gotham, _c, EINA_FALSE);                   \
+        eina_strbuf_free(buf);                                                 \
+        return EINA_TRUE;                                                      \
+     }                                                                         \
+}
+/* "debug" */
+
 Eina_Bool
 event_citizen_command(void *data,
                       int type EINA_UNUSED,
@@ -18,15 +33,30 @@ event_citizen_command(void *data,
 
    if (!command->command[1]) alfred_group_print(notification, command);
    else if ((command->command[1]) && (!strcmp(command->command[1], "groupadd")))
-     alfred_group_add(notification, command);
+     {
+        AUTH(notification, gotham_modules_command_get(".notification groupadd"), citizen);
+        alfred_group_add(notification, command);
+     }
    else if ((command->command[1]) && (!strcmp(command->command[1], "groupdel")))
-     alfred_group_del(notification, command);
+     {
+        AUTH(notification, gotham_modules_command_get(".notification groupdel"), citizen);
+        alfred_group_del(notification, command);
+     }
    else if ((command->command[1]) && (!strcmp(command->command[1], "useradd")))
-     alfred_user_add(notification, command);
+     {
+        AUTH(notification, gotham_modules_command_get(".notification useradd"), citizen);
+        alfred_user_add(notification, command);
+     }
    else if ((command->command[1]) && (!strcmp(command->command[1], "userdel")))
-     alfred_user_del(notification, command);
+     {
+        AUTH(notification, gotham_modules_command_get(".notification userdel"), citizen);
+        alfred_user_del(notification, command);
+     }
    else if ((command->command[1]) && (!strcmp(command->command[1], "send")))
-     alfred_send(notification, command);
+     {
+        AUTH(notification, gotham_modules_command_get(".notification send"), citizen);
+        alfred_send(notification, command);
+     }
    else
      DBG("WHAT SHOULD I DO ?");
 
