@@ -23,6 +23,8 @@ ltmain.sh \
 missing \
 rpmbuild/SPECS/@PACKAGE@.spec
 
+BUILT_SOURCES=
+
 include doc/Makefile.mk
 include src/bin/Makefile.mk
 

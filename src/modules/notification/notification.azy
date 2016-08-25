@@ -1,0 +1,12 @@
+Azy_Namespace Module;
+
+struct Notification_Conf_Group
+{
+   string name;
+   array<string> users;
+};
+
+struct Notification_Conf
+{
+   array<Notification_Conf_Group> groups;
+};

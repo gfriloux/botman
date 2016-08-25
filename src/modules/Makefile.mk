@@ -9,7 +9,29 @@ mod_LTLIBRARIES = \
    src/modules/seen.la \
    src/modules/save.la \
    src/modules/spam.la \
-   src/modules/info.la
+   src/modules/info.la \
+   src/modules/notification.la
+
+BUILT_SOURCES += .sources_notification
+src_modules_notification_la_SOURCES = \
+   src/modules/notification/main.c \
+   src/modules/notification/main.h \
+   src/modules/notification/event.c \
+   src/modules/notification/alfred.c \
+   src/modules/notification/utils.c \
+   src/modules/notification/Module_Common_Azy.c \
+   src/modules/notification/Module_Common_Azy.h \
+   src/modules/notification/Module_Common.c \
+   src/modules/notification/Module_Common.h
+src_modules_notification_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_notification_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS)
+src_modules_notification_la_LIBADD = \
+   src/lib/libgotham.la
+.sources_notification: src/modules/notification/notification.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/notification \
+	                    $(top_srcdir)/src/modules/notification/notification.azy
 
 src_modules_access_la_SOURCES = \
    src/modules/access/access.c \
