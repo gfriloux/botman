@@ -44,6 +44,7 @@ int gotham_init(void)
    eet_init();
    ecore_init();
    shotgun_init();
+   azy_init();
 
    gotham_log_dom = eina_log_domain_register("gotham", EINA_COLOR_YELLOW);
 
