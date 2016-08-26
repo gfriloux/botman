@@ -162,6 +162,8 @@ alfred_send(Module_Notification *notification,
 
    buf = eina_strbuf_new();
 
+   eina_strbuf_append_printf(buf, "Notification from [%s] : ", command->citizen->jid);
+
    for (i = 3; command->command[i]; i++)
      eina_strbuf_append_printf(buf, "%s%s", i == 3 ? "" : " ", command->command[i]);
 
