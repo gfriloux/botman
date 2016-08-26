@@ -42,8 +42,6 @@ module_register(Gotham *gotham)
 
    gdb->dumps.poll = ecore_timer_add(20.0, botman_dumps_poll, gdb);
 
-   botman_dumps_poll(gdb);
-
    gotham_modules_command_add("gdb", ".gdb list",
                               "[.gdb list] - "
                               "This command will list coredumps inside the coredumps directory.");

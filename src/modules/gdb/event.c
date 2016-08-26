@@ -20,6 +20,15 @@
 /* "debug" */
 
 Eina_Bool
+event_connect(void *data,
+              int type EINA_UNUSED,
+              void *ev)
+{
+   botman_dumps_poll(gdb);
+   return EINA_TRUE;
+}
+
+Eina_Bool
 event_citizen_command(void *data,
                       int type EINA_UNUSED,
                       void *ev)
