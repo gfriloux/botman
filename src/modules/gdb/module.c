@@ -30,16 +30,30 @@ module_register(Gotham *gotham)
 {
    Module_Gdb *gdb;
 
+   if (gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN) return NULL;
+
    gdb = calloc(1, sizeof(Module_Gdb));
    EINA_SAFETY_ON_NULL_RETURN_VAL(gdb, NULL);
-
    gdb->gotham = gotham;
-
-   if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN) botman_register(gdb);
-   else alfred_register(gdb);
+   gdb->conf = gotham_serialize_file_to_struct(MODULE_GDB_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Gdb_Conf);
 
    gdb->access_allowed = gotham_modules_function_get("access",
                                                      "access_allowed");
+
+   gdb->dumps.poll = ecore_timer_add(20.0, botman_dumps_poll, gdb);
+
+   botman_dumps_poll(gdb);
+
+   gotham_modules_command_add("gdb", ".gdb list",
+                              "[.gdb list] - "
+                              "This command will list coredumps inside the coredumps directory.");
+   gotham_modules_command_add("gdb", ".gdb delete",
+                              "[.gdb delete <pattern>] - "
+                              "This command will delete coredumps matching given parttern.");
+   gotham_modules_command_add("gdb", ".gdb fetch",
+                              "[.gdb fetch <coredump>] - "
+                              "This command will retrieve the backtrace from a given coredump.");
+
    return gdb;
 }
 
@@ -47,9 +61,13 @@ void
 module_unregister(void *data)
 {
    Module_Gdb *gdb = data;
+   Eina_List *l;
+   char *s;
 
-   if (gdb->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN) botman_unregister(gdb);
-   else alfred_unregister(gdb);
+   EINA_LIST_FOREACH(gdb->dumps.known, l, s)
+     free(s);
+
+   ecore_timer_del(gdb->dumps.poll);
 }
 
 void

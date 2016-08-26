@@ -11,7 +11,7 @@ botman_fetch_send(Module_Gdb *gdb,
    char *coredump;
    Eina_Bool r;
 
-   coredump = utils_dupf("%s%s", gdb->dumps.dir, command->command[2]);
+   coredump = utils_dupf("%s%s", gdb->conf->dir, command->command[2]);
 
    {
      struct stat b;

@@ -84,44 +84,11 @@ botman_dumps_poll(void *data)
 {
    Module_Gdb *gdb = data;
 
-   eio_file_direct_ls(gdb->dumps.dir,
+   eio_file_direct_ls(gdb->conf->dir,
                       botman_dumps_ls_filter,
                       botman_dumps_ls_main,
                       botman_dumps_ls_done,
                       botman_dumps_ls_error,
                       gdb);
    return EINA_TRUE;
-}
-
-void
-botman_register(Module_Gdb *gdb)
-{
-   gdb->dumps.poll = ecore_timer_add(20.0, botman_dumps_poll, gdb);
-
-   conf_load(gdb);
-
-   conf_backup_load(gdb);
-   botman_dumps_poll(gdb);
-
-   gotham_modules_command_add("gdb", ".gdb list",
-                              "[.gdb list] - "
-                              "This command will list coredumps inside the coredumps directory.");
-   gotham_modules_command_add("gdb", ".gdb delete",
-                              "[.gdb delete <pattern>] - "
-                              "This command will delete coredumps matching given parttern.");
-   gotham_modules_command_add("gdb", ".gdb fetch",
-                              "[.gdb fetch <coredump>] - "
-                              "This command will retrieve the backtrace from a given coredump.");
-}
-
-void
-botman_unregister(Module_Gdb *gdb)
-{
-   Eina_List *l;
-   char *s;
-
-   EINA_LIST_FOREACH(gdb->dumps.known, l, s)
-     free(s);
-
-   ecore_timer_del(gdb->dumps.poll);
 }

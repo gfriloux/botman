@@ -1,0 +1,12 @@
+Azy_Namespace Module;
+
+struct Gdb_Conf
+{
+   string notification;
+   string dir;
+};
+
+struct Gdb_Dumps
+{
+   array<string> dumps;
+};

@@ -237,18 +237,21 @@ src_modules_ssh_tunnel_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_gdb
 src_modules_gdb_la_SOURCES = \
    src/modules/gdb/backtrace.c \
    src/modules/gdb/botman.c \
-   src/modules/gdb/conf.c \
    src/modules/gdb/module.c \
    src/modules/gdb/event.c \
    src/modules/gdb/botman_delete.c \
    src/modules/gdb/botman_fetch.c \
    src/modules/gdb/botman_list.c \
-   src/modules/gdb/alfred.c \
    src/modules/gdb/utils.c \
-   src/modules/gdb/gdb.h
+   src/modules/gdb/gdb.h \
+   src/modules/gdb/Module_Common_Azy.c \
+   src/modules/gdb/Module_Common_Azy.h \
+   src/modules/gdb/Module_Common.c \
+   src/modules/gdb/Module_Common.h
 src_modules_gdb_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
@@ -258,4 +261,7 @@ src_modules_gdb_la_LDFLAGS = \
 src_modules_gdb_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_gdb: src/modules/gdb/gdb.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/gdb \
+	                    $(top_srcdir)/src/modules/gdb/gdb.azy
 endif
