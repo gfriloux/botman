@@ -108,7 +108,6 @@ free_buf:
    eina_strbuf_free(buf);
 free_b:
    _backtrace_free(b);
-   gotham_serialize_struct_to_file(gdb->dumps.known, MODULE_GDB_SAVE, (Gotham_Serialization_Function)Array_string_to_azy_value);
    backtrace_get(gdb);
    return EINA_TRUE;
 }
@@ -212,6 +211,7 @@ backtrace_get(void *data)
 
    if (!gdb->dumps.queue) return;
 
+begin:
    s = eina_list_nth(gdb->dumps.queue, 0);
    if (!s) return;
 
@@ -220,8 +220,9 @@ backtrace_get(void *data)
    DBG("A new coredump has been found : %s", s);
 
    buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "New coredump detected : %s", s);
+   eina_strbuf_append_printf(buf, ".notification send %s New coredump detected : %s",
+                             gdb->conf->notification, s);
    gotham_citizen_send(gdb->gotham->alfred, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-   free(s);
+   goto begin;
 }

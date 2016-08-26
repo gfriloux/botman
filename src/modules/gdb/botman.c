@@ -20,7 +20,7 @@ botman_dumps_ls_main(void *data,
 
    DBG("gdb[%p] info[%p][%s]", gdb, info, info->path);
 
-   gdb->dumps.check = eina_list_append(gdb->dumps.check, strdup(info->path));
+   gdb->dumps.check = eina_list_append(gdb->dumps.check, eina_stringshare_add(info->path));
 }
 
 void
@@ -43,7 +43,7 @@ botman_dumps_ls_done(void *data,
 
         DBG("New file found : %s", s);
 
-        file = strdup(s);
+        file = (char *)eina_stringshare_ref(s);
         EINA_SAFETY_ON_NULL_GOTO(file, end_loop);
 
         gdb->dumps.known = eina_list_append(gdb->dumps.known, file);
@@ -60,10 +60,17 @@ end_loop:
         if (utils_dump_exist(gdb->dumps.check, s))
           continue;
 
+        DBG("Deleting coredump [%s] from known list", s);
         gdb->dumps.known = eina_list_remove(gdb->dumps.known, s);
         gdb->dumps.queue = eina_list_remove(gdb->dumps.queue, s);
-        free(s);
+        eina_stringshare_del(s);
      }
+
+   EINA_LIST_FREE(gdb->dumps.check, s)
+     eina_stringshare_del(s);
+   gdb->dumps.check = NULL;
+
+   gotham_serialize_struct_to_file(gdb->dumps.known, MODULE_GDB_SAVE, (Gotham_Serialization_Function)Array_string_to_azy_value);
 
    /* Process queue to send backtraces */
    backtrace_get(gdb);
@@ -83,6 +90,8 @@ Eina_Bool
 botman_dumps_poll(void *data)
 {
    Module_Gdb *gdb = data;
+   DBG("gdb[%p]", gdb);
+   DBG("gdb[%p] gdb->conf->dir[%s]", gdb, gdb->conf->dir);
 
    eio_file_direct_ls(gdb->conf->dir,
                       botman_dumps_ls_filter,

@@ -36,6 +36,10 @@ module_register(Gotham *gotham)
    EINA_SAFETY_ON_NULL_RETURN_VAL(gdb, NULL);
    gdb->gotham = gotham;
    gdb->conf = gotham_serialize_file_to_struct(MODULE_GDB_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Gdb_Conf);
+   gdb->dumps.known = gotham_serialize_file_to_struct(MODULE_GDB_SAVE, (Gotham_Deserialization_Function)azy_value_to_Array_string);
+
+   DBG("gdb->conf->notification[%p][%s] gdb->conf->dir[%p][%s]",
+       gdb->conf->notification, gdb->conf->notification, gdb->conf->dir, gdb->conf->dir);
 
    gdb->access_allowed = gotham_modules_function_get("access",
                                                      "access_allowed");
