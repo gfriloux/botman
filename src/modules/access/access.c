@@ -67,8 +67,7 @@ module_register(Gotham *gotham)
         botman_access_alfred_add(access);
      }
 
-   access_conf_load(access);
-
+   access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
    return access;
 }
 
@@ -82,25 +81,12 @@ void
 module_unregister(void *data)
 {
    Module_Access *access = data;
-   Module_Access_Rule *rule;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
 
    DBG("access[%p]", access);
 
-   EINA_LIST_FREE(access->citizens, rule)
-     {
-        free((char *)rule->pattern);
-        free((char *)rule->description);
-        free(rule);
-     }
-
-   EINA_LIST_FREE(access->commands, rule)
-     {
-        free((char *)rule->pattern);
-        free((char *)rule->description);
-        free(rule);
-     }
+   Module_Access_Conf_free(access->conf);
 
    if (access->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      alfred_commands_unregister();

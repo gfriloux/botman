@@ -34,13 +34,13 @@ src_modules_notification_la_LIBADD = \
 	azy_parser -H -p -o $(top_srcdir)/src/modules/notification \
 	                    $(top_srcdir)/src/modules/notification/notification.azy
 
+BUILT_SOURCES += .sources_access
 src_modules_access_la_SOURCES = \
    src/modules/access/access.c \
    src/modules/access/access.h \
    src/modules/access/alfred.c \
    src/modules/access/botman.c \
    src/modules/access/citizen.c \
-   src/modules/access/conf.c \
    src/modules/access/event.c \
    src/modules/access/modules.c
 src_modules_access_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
@@ -51,6 +51,9 @@ src_modules_access_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_access: src/modules/gdb/gdb.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/access \
+	                    $(top_srcdir)/src/modules/access/access.azy
 
 src_modules_help_la_SOURCES = \
    src/modules/help/event.c \

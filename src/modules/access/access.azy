@@ -1,0 +1,15 @@
+Azy_Namespace Module;
+
+struct Access_Conf_Rule
+{
+   string pattern;
+   int level;
+   string description;
+};
+
+struct Access_Conf
+{
+   int revision;
+   array<Access_Conf_Rule> citizens;
+   array<Access_Conf_Rule> commands;
+};

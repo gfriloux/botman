@@ -5,6 +5,8 @@
 #include <Gotham.h>
 #include <cJSON.h>
 
+#include "Module_Common_Azy.h"
+
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_access_log_dom, __VA_ARGS__)
 #define DBG(...) EINA_LOG_DOM_DBG(_module_access_log_dom, __VA_ARGS__)
 #define NFO(...) EINA_LOG_DOM_INFO(_module_access_log_dom, __VA_ARGS__)
@@ -22,19 +24,10 @@
 
 int _module_access_log_dom;
 
-typedef struct _Module_Access_Rule
-{
-   const char *pattern,       /*!<  Pattern to match                         */
-              *description;   /*!<  A short description                      */
-   unsigned int level;        /*!<  Access level                             */
-} Module_Access_Rule;
-
 typedef struct _Module_Access
 {
    Gotham *gotham;            /*!<  Gotham structure                         */
-   unsigned int revision;     /*!<  Access conf revision number              */
-   Eina_List *citizens,     /*!<  Citizen access list                      */
-             *commands;     /*!<  Commands access list                     */
+   Module_Access_Conf *conf;
 } Module_Access;
 
 void access_conf_load(Module_Access *access);

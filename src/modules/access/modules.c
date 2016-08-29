@@ -24,10 +24,10 @@ unsigned int
 modules_commands_level_find(Module_Access *access,
                             const char *command)
 {
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    Eina_List *l;
 
-   EINA_LIST_FOREACH(access->commands, l, rule)
+   EINA_LIST_FOREACH(access->conf->commands, l, rule)
      {
         if (!fnmatch(rule->pattern, command, FNM_NOESCAPE))
           return rule->level;

@@ -34,12 +34,12 @@ Eina_Bool _isnumber(char c)
 void
 citizen_access_eval(Module_Access *access, Gotham_Citizen *citizen)
 {
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    unsigned int level = 1;
    const char *pattern = "default";
    Eina_List *l;
 
-   EINA_LIST_FOREACH(access->citizens, l, rule)
+   EINA_LIST_FOREACH(access->conf->citizens, l, rule)
      {
         if (fnmatch(rule->pattern, citizen->jid, FNM_NOESCAPE))
           continue;
@@ -64,14 +64,14 @@ citizen_access_list(Module_Access *access)
 {
    Eina_Strbuf *buf;
    unsigned int i = 0;
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    const char *answer;
    Eina_List *l;
 
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of access rights :\n");
 
-   EINA_LIST_FOREACH(access->citizens, l, rule)
+   EINA_LIST_FOREACH(access->conf->citizens, l, rule)
      {
         eina_strbuf_append_printf(buf,
                                   "\t%d/\tPattern [%s] → Access level [%d]\n"
@@ -97,8 +97,8 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
    Eina_Iterator *it;
    const char *pattern;
    unsigned int level;
-   Module_Access_Rule *rule,
-                      *rule_found = NULL;
+   Module_Access_Conf_Rule *rule,
+                           *rule_found = NULL;
    void *data;
    const char **cmd = command->command;
    Eina_List *l;
@@ -109,7 +109,7 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
    pattern = cmd[2];
    level = atoi(cmd[3]);
 
-   EINA_LIST_FOREACH(access->citizens, l, rule)
+   EINA_LIST_FOREACH(access->conf->citizens, l, rule)
      {
         DBG("rule->pattern=%s pattern=%s", rule->pattern, pattern);
 
@@ -141,7 +141,7 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    /* We should sync to disk */
-   access->revision++;
+   access->conf->revision++;
    access_conf_save(access);
    return strdup("Modification done");
 }
@@ -159,7 +159,7 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
    void *data;
    const char **cmd = command->command;
    const char *pattern = cmd[2];
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    Eina_List *l,
              *l2;
    Eina_Bool found = EINA_FALSE;
@@ -169,12 +169,12 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
    if (!pattern)
      return strdup("Wrong use of “.access del”");
 
-   EINA_LIST_FOREACH_SAFE(access->citizens, l, l2, rule)
+   EINA_LIST_FOREACH_SAFE(access->conf->citizens, l, l2, rule)
      {
         if (strcasecmp(pattern, rule->pattern))
           continue;
 
-        access->citizens = eina_list_remove(access->citizens, rule);
+        access->conf->citizens = eina_list_remove(access->conf->citizens, rule);
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
@@ -201,7 +201,7 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
         citizen_access_eval(access, citizen);
      }
 
-   access->revision++;
+   access->conf->revision++;
    access_conf_save(access);
 
    return strdup("Modification done");
@@ -216,7 +216,7 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
 const char *
 citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
 {
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    Eina_Iterator *it;
    void *data;
    const char **cmd = command->command;
@@ -226,7 +226,7 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
        (!_isnumber(cmd[3][0])) || (!cmd[4]))
      return strdup("Wrong use of “.access add”");
 
-   rule = calloc(1, sizeof(Module_Access_Rule));
+   rule = calloc(1, sizeof(Module_Access_Conf_Rule));
    rule->pattern = strdup(cmd[2]);
    rule->level = atoi(cmd[3]);
 
@@ -241,7 +241,7 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
 
    DBG("description : %s", rule->description);
 
-   access->citizens = eina_list_append(access->citizens, rule);
+   access->conf->citizens = eina_list_append(access->conf->citizens, rule);
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))
@@ -256,7 +256,7 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
         gotham_citizen_var_set(citizen, "access_pattern", rule->pattern);
      }
 
-   access->revision++;
+   access->conf->revision++;
    access_conf_save(access);
 
    return strdup("Modification done");

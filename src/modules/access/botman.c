@@ -43,18 +43,18 @@ void
 botman_access_alfred_add(Module_Access *access)
 {
    Gotham_Citizen *alfred = access->gotham->alfred;
-   Module_Access_Rule *arule;
+   Module_Access_Conf_Rule *arule;
 
    DBG("access[%p]", access);
 
-   arule = calloc(1, sizeof(Module_Access_Rule));
+   arule = calloc(1, sizeof(Module_Access_Conf_Rule));
    arule->pattern = strdup(alfred->jid);
    arule->level = 10;
    arule->description = strdup(alfred->nickname ?
                                  alfred->nickname :
                                  "Alfred Pennyworth");
 
-   access->citizens = eina_list_append(access->citizens, arule);
+   access->conf->citizens = eina_list_append(access->conf->citizens, arule);
 
    return;
 }
@@ -68,7 +68,7 @@ void
 botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
 {
    cJSON *json;
-   Module_Access_Rule *rule;
+   Module_Access_Conf_Rule *rule;
    const char *p;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
@@ -98,14 +98,14 @@ botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
         return;
      }
 
-   EINA_LIST_FREE(access->citizens, rule)
+   EINA_LIST_FREE(access->conf->citizens, rule)
      {
         free((char *)rule->pattern);
         free((char *)rule->description);
         free(rule);
      }
 
-   EINA_LIST_FREE(access->commands, rule)
+   EINA_LIST_FREE(access->conf->commands, rule)
      {
         free((char *)rule->pattern);
         free((char *)rule->description);
