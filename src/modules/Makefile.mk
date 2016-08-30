@@ -179,7 +179,11 @@ src_modules_rewrite_la_SOURCES = \
    src/modules/rewrite/event.c \
    src/modules/rewrite/rewrite.c \
    src/modules/rewrite/rewrite.h \
-   src/modules/rewrite/utils.c
+   src/modules/rewrite/utils.c \
+   src/modules/rewrite/Module_Common_Azy.c \
+   src/modules/rewrite/Module_Common_Azy.h \
+   src/modules/rewrite/Module_Common.c \
+   src/modules/rewrite/Module_Common.h
 src_modules_rewrite_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_rewrite_la_LDFLAGS = \
