@@ -30,7 +30,7 @@ DBG("Adding %s : %s", name, value);
         return;
      }
 
-   module_json_answer(".info", "", EINA_TRUE, buf, info->gotham, citizen, EINA_TRUE);
+   gotham_command_json_answer(".info", "", EINA_TRUE, buf, info->gotham, citizen, EINA_TRUE);
 }
 
 Eina_Bool
@@ -66,7 +66,7 @@ info_botman_command(Module_Info *info,
         if (strcmp(command->citizen->jid, info->gotham->alfred->jid))
           gotham_command_send(command, eina_strbuf_string_get(buf));
         else
-          module_json_answer(".info", "get", EINA_TRUE, buf, info->gotham, command->citizen, EINA_TRUE);
+          gotham_command_json_answer(".info", "get", EINA_TRUE, buf, info->gotham, command->citizen, EINA_TRUE);
         eina_strbuf_free(buf);
      }
    else if (!command->command[1])
@@ -84,7 +84,7 @@ not_found_msg:
         buf = eina_strbuf_new();
         eina_strbuf_append_printf(buf, "Given info variable '%s' was not found.", command->command[1]);
 
-        module_json_answer(".info", "get", EINA_FALSE, buf, info->gotham, command->citizen, EINA_TRUE);
+        gotham_command_json_answer(".info", "get", EINA_FALSE, buf, info->gotham, command->citizen, EINA_TRUE);
         eina_strbuf_free(buf);
      }
    return;

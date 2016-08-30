@@ -14,59 +14,6 @@
  * @{
  */
 
-
-/**
- * @brief Send answer in JSON format.
- * @param cmd Command requested
- * @param params Command parameters
- * @param status EINA_TRUE on success, EINA_FALSE otherwise
- * @param gotham Gotham structure
- * @param content String buffer containing message content
- * @param citizen Gotham_Citizen we reply to
- * @param send_to_alfred EINA_TRUE if message has to be also sent
-          to Alfred, EINA_FALSE otherwise
- */
-void
-module_json_answer(const char *cmd,
-                   const char *params,
-                   Eina_Bool status,
-                   Eina_Strbuf *content,
-                   Gotham *gotham,
-                   Gotham_Citizen *citizen,
-                   Eina_Bool send_to_alfred)
-{
-   cJSON *json_obj,
-         *json_content;
-   char **split;
-   unsigned int i;
-   char *ptr;
-
-   json_obj = cJSON_CreateObject();
-   cJSON_AddStringToObject(json_obj, "command", cmd);
-   cJSON_AddStringToObject(json_obj, "parameters", params);
-   cJSON_AddStringToObject(json_obj, "status", status ? "ok" : "ko");
-
-   json_content = cJSON_CreateArray();
-   split = eina_str_split(eina_strbuf_string_get(content), "\n", 0);
-   for (i=0; split[i]; i++)
-     if (split[i][0])
-       cJSON_AddItemToArray(json_content, cJSON_CreateString(split[i]));
-
-   cJSON_AddItemToObject(json_obj, "content", json_content);
-   if (split[0]) free(split[0]);
-   free(split);
-
-   ptr = cJSON_Print(json_obj);
-   cJSON_Delete(json_obj);
-   gotham_citizen_send(citizen, ptr);
-
-   if (send_to_alfred && (strcmp(citizen->jid, gotham->alfred->jid)))
-     gotham_citizen_send(gotham->alfred, ptr);
-
-   free(ptr);
-   return;
-}
-
 /**
  * @brief Run command in a pipe and return command's result.
  * @param cmd Command to run
@@ -188,13 +135,8 @@ botman_sysinfo_send(Module_Sysinfo *obj,
      }
    eina_iterator_free(it);
 
-   module_json_answer(".sysinfo",
-                      "",
-                      EINA_TRUE,
-                      buf,
-                      obj->gotham,
-                      command->citizen,
-                      EINA_TRUE);
+   gotham_command_json_answer(".sysinfo", "", EINA_TRUE, buf,
+                              obj->gotham, command->citizen, EINA_TRUE);
 
    eina_strbuf_free(buf);
 }
@@ -233,13 +175,8 @@ botman_sysinfo_command_run(Module_Sysinfo *obj,
    ret = EINA_TRUE;
 
 func_end:
-   module_json_answer(command->name,
-                      "",
-                      ret,
-                      buf,
-                      obj->gotham,
-                      command->citizen,
-                      EINA_FALSE);
+   gotham_command_json_answer(command->name, "", ret, buf,
+                              obj->gotham, command->citizen, EINA_FALSE);
 
    eina_strbuf_free(buf);
 

@@ -44,7 +44,7 @@ end_loop:
 
    if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
      gotham_command_send(command, eina_strbuf_string_get(buf));
-   else module_json_answer(".gdb", "list", EINA_TRUE, buf, gdb->gotham, command->citizen, EINA_FALSE);
+   else gotham_command_json_answer(".gdb", "list", EINA_TRUE, buf, gdb->gotham, command->citizen, EINA_FALSE);
 
    eina_strbuf_free(buf);
    botman_dumps_poll(gdb);
@@ -54,5 +54,5 @@ error:
    if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
      gotham_command_send(command, "Failed to delete coredumps due to memory allocation error");
    else
-     module_json_answer(".gdb", "list", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
+     gotham_command_json_answer(".gdb", "list", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
 }

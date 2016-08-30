@@ -54,15 +54,6 @@ void ssh_tunnel_get(Module_Ssh_Tunnel *obj,
 Eina_Bool ssh_tunnel_cb_data(void *data, int type, void *event);
 Eina_Bool ssh_tunnel_cb_end(void *data, int type, void *event);
 
-void module_json_answer(const char *cmd,
-                        const char *params,
-                        Eina_Bool status,
-                        Eina_Strbuf *content,
-                        Gotham *gotham,
-                        Gotham_Citizen *citizen,
-                        Eina_Bool send_to_alfred);
-
-
 void alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
                                  Gotham_Citizen_Command *command);
 void botman_answer_get(Module_Ssh_Tunnel *obj,

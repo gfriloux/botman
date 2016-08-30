@@ -184,6 +184,7 @@ GOTHAM_API Eina_Bool gotham_command_send(Gotham_Citizen_Command *command, const 
 GOTHAM_API Eina_Bool gotham_emoticons_custom_add(Gotham *gotham, const char *file);
 
 GOTHAM_API void gotham_event_command_new(Gotham_Citizen_Command *command);
+GOTHAM_API void gotham_command_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);
 
 GOTHAM_API Eina_Inlist *gotham_modules_list(void);
 GOTHAM_API Gotham_Module *gotham_modules_single_module_load(const char *name, Gotham *gotham);

@@ -41,7 +41,6 @@ Eina_Bool botman_dumps_poll(void *data);
 void botman_fetch_send(Module_Gdb *gdb, Gotham_Citizen_Command *command);
 void botman_list_send(Module_Gdb *gdb, Gotham_Citizen_Command *command);
 
-void module_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);
 Eina_Bool utils_dump_exist(Eina_List *list, char *s);
 char * utils_coredump_name_extract(const char *path);
 char * utils_dupf(const char *s, ...);

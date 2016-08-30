@@ -32,7 +32,7 @@ botman_fetch_send(Module_Gdb *gdb,
         if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
           gotham_command_send(command, "Failed to fetch coredump.");
         else
-          module_json_answer(".gdb", "fetch", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
+          gotham_command_json_answer(".gdb", "fetch", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
      }
 end:
    free(coredump);

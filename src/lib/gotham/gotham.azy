@@ -1,0 +1,10 @@
+Azy_Namespace Gotham;
+
+struct Command_Json_Answer
+{
+   string        command;
+   string        parameters;
+   string        status;
+
+   array<string> content;
+};

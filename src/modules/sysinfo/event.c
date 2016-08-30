@@ -23,7 +23,7 @@
         ERR("%s is not autorized", _c->jid);                                   \
         Eina_Strbuf *buf = eina_strbuf_new();                                  \
         eina_strbuf_append(buf, "Access denied");                              \
-        module_json_answer(".ssh", "", EINA_FALSE,                             \
+        gotham_command_json_answer(".ssh", "", EINA_FALSE,                     \
                            buf, _a->gotham, _c, EINA_FALSE);                   \
         eina_strbuf_free(buf);                                                 \
         return EINA_TRUE;                                                      \

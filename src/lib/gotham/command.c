@@ -109,6 +109,43 @@ gotham_command_free(Gotham_Citizen_Command *command)
 #undef _FREE
 }
 
+void
+gotham_command_json_answer(const char *cmd,
+                           const char *params,
+                           Eina_Bool status,
+                           Eina_Strbuf *content,
+                           Gotham *gotham,
+                           Gotham_Citizen *citizen,
+                           Eina_Bool send_to_alfred)
+{
+   Gotham_Command_Json_Answer *gcja;
+   char **split;
+   char *s;
+   unsigned int i;
+
+   gcja = Gotham_Command_Json_Answer_new();
+
+   gcja->command = eina_stringshare_add(cmd);
+   gcja->parameters = eina_stringshare_add(params);
+   gcja->status = eina_stringshare_add(status ? "ok" : "ko");
+
+   split = eina_str_split(eina_strbuf_string_get(content), "\n", 0);
+   for (i=0; split[i]; i++)
+     if (split[i][0])
+       gcja->content = eina_list_append(gcja->content, eina_stringshare_add(split[i]));
+
+   s = gotham_serialize_struct_to_string(gcja, (Gotham_Serialization_Function)Gotham_Command_Json_Answer_to_azy_value);
+   Gotham_Command_Json_Answer_free(gcja);
+   gotham_citizen_send(citizen, s);
+
+   if (send_to_alfred && (strcmp(citizen->jid, gotham->alfred->jid)))
+     gotham_citizen_send(gotham->alfred, s);
+
+   free(s);
+}
+
+
+
 /**
  * @}
  */

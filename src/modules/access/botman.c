@@ -113,7 +113,7 @@ botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    botman_access_alfred_add(access);
-   access_conf_load(access);
+   access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
 }
 
 /**

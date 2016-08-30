@@ -13,6 +13,8 @@
 #include <Eet.h>
 #include <Gotham.h>
 
+#include "Gotham_Common_Azy.h"
+
 int gotham_log_dom;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(gotham_log_dom, __VA_ARGS__)

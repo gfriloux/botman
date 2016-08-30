@@ -30,5 +30,3 @@ void alfred_send(Module_Notification *notification, Gotham_Citizen_Command *comm
 
 Module_Notification_Conf_Group * utils_group_find(Module_Notification *notification, const char *name);
 const char * utils_user_find(Module_Notification_Conf_Group *group, const char *name);
-
-void module_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);

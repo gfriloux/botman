@@ -43,7 +43,5 @@ void info_conf_alfred_load(Module_Info *info);
 void info_botman_command(Module_Info *info, Gotham_Citizen_Command *command);
 Eina_Bool info_botman_sync(void *data);
 
-void module_json_answer(const char *cmd, const char *params, Eina_Bool status, Eina_Strbuf *content, Gotham *gotham, Gotham_Citizen *citizen, Eina_Bool send_to_alfred);
-
 const char * utils_citizen_print(Module_Info *info, Gotham_Citizen *citizen);
 #endif

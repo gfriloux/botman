@@ -43,13 +43,4 @@ void botman_sysinfo_send(Module_Sysinfo *obj, Gotham_Citizen_Command *command);
 
 void botman_sysinfo_command_run(Module_Sysinfo *obj,
                                 Gotham_Citizen_Command *command);
-
-void module_json_answer(const char *cmd,
-                        const char *params,
-                        Eina_Bool status,
-                        Eina_Strbuf *content,
-                        Gotham *gotham,
-                        Gotham_Citizen *citizen,
-                        Eina_Bool send_to_alfred);
-
 #endif

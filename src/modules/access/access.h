@@ -30,10 +30,6 @@ typedef struct _Module_Access
    Module_Access_Conf *conf;
 } Module_Access;
 
-void access_conf_load(Module_Access *access);
-void access_conf_save(Module_Access *access);
-cJSON * access_conf_tojson(Module_Access *access);
-
 Eina_Bool access_allowed(Gotham_Module_Command *mc, Gotham_Citizen *citizen);
 
 void citizen_access_eval(Module_Access *access, Gotham_Citizen *citizen);

@@ -12,6 +12,8 @@
  * @{
  */
 
+#define _WRITE_CONF() gotham_serialize_struct_to_file(access->conf, MODULE_ACCESS_CONF, (Gotham_Serialization_Function)Module_Access_Conf_to_azy_value)
+
 /**
  * @brief Check if given char is a number.
  * @param c char to check
@@ -142,7 +144,7 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
 
    /* We should sync to disk */
    access->conf->revision++;
-   access_conf_save(access);
+   _WRITE_CONF();
    return strdup("Modification done");
 }
 
@@ -202,7 +204,7 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    access->conf->revision++;
-   access_conf_save(access);
+   _WRITE_CONF();
 
    return strdup("Modification done");
 }
@@ -257,7 +259,7 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    access->conf->revision++;
-   access_conf_save(access);
+   _WRITE_CONF();
 
    return strdup("Modification done");
 }
@@ -272,27 +274,16 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
 const char *
 citizen_access_sync(Module_Access *access)
 {
-   cJSON *json;
-   char *json_str,
-        *access_set;
+   char *s;
+   Eina_Strbuf *buf;
    Eina_Iterator *it;
    void *data;
 
+   s = gotham_serialize_struct_to_string(access, (Gotham_Serialization_Function)Module_Access_Conf_to_azy_value);
 
-   json = access_conf_tojson(access);
-   if (!json)
-     {
-        ERR("Failed to turn Access into JSON");
-        return strdup("Failed to turn Access into JSON");
-     }
-
-   json_str = cJSON_PrintUnformatted(json);
-   cJSON_Delete(json);
-
-   access_set = calloc(1, strlen(json_str) + strlen(".access set ") + 1);
-   sprintf(access_set, ".access set ");
-   strcat(access_set, json_str);
-   free(json_str);
+   buf = eina_strbuf_new();
+   eina_strbuf_append_printf(buf, ".access set %s", s);
+   free(s);
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while(eina_iterator_next(it, &data))
@@ -302,12 +293,14 @@ citizen_access_sync(Module_Access *access)
         if (citizen->type != GOTHAM_CITIZEN_TYPE_BOTMAN)
           continue;
 
-        gotham_citizen_send(citizen, access_set);
+        gotham_citizen_send(citizen, eina_strbuf_string_get(buf));
      }
-   free(access_set);
+   eina_strbuf_free(buf);
 
    return strdup("Everyone seems to be up2date");
 }
+
+#undef _WRITE_CONF
 
 /**
  * @}

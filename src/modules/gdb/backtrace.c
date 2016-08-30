@@ -96,8 +96,8 @@ _backtrace_del(void *data,
 
    if (!strcmp(b->jid, gdb->gotham->alfred->jid))
      {
-        module_json_answer(".gdb", b->report ? "backtrace" : "fetch", EINA_TRUE, buf,
-                           gdb->gotham, c, EINA_FALSE);
+        gotham_command_json_answer(".gdb", b->report ? "backtrace" : "fetch", EINA_TRUE, buf,
+                                   gdb->gotham, c, EINA_FALSE);
      }
    else
      gotham_citizen_send(c, eina_strbuf_string_get(buf));

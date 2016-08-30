@@ -18,7 +18,6 @@ src_modules_notification_la_SOURCES = \
    src/modules/notification/main.h \
    src/modules/notification/event.c \
    src/modules/notification/alfred.c \
-   src/modules/notification/module.c \
    src/modules/notification/utils.c \
    src/modules/notification/Module_Common_Azy.c \
    src/modules/notification/Module_Common_Azy.h \
@@ -42,7 +41,11 @@ src_modules_access_la_SOURCES = \
    src/modules/access/botman.c \
    src/modules/access/citizen.c \
    src/modules/access/event.c \
-   src/modules/access/modules.c
+   src/modules/access/modules.c \
+   src/modules/access/Module_Common_Azy.c \
+   src/modules/access/Module_Common_Azy.h \
+   src/modules/access/Module_Common.c \
+   src/modules/access/Module_Common.h
 src_modules_access_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_access_la_LDFLAGS = \
    -no-undefined -module -avoid-version \

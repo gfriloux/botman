@@ -14,59 +14,6 @@
  * @{
  */
 
-
-/**
- * @brief Send answer in JSON format.
- * @param cmd Command requested
- * @param params Command parameters
- * @param status EINA_TRUE on success, EINA_FALSE otherwise
- * @param gotham Gotham structure
- * @param content String buffer containing message content
- * @param citizen Gotham_Citizen we reply to
- * @param send_to_alfred EINA_TRUE if message has to be also sent
-          to Alfred, EINA_FALSE otherwise
- */
-void
-module_json_answer(const char *cmd,
-                   const char *params,
-                   Eina_Bool status,
-                   Eina_Strbuf *content,
-                   Gotham *gotham,
-                   Gotham_Citizen *citizen,
-                   Eina_Bool send_to_alfred)
-{
-   cJSON *json_obj,
-         *json_content;
-   char **split;
-   unsigned int i;
-   char *ptr;
-
-   json_obj = cJSON_CreateObject();
-   cJSON_AddStringToObject(json_obj, "command", cmd);
-   cJSON_AddStringToObject(json_obj, "parameters", params);
-   cJSON_AddStringToObject(json_obj, "status", status ? "ok" : "ko");
-
-   json_content = cJSON_CreateArray();
-   split = eina_str_split(eina_strbuf_string_get(content), "\n", 0);
-   for (i=0; split[i]; i++)
-     if (split[i][0])
-       cJSON_AddItemToArray(json_content, cJSON_CreateString(split[i]));
-
-   cJSON_AddItemToObject(json_obj, "content", json_content);
-   if (split[0]) free(split[0]);
-   free(split);
-
-   ptr = cJSON_Print(json_obj);
-   cJSON_Delete(json_obj);
-   gotham_citizen_send(citizen, ptr);
-
-   if (send_to_alfred && (strcmp(citizen->jid, gotham->alfred->jid)))
-     gotham_citizen_send(gotham->alfred, ptr);
-
-   free(ptr);
-   return;
-}
-
 /**
  * @brief Check if stored PID for tunnel still exists.
  * If tunnel isn't valid (pid doesn't exist), reset variables.
@@ -132,13 +79,8 @@ _tunnel_closed_send(Module_Ssh_Tunnel *obj,
    buf = eina_strbuf_new();
 
    eina_strbuf_append(buf, "Tunnel has died");
-   module_json_answer(".ssh",
-                      cmd->command[1],
-                      EINA_TRUE,
-                      buf,
-                      obj->gotham,
-                      cmd->citizen,
-                      EINA_TRUE);
+   gotham_command_json_answer(".ssh", cmd->command[1], EINA_TRUE, buf,
+                              obj->gotham, cmd->citizen, EINA_TRUE);
 
    /** Reset variables and custom vars */
    obj->tunnel.pid = obj->tunnel.port = 0;
@@ -228,13 +170,8 @@ ssh_tunnel_cb_data(void *data,
      }
 
    eina_strbuf_free(data_buf);
-   module_json_answer(".ssh",
-                      cmd->command[1],
-                      ok,
-                      buf,
-                      obj->gotham,
-                      cmd->citizen,
-                      EINA_TRUE);
+   gotham_command_json_answer(".ssh", cmd->command[1], ok, buf,
+                              obj->gotham, cmd->citizen, EINA_TRUE);
    eina_strbuf_free(buf);
 
    return EINA_TRUE;
@@ -310,13 +247,8 @@ ssh_tunnel_open(Module_Ssh_Tunnel *obj,
                                        obj->tunnel.port,
                                        obj->tunnel.pid);
 
-        module_json_answer(".ssh",
-                           "on",
-                           EINA_TRUE,
-                           buf,
-                           obj->gotham,
-                           command->citizen,
-                           EINA_TRUE);
+        gotham_command_json_answer(".ssh", "on", EINA_TRUE, buf,
+                                   obj->gotham, command->citizen, EINA_TRUE);
 
         eina_strbuf_free(buf);
         return;
@@ -367,13 +299,8 @@ ssh_tunnel_close(Module_Ssh_Tunnel *obj,
    if (!obj->tunnel.pid || !obj->tunnel.port)
      {
         eina_strbuf_append(buf, "No tunnel found");
-        module_json_answer(".ssh",
-                           "off",
-                           EINA_FALSE,
-                           buf,
-                           obj->gotham,
-                           command->citizen,
-                           EINA_TRUE);
+        gotham_command_json_answer(".ssh", "off", EINA_FALSE, buf,
+                                   obj->gotham, command->citizen, EINA_TRUE);
         eina_strbuf_free(buf);
         return;
      }
@@ -407,13 +334,8 @@ ssh_tunnel_get(Module_Ssh_Tunnel *obj,
      eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
                                     obj->tunnel.port, obj->tunnel.pid);
 
-   module_json_answer(".ssh",
-                      "",
-                      EINA_TRUE,
-                      buf,
-                      obj->gotham,
-                      command->citizen,
-                      EINA_TRUE);
+   gotham_command_json_answer(".ssh", "", EINA_TRUE, buf,
+                              obj->gotham, command->citizen, EINA_TRUE);
 
    eina_strbuf_free(buf);
 }
