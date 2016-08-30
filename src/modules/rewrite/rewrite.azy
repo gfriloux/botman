@@ -1,0 +1,14 @@
+Azy_Namespace Module;
+
+struct Rewrite_Conf_Rule
+{
+   string name;
+   string filter;
+   string rule;
+   string description;
+};
+
+struct Rewrite_Conf
+{
+   array<Rewrite_Conf_Rule> rules;
+};

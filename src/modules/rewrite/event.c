@@ -41,12 +41,13 @@ _event_citizen_command_list(Module_Rewrite *rewrite)
 {
    Eina_Strbuf *b;
    const char *s;
-   Module_Rewrite_Rule *rule;
+   Module_Rewrite_Conf_Rule *rule;
+   Eina_List *l;
 
    b = eina_strbuf_new();
    eina_strbuf_append(b, "\nList of rewrites rules :\n");
 
-   EINA_INLIST_FOREACH(rewrite->rules, rule)
+   EINA_LIST_FOREACH(rewrite->conf->rules, l, rule)
      {
         eina_strbuf_append_printf(b,
                                   "\tRule [%s]\n"
@@ -54,7 +55,7 @@ _event_citizen_command_list(Module_Rewrite *rewrite)
                                   "\t\tRewrite command : %s\n"
                                   "\t\tDescription : %s\n",
                                   rule->name, rule->filter,
-                                  rule->rule, rule->desc);
+                                  rule->rule, rule->description);
      }
 
    s = eina_strbuf_string_steal(b);
@@ -80,10 +81,11 @@ event_citizen_command(void *data,
                       void *ev)
 {
    Module_Rewrite *rewrite = data;
-   Module_Rewrite_Rule *rule;
+   Module_Rewrite_Conf_Rule *rule;
    Gotham_Citizen_Command *command = ev,
                           *gcc;
    const char *s;
+   Eina_List *l;
 
    DBG("rewrite[%p] command[%p]=%s", rewrite, command, command->name);
 
@@ -107,7 +109,7 @@ event_citizen_command(void *data,
         return EINA_TRUE;
      }
 
-   EINA_INLIST_FOREACH(rewrite->rules, rule)
+   EINA_LIST_FOREACH(rewrite->conf->rules, l, rule)
      {
         if (fnmatch(rule->filter, command->message, FNM_NOESCAPE))
           continue;

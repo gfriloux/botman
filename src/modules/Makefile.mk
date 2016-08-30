@@ -174,8 +174,8 @@ src_modules_install_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_install_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_rewrite
 src_modules_rewrite_la_SOURCES = \
-   src/modules/rewrite/conf.c \
    src/modules/rewrite/event.c \
    src/modules/rewrite/rewrite.c \
    src/modules/rewrite/rewrite.h \
@@ -188,6 +188,9 @@ src_modules_rewrite_la_LDFLAGS = \
 src_modules_rewrite_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_rewrite_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_rewrite: src/modules/rewrite/rewrite.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/rewrite \
+	                    $(top_srcdir)/src/modules/rewrite/rewrite.azy
 
 src_modules_sysinfo_la_SOURCES = \
    src/modules/sysinfo/alfred.c \

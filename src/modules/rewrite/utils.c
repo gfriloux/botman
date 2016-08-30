@@ -75,7 +75,7 @@ utils_strdupargs(const char *s, ...)
  * @return const char * rewrited string.
  */
 const char *
-utils_rewrite(Module_Rewrite_Rule *rule, const char *s)
+utils_rewrite(Module_Rewrite_Conf_Rule *rule, const char *s)
 {
    char *s_esc,
         *cmd;

@@ -53,7 +53,8 @@ void *
 module_register(Gotham *gotham)
 {
    Module_Rewrite *rewrite;
-   Module_Rewrite_Rule *rule;
+   Module_Rewrite_Conf_Rule *rule;
+   Eina_List *l;
 
    if (gotham->me->type != GOTHAM_CITIZEN_TYPE_ALFRED)
      return NULL;
@@ -65,17 +66,16 @@ module_register(Gotham *gotham)
         return NULL;
      }
 
-   conf_load(rewrite);
+   rewrite->conf = gotham_serialize_file_to_struct(MODULE_REWRITE_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Rewrite_Conf);
+
    rewrite->rw = eina_hash_pointer_new(_rewrite_rw_free_cb);
 
    gotham_modules_command_add("rewrite", ".rewrite",
                               "[.rewrite] - "
                               "This command will list all know rewrite rules.");
 
-   EINA_INLIST_FOREACH(rewrite->rules, rule)
-     {
-        gotham_modules_command_add("rewrite", rule->name, rule->desc);
-     }
+   EINA_LIST_FOREACH(rewrite->conf->rules, l, rule)
+     gotham_modules_command_add("rewrite", rule->name, rule->description);
 
    return rewrite;
 }
@@ -89,24 +89,20 @@ void
 module_unregister(void *data)
 {
    Module_Rewrite *rewrite = data;
-   Module_Rewrite_Rule *rule = NULL;
-   Eina_Inlist *l;
+   Module_Rewrite_Conf_Rule *rule = NULL;
+   Eina_List *l,
+             *l2;
 
    EINA_SAFETY_ON_NULL_RETURN(rewrite);
    DBG("rewrite[%p]", rewrite);
 
    gotham_modules_command_del("rewrite", ".rewrite");
 
-   EINA_INLIST_FOREACH_SAFE(rewrite->rules, l, rule)
+   EINA_LIST_FOREACH_SAFE(rewrite->conf->rules, l, l2, rule)
      {
         gotham_modules_command_del("rewrite", rule->name);
-        rewrite->rules = eina_inlist_remove(rewrite->rules,
-                                            EINA_INLIST_GET(rule));
-        free((char *)rule->name);
-        free((char *)rule->filter);
-        eina_stringshare_del(rule->rule);
-        free((char *)rule->desc);
-        free(rule);
+        rewrite->conf->rules = eina_list_remove(rewrite->conf->rules, rule);
+        Module_Rewrite_Conf_Rule_free(rule);
      }
    eina_hash_free(rewrite->rw);
    free(rewrite);
