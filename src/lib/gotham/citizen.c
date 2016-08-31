@@ -267,6 +267,46 @@ _gotham_citizen_vars_match(Eina_List *vars,
 }
 
 /**
+ * @brief Add a line to result ("citizen that match" part).
+ * When a citizen matches the search pattern, add a line to result
+ * with citizen and some informations : status (on/offline), softwares
+ * licence number, bunker.
+ * @param obj Module object
+ * @param citizen Gotham_Citizen to print
+ * @return const char * line to add to result
+ */
+const char *
+citizen_match_print(Eina_List *vars,
+                    Gotham_Citizen *citizen,
+                    Eina_Bool print_presence)
+{
+   Eina_Strbuf *buf;
+   Eina_List *l;
+   const char *item,
+              *ptr;
+
+   buf = eina_strbuf_new();
+
+   if (print_presence)
+     eina_strbuf_append_printf(buf, "%s %s ",
+                               (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
+                                  "offline" : "online",
+                               citizen->jid);
+
+   EINA_LIST_FOREACH(vars, l, item)
+     {
+        const char *var = gotham_citizen_var_get(citizen, item);
+
+        if (!var) continue;
+        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
+     }
+
+   ptr = eina_strbuf_string_steal(buf);
+   eina_strbuf_free(buf);
+   return ptr;
+}
+
+/**
  * Checks if a citizen is allowed to talk with us.
  * Allowed citizen are defined in gotham conf file
  * @param gotham Gotham structure
