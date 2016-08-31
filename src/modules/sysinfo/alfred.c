@@ -25,8 +25,7 @@ _citizen_match_print(Module_Sysinfo *obj,
                      Gotham_Citizen *citizen)
 {
    Eina_Strbuf *buf;
-   Eina_Array_Iterator it;
-   unsigned int i;
+   Eina_List *l;
    const char *item,
               *ptr;
 
@@ -35,14 +34,12 @@ _citizen_match_print(Module_Sysinfo *obj,
                              (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
                                 "offline" : "online",
                              citizen->jid);
-
-   EINA_ARRAY_ITER_NEXT(obj->vars, i, item, it)
+                             
+   EINA_LIST_FOREACH(obj->vars, l, item)
      {
         const char *var = VARGET(item);
 
-        if (!var)
-          continue;
-
+        if (!var) continue;
         eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
      }
 
@@ -82,8 +79,7 @@ _citizen_result_print(Module_Sysinfo *obj,
         sprintf(item, "sysinfo_%s", name);
         var = VARGET(item);
 
-        if (!var)
-          continue;
+        if (!var) continue;
 
         found = EINA_TRUE;
         eina_strbuf_append_printf(buf, "\t%s : %s\n", name, var);

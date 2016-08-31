@@ -32,7 +32,7 @@ _version_conf_pattern_vars_load(Module_Version *version, cJSON *json)
      {
         cJSON *var_name = cJSON_GetArrayItem(json_obj, i);
         NFO("Found var %s", var_name->valuestring);
-        eina_array_push(version->vars, strdup(var_name->valuestring));
+        version->vars = eina_list_append(version->vars, strdup(var_name->valuestring));
      }
 }
 

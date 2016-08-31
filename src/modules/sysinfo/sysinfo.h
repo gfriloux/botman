@@ -22,7 +22,7 @@ typedef struct _Module_Sysinfo
 
    Eina_Hash *hw;       /*!<  Cached informations  */
    Eina_Hash *commands; /*!<  Custom commands, for real-time results */
-   Eina_Array *vars;
+   Eina_List *vars;
 
    Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Sysinfo;

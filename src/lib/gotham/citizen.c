@@ -204,7 +204,7 @@ Eina_List *
 gotham_citizen_match(Gotham *gotham,
                      const char *pattern,
                      Gotham_Citizen_Type type,
-                     Eina_Array *vars)
+                     Eina_List *vars)
 {
    Gotham_Citizen *citizen;
    Eina_Iterator *it;
@@ -243,23 +243,21 @@ gotham_citizen_match(Gotham *gotham,
            otherwise EINA_FALSE
  */
 Eina_Bool
-_gotham_citizen_vars_match(Eina_Array *vars,
+_gotham_citizen_vars_match(Eina_List *vars,
                            Gotham_Citizen *citizen,
                            const char *pattern)
 {
-   Eina_Array_Iterator it;
-   unsigned int i;
+   Eina_List *l;
    const char *item;
 
    if (!fnmatch(pattern, citizen->jid, FNM_NOESCAPE))
      return EINA_TRUE;
 
-   EINA_ARRAY_ITER_NEXT(vars, i, item, it)
+   EINA_LIST_FOREACH(vars, l, item)
      {
         const char *var = gotham_citizen_var_get(citizen, item);
 
-        if (!var)
-          continue;
+        if (!var) continue;
 
         if (!fnmatch(pattern, var, FNM_NOESCAPE))
           return EINA_TRUE;

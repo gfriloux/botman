@@ -60,7 +60,6 @@ module_register(Gotham *gotham)
         version_botman_conf_load(version);
         return version;
      }
-   version->vars = eina_array_new(1);
    version_alfred_commands_register();
    version_alfred_conf_load(version);
    return version;
@@ -77,8 +76,6 @@ module_unregister(void *data)
    Module_Version *version;
    Module_Version_Element *e;
    char *item;
-   Eina_Array_Iterator iterator;
-   unsigned int i;
 
    EINA_SAFETY_ON_NULL_RETURN(data);
 
@@ -98,9 +95,7 @@ module_unregister(void *data)
         goto version_free;
      }
 
-   EINA_ARRAY_ITER_NEXT(version->vars, i, item, iterator)
-     free(item);
-   eina_array_free(version->vars);
+   EINA_LIST_FREE(version->vars, item) free(item);
    version_alfred_commands_unregister();
 
 version_free:

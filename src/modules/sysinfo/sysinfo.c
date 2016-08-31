@@ -72,7 +72,6 @@ module_register(Gotham *gotham)
 
    obj->hw = eina_hash_string_small_new(_hash_free_cb);
    obj->commands = eina_hash_string_small_new(_hash_free_cb);
-   obj->vars = eina_array_new(1);
 
    conf_load(obj);
 
@@ -99,8 +98,6 @@ module_unregister(void *data)
 {
    Module_Sysinfo *obj = data;
    char *item;
-   Eina_Array_Iterator iterator;
-   unsigned int i;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
 
@@ -110,9 +107,7 @@ module_unregister(void *data)
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      alfred_commands_del(obj);
 
-   EINA_ARRAY_ITER_NEXT(obj->vars, i, item, iterator)
-     free(item);
-   eina_array_free(obj->vars);
+   EINA_LIST_FREE(obj->vars, item) free(item);
 
    eina_hash_free(obj->hw);
 

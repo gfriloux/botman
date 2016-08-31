@@ -68,7 +68,7 @@ conf_load(Module_Sysinfo *obj)
      {
         var = cJSON_GetArrayItem(json_vars, i);
         NFO("Found var %s", var->valuestring);
-        eina_array_push(obj->vars, strdup(var->valuestring));
+        obj->vars = eina_list_append(obj->vars, strdup(var->valuestring));
      }
 
 func_end:

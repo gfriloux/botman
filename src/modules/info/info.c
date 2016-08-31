@@ -15,7 +15,7 @@ module_register(Gotham *gotham)
    info->gotham = gotham;
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
-     info_conf_alfred_load(info);
+     info->conf = gotham_serialize_file_to_struct(MODULE_INFO_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Info_Conf);
    else
      info->sync = ecore_timer_add(60, info_botman_sync, info);
 
@@ -26,16 +26,10 @@ void
 module_unregister(void *data)
 {
    Module_Info *info = data;
-   char *s;
-   unsigned int i;
-   Eina_Array_Iterator iterator;
 
    DBG("info[%p]", info);
 
-   EINA_ARRAY_ITER_NEXT(info->search_vars, i, s, iterator)
-     free(s);
-   eina_array_free(info->search_vars);
-
+   if (info->conf) Module_Info_Conf_free(info->conf);
    if (info->sync) ecore_timer_del(info->sync);
 
    free(info);

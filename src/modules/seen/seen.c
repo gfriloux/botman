@@ -56,10 +56,15 @@ module_register(Gotham *gotham)
         return NULL;
      }
    seen->gotham = gotham;
-   seen->vars = eina_array_new(1);
 
-   seen_conf_load(seen);
+   seen->conf = gotham_serialize_file_to_struct(MODULE_SEEN_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Seen_Conf);
 
+   {
+      Eina_List *l;
+      const char *s;
+      EINA_LIST_FOREACH(seen->conf->vars, l, s)
+        DBG("Found custom variable [%s]", s);
+   }
 
    gotham_modules_command_add("seen", ".seen",
                               "[.seen pattern] - "
@@ -82,15 +87,10 @@ void
 module_unregister(void *data)
 {
    Module_Seen *seen = data;
-   char *item;
-   Eina_Array_Iterator iterator;
-   unsigned int i;
 
    EINA_SAFETY_ON_NULL_RETURN(seen);
-   EINA_ARRAY_ITER_NEXT(seen->vars, i, item, iterator)
-     free(item);
+   Module_Seen_Conf_free(seen->conf);
    gotham_modules_command_del("seen", ".seen");
-   eina_array_free(seen->vars);
 }
 
 /**

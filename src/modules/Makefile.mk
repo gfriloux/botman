@@ -54,7 +54,7 @@ src_modules_access_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_access: src/modules/gdb/gdb.azy
+.sources_access: src/modules/access/access.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/access \
 	                    $(top_srcdir)/src/modules/access/access.azy
 
@@ -83,13 +83,17 @@ src_modules_module_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_module_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_seen
 src_modules_seen_la_SOURCES = \
    src/modules/seen/seen.c \
    src/modules/seen/utils.c \
-   src/modules/seen/conf.c \
    src/modules/seen/event.c \
    src/modules/seen/seen_query.c \
-   src/modules/seen/seen.h
+   src/modules/seen/seen.h \
+   src/modules/seen/Module_Common_Azy.c \
+   src/modules/seen/Module_Common_Azy.h \
+   src/modules/seen/Module_Common.c \
+   src/modules/seen/Module_Common.h
 src_modules_seen_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_seen_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
@@ -98,6 +102,9 @@ src_modules_seen_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_seen_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_seen: src/modules/seen/seen.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/seen \
+	                    $(top_srcdir)/src/modules/seen/seen.azy
 
 src_modules_save_la_SOURCES = \
    src/modules/save/conf.c \
@@ -115,14 +122,18 @@ src_modules_save_la_LIBADD = \
    src/lib/libcjson.la
 src_modules_save_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_spam
 src_modules_spam_la_SOURCES = \
-   src/modules/spam/conf.c \
    src/modules/spam/event.c \
    src/modules/spam/queue.c \
    src/modules/spam/spam.c \
    src/modules/spam/spam.h \
    src/modules/spam/spam_query.c \
-   src/modules/spam/utils.c
+   src/modules/spam/utils.c \
+   src/modules/spam/Module_Common_Azy.c \
+   src/modules/spam/Module_Common_Azy.h \
+   src/modules/spam/Module_Common.c \
+   src/modules/spam/Module_Common.h
 src_modules_spam_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_spam_la_LDFLAGS = \
@@ -132,16 +143,24 @@ src_modules_spam_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_spam_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_spam: src/modules/spam/spam.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/spam \
+	                    $(top_srcdir)/src/modules/spam/spam.azy
 
+
+BUILT_SOURCES += .sources_info
 src_modules_info_la_SOURCES = \
    src/modules/info/alfred.c \
    src/modules/info/alfred_sort.c \
    src/modules/info/botman.c \
-   src/modules/info/conf.c \
    src/modules/info/event.c \
    src/modules/info/utils.c \
    src/modules/info/info.c \
-   src/modules/info/info.h
+   src/modules/info/info.h \
+   src/modules/info/Module_Common_Azy.c \
+   src/modules/info/Module_Common_Azy.h \
+   src/modules/info/Module_Common.c \
+   src/modules/info/Module_Common.h
 src_modules_info_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
@@ -152,6 +171,9 @@ src_modules_info_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_info_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_info: src/modules/info/info.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/info \
+	                    $(top_srcdir)/src/modules/info/info.azy
    
 if BUILD_UNIX
 mod_LTLIBRARIES += \

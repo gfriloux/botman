@@ -3,6 +3,8 @@
 #include <Eina.h>
 #include <Gotham.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define MODULE_SEEN_CONF SYSCONF_DIR"/gotham/modules.conf.d/seen.conf"
@@ -12,7 +14,7 @@ int _module_seen_log_dom;
 typedef struct _Module_Seen
 {
    Gotham *gotham;
-   Eina_Array *vars;
+   Module_Seen_Conf *conf;
    Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Seen;
 

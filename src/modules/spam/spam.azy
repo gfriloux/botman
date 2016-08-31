@@ -1,0 +1,6 @@
+Azy_Namespace Module;
+
+struct Spam_Conf
+{
+   array<string> vars;
+};

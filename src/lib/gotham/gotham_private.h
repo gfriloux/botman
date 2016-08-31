@@ -27,7 +27,7 @@ _gotham_fake_free(void *d EINA_UNUSED, void *d2 EINA_UNUSED)
 {}
 
 void _gotham_citizen_list_free_cb(void *data);
-Eina_Bool _gotham_citizen_vars_match(Eina_Array *vars,
+Eina_Bool _gotham_citizen_vars_match(Eina_List *vars,
                                      Gotham_Citizen *citizen,
                                      const char *pattern);
 Eina_Bool _gotham_citizen_authorized(Gotham *gotham,

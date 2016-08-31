@@ -40,8 +40,7 @@ _citizen_match_print(Module_Info *info,
                      Gotham_Citizen *citizen)
 {
    Eina_Strbuf *buf;
-   Eina_Array_Iterator it;
-   unsigned int i;
+   Eina_List *l;
    const char *item,
               *ptr;
 
@@ -51,7 +50,7 @@ _citizen_match_print(Module_Info *info,
                                                 "offline" : "online",
                              citizen->jid);
 
-   EINA_ARRAY_ITER_NEXT(info->search_vars, i, item, it)
+   EINA_LIST_FOREACH(info->conf->search_vars, l, item)
      {
         const char *var = VARGET(item);
 
@@ -130,7 +129,7 @@ _info_alfred_command_citizen_list(Module_Info *info,
    l_citizen = gotham_citizen_match(info->gotham,
                                     command->command[1],
                                     GOTHAM_CITIZEN_TYPE_BOTMAN,
-                                    info->search_vars);
+                                    info->conf->search_vars);
 
    EINA_LIST_FOREACH(l_citizen, l, citizen)
      {
@@ -183,7 +182,7 @@ _info_alfred_command_citizen_find(Module_Info *info,
    as = alfred_sort_new(info);
 
    l_citizen = gotham_citizen_match(info->gotham, "*",
-                                    GOTHAM_CITIZEN_TYPE_BOTMAN, info->search_vars);
+                                    GOTHAM_CITIZEN_TYPE_BOTMAN, info->conf->search_vars);
    EINA_LIST_FOREACH(l_citizen, l, citizen)
      {
         Eina_Iterator *it;

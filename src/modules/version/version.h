@@ -43,7 +43,7 @@ typedef struct _Module_Version_Element
 typedef struct _Module_Version
 {
    Gotham *gotham;
-   Eina_Array *vars;
+   Eina_List *vars;
    Ecore_Timer *poll;
    Eina_Bool sent_once: 1;
 

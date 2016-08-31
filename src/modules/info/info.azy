@@ -1,0 +1,6 @@
+Azy_Namespace Module;
+
+struct Info_Conf
+{
+   array<string> search_vars;
+};

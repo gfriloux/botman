@@ -10,6 +10,8 @@
 #include <Gotham.h>
 #include <cJSON.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define MODULE_INFO_CONF SYSCONF_DIR"/gotham/modules.conf.d/info.conf"
@@ -19,8 +21,7 @@ int _module_info_log_dom;
 typedef struct _Module_Info
 {
    Gotham *gotham;
-   Eina_Array *search_vars;
-
+   Module_Info_Conf *conf;
    Ecore_Timer *sync;
 } Module_Info;
 
@@ -38,7 +39,6 @@ char * alfred_sort_print(Alfred_Sort *as, const char *operation);
 
 
 void info_alfred_command(Module_Info *info, Gotham_Citizen_Command *command);
-void info_conf_alfred_load(Module_Info *info);
 
 void info_botman_command(Module_Info *info, Gotham_Citizen_Command *command);
 Eina_Bool info_botman_sync(void *data);

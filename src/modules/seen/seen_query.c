@@ -10,8 +10,7 @@ _seen_query_citizen_print(Module_Seen *seen,
                           Gotham_Citizen *citizen)
 {
    Eina_Strbuf *buf;
-   Eina_Array_Iterator it;
-   unsigned int i;
+   Eina_List *l;
    const char *item,
               *ptr,
               *last_time;
@@ -22,13 +21,11 @@ _seen_query_citizen_print(Module_Seen *seen,
                                 "offline" : "online",
                              citizen->jid);
 
-   EINA_ARRAY_ITER_NEXT(seen->vars, i, item, it)
+   EINA_LIST_FOREACH(seen->conf->vars, l, item)
      {
         const char *var = VARGET(item);
 
-        if (!var)
-          continue;
-
+        if (!var) continue;
         eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
      }
 
@@ -62,7 +59,7 @@ seen_query_match(Gotham *gotham,
                  Gotham_Citizen_Type citizen_type,
                  Module_Seen *seen)
 {
-   return gotham_citizen_match(gotham, pattern, citizen_type, seen->vars);
+   return gotham_citizen_match(gotham, pattern, citizen_type, seen->conf->vars);
 }
 
 const char *
@@ -81,7 +78,7 @@ seen_query(Module_Seen *seen,
    eina_strbuf_append_printf(b, "\nContacts that matched :\n");
 
    l_citizen = gotham_citizen_match(seen->gotham, pattern,
-                                    GOTHAM_CITIZEN_TYPE_BOTMAN, seen->vars);
+                                    GOTHAM_CITIZEN_TYPE_BOTMAN, seen->conf->vars);
 
    EINA_LIST_FOREACH(l_citizen, l, citizen)
      {

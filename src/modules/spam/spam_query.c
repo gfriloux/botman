@@ -15,7 +15,7 @@ spam_query(Module_Spam *spam,
    Gotham_Citizen *citizen;
 
    l_citizen = gotham_citizen_match(spam->gotham, pattern,
-                                    GOTHAM_CITIZEN_TYPE_BOTMAN, spam->vars);
+                                    GOTHAM_CITIZEN_TYPE_BOTMAN, spam->conf->vars);
 
 
    EINA_LIST_FOREACH(l_citizen, l, citizen)

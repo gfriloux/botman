@@ -11,6 +11,8 @@ event_citizen_command(void *data,
    if (strcmp(command->name, ".info"))
      return EINA_TRUE;
 
+   DBG("info[%p] command[%p][%s]", info, command, command->name);
+
    command->handled = EINA_TRUE;
 
    if (info->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)

@@ -1,0 +1,6 @@
+Azy_Namespace Module;
+
+struct Seen_Conf
+{
+   array<string> vars;
+};

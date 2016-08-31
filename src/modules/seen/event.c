@@ -56,13 +56,13 @@ event_citizen_command(void *data,
    EINA_SAFETY_ON_NULL_RETURN_VAL(seen, EINA_TRUE);
    EINA_SAFETY_ON_NULL_RETURN_VAL(command, EINA_TRUE);
 
-   DBG("seen[%p] command[%p]=%s", seen, command, command->name);
-
    if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      return EINA_TRUE;
 
    if (strcmp(command->name, ".seen"))
      return EINA_TRUE;
+
+   DBG("seen[%p] command[%p][%s]", seen, command, command->name);
 
    command->handled = EINA_TRUE;
 

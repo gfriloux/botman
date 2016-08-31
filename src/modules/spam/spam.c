@@ -53,9 +53,7 @@ module_register(Gotham *gotham)
      }
 
    spam->gotham = gotham;
-   spam->vars = eina_array_new(1);
-   conf_load(spam);
-
+   spam->conf = gotham_serialize_file_to_struct(MODULE_SPAM_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Spam_Conf);
    spam->access_allowed = gotham_modules_function_get("access",
                                                       "access_allowed");
    gotham_modules_command_add("spam", ".spam",
@@ -75,19 +73,13 @@ void
 module_unregister(void *data)
 {
    Module_Spam *spam = data;
-   char *item;
-   Eina_Array_Iterator iterator;
-   unsigned int i;
 
    EINA_SAFETY_ON_NULL_RETURN(spam);
 
    ecore_timer_del(spam->queue.t);
-
-   EINA_ARRAY_ITER_NEXT(spam->vars, i, item, iterator)
-     free(item);
+   Module_Spam_Conf_free(spam->conf);
 
    gotham_modules_command_del("spam", ".spam");
-   eina_array_free(spam->vars);
 }
 
 /**

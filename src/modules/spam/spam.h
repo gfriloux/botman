@@ -3,6 +3,8 @@
 #include <Eina.h>
 #include <Gotham.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define MODULE_SPAM_CONF SYSCONF_DIR"/gotham/modules.conf.d/spam.conf"
 
@@ -11,7 +13,7 @@ int log_dom;
 typedef struct _Module_Spam
 {
    Gotham *gotham;
-   Eina_Array *vars;
+   Module_Spam_Conf *conf;
    struct
    {
       Ecore_Timer *t;
