@@ -276,9 +276,9 @@ _gotham_citizen_vars_match(Eina_List *vars,
  * @return const char * line to add to result
  */
 const char *
-citizen_match_print(Eina_List *vars,
-                    Gotham_Citizen *citizen,
-                    Eina_Bool print_presence)
+gotham_citizen_match_print(Eina_List *vars,
+                          Gotham_Citizen *citizen,
+                          Eina_Bool print_presence)
 {
    Eina_Strbuf *buf;
    Eina_List *l;
