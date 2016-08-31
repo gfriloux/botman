@@ -15,42 +15,6 @@
 
 /**
  * @brief Print a line for the given citizen.
- * Will show his online status, xmpp account and some custom vars
- * @param seen Module object
- * @param citizen Gotham_Citizen to print
- * @return const char line representing citizen
- */
-const char *
-version_citizen_match_print(Module_Version *version,
-                             Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_List *l;
-   const char *item,
-              *ptr;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "%s %s ",
-                             (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_LIST_FOREACH(version->vars, l, item)
-     {
-        const char *var = VARGET(item);
-
-        if (!var) continue;
-
-        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
-/**
- * @brief Print a line for the given citizen.
  * Will show his online status, xmpp account and all decalred version vars.
  * @param seen Module object
  * @param citizen Gotham_Citizen to print
@@ -134,7 +98,7 @@ version_alfred_command(Module_Version *version,
 
         found = EINA_TRUE;
 
-        line = version_citizen_match_print(version, citizen);
+        line = gotham_citizen_match_print(version, citizen, EINA_TRUE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         eina_strbuf_append_printf(result_buf, "%s :\n", line);
         free((char *)line);

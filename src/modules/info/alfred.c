@@ -36,33 +36,6 @@ end_loop:
 }
 
 const char *
-_citizen_match_print(Module_Info *info,
-                     Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_List *l;
-   const char *item,
-              *ptr;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "%s %s ",
-                             citizen->status == GOTHAM_CITIZEN_STATUS_OFFLINE ?
-                                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_LIST_FOREACH(info->conf->search_vars, l, item)
-     {
-        const char *var = VARGET(item);
-
-        if (var) eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
-const char *
 _citizen_result_print(Module_Info *info EINA_UNUSED,
                       Gotham_Citizen *citizen)
 {
@@ -137,7 +110,7 @@ _info_alfred_command_citizen_list(Module_Info *info,
 
         found = EINA_TRUE;
 
-        line = _citizen_match_print(info, citizen);
+        line = gotham_citizen_match_print(info, citizen, EINA_TRUE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         free((char *)line);
 

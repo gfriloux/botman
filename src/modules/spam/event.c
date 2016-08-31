@@ -43,41 +43,6 @@ event_modules_ready(void *data,
 }
 
 /**
- * @brief Print a line for the given citizen.
- * Will show his online status, xmpp account and some custom vars
- * @param spam Module_Spam object
- * @param citizen Gotham_Citizen to print
- * @return const char line representing citizen
- */
-const char *
-_citizen_match_print(Module_Spam *spam,
-                     Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_List *l;
-   const char *item,
-              *ptr;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "%s %s ",
-                             (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_LIST_FOREACH(spam->conf->vars, l, item)
-     {
-        const char *var = VARGET(item);
-
-        if (!var) continue;
-        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
-/**
  * @brief Callback when a citizen sends a command.
  * Check citizen auth level / compare to the command access level. Citizen
  * level has to be at least equal to command level in order to run it.
@@ -146,7 +111,7 @@ event_citizen_command(void *data,
    EINA_LIST_FOREACH(lc, l, bot)
      {
         const char *line;
-        line = _citizen_match_print(spam, bot);
+        line = gotham_citizen_match_print(spam, bot, EINA_TRUE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         free((char *)line);
      }

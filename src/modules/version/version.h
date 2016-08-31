@@ -66,7 +66,6 @@ void version_alfred_commands_unregister(void);
 void version_alfred_command(Module_Version *version, Gotham_Citizen_Command *command);
 void version_alfred_find_command(Module_Version *version, Gotham_Citizen_Command *command);
 void version_alfred_answer_get(Module_Version *version, Gotham_Citizen_Command *command);
-const char *version_citizen_match_print(Module_Version *version, Gotham_Citizen *citizen);
 
 void version_botman_conf_load(Module_Version *version);
 void version_botman_commands_register(void);

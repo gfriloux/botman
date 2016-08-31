@@ -39,43 +39,6 @@ _ssh_tunnel_sort(void *data1, void *data2)
 }
 
 /**
- * @brief Add a line to result ("citizen that match" part).
- * When a citizen matches the search pattern, add a line to result
- * with citizen and some informations : status (on/offline), softwares
- * licence number, bunker.
- * @param obj Module object
- * @param citizen Gotham_Citizen to print
- * @return const char * line to add to result
- */
-const char *
-_citizen_match_print(Module_Ssh_Tunnel *obj,
-                     Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_List *l;
-   const char *item,
-              *ptr;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "%s %s ",
-                             (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_LIST_FOREACH(obj->vars, l, item)
-     {
-        const char *var = VARGET(item);
-
-        if (!var) continue;
-        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
-/**
  * @brief Show stored tunnel ports for a pattern.
  * For each citizen that match pattern, get the tunnel port
  * from custom vars and send result.
@@ -114,7 +77,7 @@ alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
 
         found = EINA_TRUE;
 
-        line = _citizen_match_print(obj, citizen);
+        line = gotham_citizen_match_print(obj, citizen, EINA_TRUE);
         eina_strbuf_append_printf(buf, "%s : Port %s\n", line, var);
         free((char *)line);
      }
