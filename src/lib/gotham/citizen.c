@@ -288,10 +288,10 @@ citizen_match_print(Eina_List *vars,
    buf = eina_strbuf_new();
 
    if (print_presence)
-     eina_strbuf_append_printf(buf, "%s %s ",
-                               (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                  "offline" : "online",
-                               citizen->jid);
+     eina_strbuf_append_printf(buf, "%s ",
+                               (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ? "offline" : "online");
+
+   eina_strbuf_append_printf(buf, "%s ", citizen->jid);
 
    EINA_LIST_FOREACH(vars, l, item)
      {
