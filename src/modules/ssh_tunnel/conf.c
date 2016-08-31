@@ -50,7 +50,7 @@ conf_load(Module_Ssh_Tunnel *obj)
      {
         cJSON *var_name = cJSON_GetArrayItem(json_vars, i);
         NFO("Found var %s", var_name->valuestring);
-        eina_array_push(obj->vars, strdup(var_name->valuestring));
+        obj->vars = eina_list_append(obj->vars, strdup(var_name->valuestring));
      }
 
    cJSON_Delete(json);

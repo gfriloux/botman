@@ -98,7 +98,7 @@ version_alfred_command(Module_Version *version,
 
         found = EINA_TRUE;
 
-        line = gotham_citizen_match_print(version, citizen, EINA_TRUE);
+        line = gotham_citizen_match_print(version->vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         eina_strbuf_append_printf(result_buf, "%s :\n", line);
         free((char *)line);

@@ -175,7 +175,7 @@ GOTHAM_API Eina_Bool gotham_citizen_var_del(Gotham_Citizen *citizen, const char 
 GOTHAM_API const char *gotham_citizen_var_get(Gotham_Citizen *citizen, const char *name);
 GOTHAM_API Eina_Iterator * gotham_citizen_var_iterate(Gotham_Citizen *citizen);
 GOTHAM_API Eina_List *gotham_citizen_match(Gotham *gotham, const char *pattern, Gotham_Citizen_Type flags_type, Eina_List *vars);
-GOTHAM_API const char * gotham_citizen_match_print(Eina_List *vars, Gotham_Citizen *citizen, Eina_Bool print_presence);
+GOTHAM_API const char * gotham_citizen_match_print(Eina_List *vars, Gotham_Citizen *citizen, Eina_Bool print_presence, Eina_Bool print_lastseen);
 
 GOTHAM_API Gotham_Citizen_Command *gotham_command_new(Gotham_Citizen *citizen, const char *msg, const char *jid);
 GOTHAM_API void gotham_command_free(Gotham_Citizen_Command *command);

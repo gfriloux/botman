@@ -86,7 +86,6 @@ src_modules_module_la_LIBTOOLFLAGS = --tag=disable-static
 BUILT_SOURCES += .sources_seen
 src_modules_seen_la_SOURCES = \
    src/modules/seen/seen.c \
-   src/modules/seen/utils.c \
    src/modules/seen/event.c \
    src/modules/seen/seen_query.c \
    src/modules/seen/seen.h \

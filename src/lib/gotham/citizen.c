@@ -271,6 +271,7 @@ _gotham_citizen_vars_match(Eina_List *vars,
  * When a citizen matches the search pattern, add a line to result
  * with citizen and some informations : status (on/offline), softwares
  * licence number, bunker.
+ * @since 1.3.0
  * @param obj Module object
  * @param citizen Gotham_Citizen to print
  * @return const char * line to add to result
@@ -278,12 +279,14 @@ _gotham_citizen_vars_match(Eina_List *vars,
 const char *
 gotham_citizen_match_print(Eina_List *vars,
                           Gotham_Citizen *citizen,
-                          Eina_Bool print_presence)
+                          Eina_Bool print_presence,
+                          Eina_Bool print_lastseen)
 {
    Eina_Strbuf *buf;
    Eina_List *l;
    const char *item,
-              *ptr;
+              *ptr,
+              *last_time;
 
    buf = eina_strbuf_new();
 
@@ -299,6 +302,19 @@ gotham_citizen_match_print(Eina_List *vars,
 
         if (!var) continue;
         eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
+     }
+
+   if ((print_lastseen) && (citizen->status == GOTHAM_CITIZEN_STATUS_OFFLINE))
+     {
+        double timestamp;
+        const char *seen_last = NULL;
+
+        seen_last = gotham_citizen_var_get(citizen, "seen_last");
+
+        timestamp = time(0) - ((seen_last) ? atof(seen_last) : 0);
+        last_time = gotham_utils_elapsed_time(timestamp);
+        eina_strbuf_append_printf(buf, "time %s", last_time);
+        free((char *)last_time);
      }
 
    ptr = eina_strbuf_string_steal(buf);

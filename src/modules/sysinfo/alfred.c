@@ -94,7 +94,7 @@ alfred_sysinfo_show(Module_Sysinfo *obj,
      {
         const char *line;
 
-        line = gotham_citizen_match_print(obj, citizen);
+        line = gotham_citizen_match_print(obj->vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         eina_strbuf_append_printf(result_buf, "%s :\n", line);
         free((char *)line);

@@ -5,50 +5,6 @@
 #include "seen.h"
 #include <fnmatch.h>
 
-const char *
-_seen_query_citizen_print(Module_Seen *seen,
-                          Gotham_Citizen *citizen)
-{
-   Eina_Strbuf *buf;
-   Eina_List *l;
-   const char *item,
-              *ptr,
-              *last_time;
-
-   buf = eina_strbuf_new();
-   eina_strbuf_append_printf(buf, "\t%s %s ",
-                             (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE) ?
-                                "offline" : "online",
-                             citizen->jid);
-
-   EINA_LIST_FOREACH(seen->conf->vars, l, item)
-     {
-        const char *var = VARGET(item);
-
-        if (!var) continue;
-        eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
-     }
-
-   if (citizen->status==GOTHAM_CITIZEN_STATUS_OFFLINE)
-     {
-        double timestamp;
-        const char *seen_last = NULL;
-
-        seen_last = VARGET("seen_last");
-
-        timestamp = time(0) - ((seen_last) ? atof(seen_last) : 0);
-        last_time = seen_utils_elapsed_time(timestamp);
-        eina_strbuf_append_printf(buf, "time %s", last_time);
-        free((char *)last_time);
-     }
-
-   eina_strbuf_append(buf, "\n");
-
-   ptr = eina_strbuf_string_steal(buf);
-   eina_strbuf_free(buf);
-   return ptr;
-}
-
 /* This function has been added to have the HTTPd module
  * able to expose a /seen URI answering JSON data instead
  * of plaintext.
@@ -84,7 +40,7 @@ seen_query(Module_Seen *seen,
      {
         const char *line;
 
-        line = _seen_query_citizen_print(seen, citizen);
+        line = gotham_citizen_match_print(seen->conf->vars, citizen, EINA_TRUE, EINA_TRUE);
         eina_strbuf_append(b, line);
         free((char *)line);
      }

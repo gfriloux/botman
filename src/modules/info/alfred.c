@@ -110,7 +110,7 @@ _info_alfred_command_citizen_list(Module_Info *info,
 
         found = EINA_TRUE;
 
-        line = gotham_citizen_match_print(info, citizen, EINA_TRUE);
+        line = gotham_citizen_match_print(info->conf->search_vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         free((char *)line);
 

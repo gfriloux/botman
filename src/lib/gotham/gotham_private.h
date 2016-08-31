@@ -44,4 +44,6 @@ Eina_Bool _gotham_event_presence(void *data, int type, void *ev);
 Eina_Bool _gotham_event_iq(void *data, int type, void *ev);
 
 void _gotham_modules_load(Gotham *gotham);
+
+char * gotham_utils_elapsed_time(double timestamp);
 #endif

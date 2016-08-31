@@ -111,7 +111,7 @@ event_citizen_command(void *data,
    EINA_LIST_FOREACH(lc, l, bot)
      {
         const char *line;
-        line = gotham_citizen_match_print(spam, bot, EINA_TRUE);
+        line = gotham_citizen_match_print(spam->conf->vars, bot, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         free((char *)line);
      }
