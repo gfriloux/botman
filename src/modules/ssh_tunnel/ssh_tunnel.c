@@ -93,7 +93,6 @@ module_register(Gotham *gotham)
      }
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
-        obj->vars = eina_array_new(1);
         conf_load(obj);
         gotham_modules_command_add("ssh_tunnel", ".ssh",
                                    "[.ssh pattern] - "
@@ -117,8 +116,6 @@ module_unregister(void *data)
 #define _FREE(a) if (obj->a) free((char *)obj->a)
    Module_Ssh_Tunnel *obj = data;
    char *item;
-   Eina_Array_Iterator iterator;
-   unsigned int i;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
 
@@ -135,9 +132,7 @@ module_unregister(void *data)
 
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
-        EINA_ARRAY_ITER_NEXT(obj->vars, i, item, iterator)
-          free(item);
-        eina_array_free(obj->vars);
+        EINA_LIST_FREE(obj->vars, item) free(item);
         gotham_modules_command_del("ssh_tunnel", ".ssh");
      }
 

@@ -30,7 +30,7 @@ typedef struct _Module_Ssh_Tunnel
       Ecore_Exe *exe;
    } tunnel;
 
-   Eina_Array *vars;
+   Eina_List *vars;
 
    Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
    void (*save_conf)(void);

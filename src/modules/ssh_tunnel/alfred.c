@@ -52,8 +52,7 @@ _citizen_match_print(Module_Ssh_Tunnel *obj,
                      Gotham_Citizen *citizen)
 {
    Eina_Strbuf *buf;
-   Eina_Array_Iterator it;
-   unsigned int i;
+   Eina_List *l;
    const char *item,
               *ptr;
 
@@ -63,13 +62,11 @@ _citizen_match_print(Module_Ssh_Tunnel *obj,
                                 "offline" : "online",
                              citizen->jid);
 
-   EINA_ARRAY_ITER_NEXT(obj->vars, i, item, it)
+   EINA_LIST_FOREACH(obj->vars, l, item)
      {
         const char *var = VARGET(item);
 
-        if (!var)
-          continue;
-
+        if (!var) continue;
         eina_strbuf_append_printf(buf, "%s[%s] ", item, var);
      }
 
