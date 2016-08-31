@@ -4,6 +4,9 @@
 
 #include "gotham_private.h"
 
+/**
+ * @since 1.3.0
+ */
 void *
 gotham_serialize_string_to_struct(const char *s,
                                   size_t len,
@@ -30,6 +33,9 @@ free_ac:
    return data;
 }
 
+/**
+ * @since 1.3.0
+ */
 char *
 gotham_serialize_struct_to_string(void *data,
                                   Gotham_Serialization_Function func)
@@ -46,6 +52,9 @@ gotham_serialize_struct_to_string(void *data,
    return s;
 }
 
+/**
+ * @since 1.3.0
+ */
 void *
 gotham_serialize_file_to_struct(const char *file,
                                 Gotham_Deserialization_Function func)
@@ -59,6 +68,9 @@ gotham_serialize_file_to_struct(const char *file,
    return gotham_serialize_string_to_struct(s, l, func);
 }
 
+/**
+ * @since 1.3.0
+ */
 Eina_Bool
 gotham_serialize_struct_to_file(void *data,
                                 const char *file,
