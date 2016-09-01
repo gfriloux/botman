@@ -8,5 +8,6 @@ struct Notification_Conf_Group
 
 struct Notification_Conf
 {
+   array<string> vars;
    array<Notification_Conf_Group> groups;
 };

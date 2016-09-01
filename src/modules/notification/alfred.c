@@ -150,7 +150,8 @@ alfred_send(Module_Notification *notification,
 {
    Module_Notification_Conf_Group *group;
    unsigned int i;
-   const char *user;
+   const char *user,
+              *match;
    Eina_Strbuf *buf;
    Eina_List *l;
 
@@ -162,7 +163,11 @@ alfred_send(Module_Notification *notification,
 
    buf = eina_strbuf_new();
 
-   eina_strbuf_append_printf(buf, "Notification from [%s] : ", command->citizen->jid);
+   match = gotham_citizen_match_print(notification->conf->vars,
+                                      command->citizen,
+                                      EINA_FALSE, EINA_FALSE);
+
+   eina_strbuf_append_printf(buf, "Notification from %s : ", match);
 
    for (i = 3; command->command[i]; i++)
      eina_strbuf_append_printf(buf, "%s%s", i == 3 ? "" : " ", command->command[i]);
