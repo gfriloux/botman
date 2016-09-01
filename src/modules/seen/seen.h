@@ -23,6 +23,7 @@ typedef struct _Module_Seen
 #define NFO(...) EINA_LOG_DOM_INFO(_module_seen_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_seen_log_dom, __VA_ARGS__)
 
+void event_command_seen(void *data, Gotham_Citizen_Command *command);
 char * seen_utils_elapsed_time(double timestamp);
 void seen_conf_load(Module_Seen *seen);
 const char * seen_query(Module_Seen *seen, const char *pattern);

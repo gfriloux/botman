@@ -33,59 +33,34 @@ event_modules_ready(void *data,
    return EINA_TRUE;
 }
 
-/**
- * @brief Callback when a citizen sends a command.
- * Check citizen auth level / compare to the command access level. Citizen
- * level has to be at least equal to command level in order to run it.
- * Then search citizens that match pattern and send back citizen list.
- * @param data Module_Module object
- * @param type UNUSED
- * @param ev Gotham_Citizen_Command structure
- * @return EINA_TRUE
- */
-Eina_Bool
-event_citizen_command(void *data,
-                      int type EINA_UNUSED,
-                      void *ev)
+void
+event_command_seen(void *data,
+                   Gotham_Citizen_Command *command)
 {
    Module_Seen *seen = data;
-   Gotham_Citizen_Command *command = ev;
-   const char **seen_cmd = command->command,
-              *s;
+   const char *s;
 
-   EINA_SAFETY_ON_NULL_RETURN_VAL(seen, EINA_TRUE);
-   EINA_SAFETY_ON_NULL_RETURN_VAL(command, EINA_TRUE);
-
-   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
-     return EINA_TRUE;
-
-   if (strcmp(command->name, ".seen"))
-     return EINA_TRUE;
+   EINA_SAFETY_ON_TRUE_RETURN(command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN);
 
    DBG("seen[%p] command[%p][%s]", seen, command, command->name);
-
-   command->handled = EINA_TRUE;
 
    if ((seen->access_allowed) &&
        (!seen->access_allowed(gotham_modules_command_get(".seen"),
                               command->citizen)))
      {
         gotham_command_send(command, "Access denied");
-        return EINA_TRUE;
+        return;
      }
 
-   if (!seen_cmd[1])
+   if (!command->command[1])
      {
         gotham_command_send(command, "Usage : .seen pattern");
-        return EINA_TRUE;
+        return;
      }
 
-   s = seen_query(seen, seen_cmd[1]);
-
+   s = seen_query(seen, command->command[1]);
    gotham_command_send(command, s);
-
    free((char *)s);
-   return EINA_TRUE;
 }
 
 /**
