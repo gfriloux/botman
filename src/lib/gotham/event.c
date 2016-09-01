@@ -169,7 +169,11 @@ gotham_event_command_new(Gotham_Citizen_Command *command)
              if (strncmp(module_command->command, command->message, len))
                continue;
 
-             if (module_command->cb) module_command->cb(module->module_data, command);
+             if (module_command->cb)
+               {
+                  command->handled = EINA_TRUE;
+                  module_command->cb(module->module_data, command);
+               }
           }
      }
 }
