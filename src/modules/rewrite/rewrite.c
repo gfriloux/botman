@@ -72,10 +72,10 @@ module_register(Gotham *gotham)
 
    gotham_modules_command_add("rewrite", ".rewrite",
                               "[.rewrite] - "
-                              "This command will list all know rewrite rules.");
+                              "This command will list all know rewrite rules.", NULL);
 
    EINA_LIST_FOREACH(rewrite->conf->rules, l, rule)
-     gotham_modules_command_add("rewrite", rule->name, rule->description);
+     gotham_modules_command_add("rewrite", rule->name, rule->description, NULL);
 
    return rewrite;
 }

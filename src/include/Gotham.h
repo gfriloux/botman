@@ -138,6 +138,7 @@ typedef void (*Gotham_Module_Unregister)(void *);
 typedef Eina_List *(*Gotham_Module_Commands)(void);
 typedef void (*Gotham_Module_Shutdown)(void);
 typedef Eina_Bool (*Gotham_Module_Event)(void *, int, void *);
+typedef void (*Gotham_Module_Command_Cb)(void *module_data, Gotham_Citizen_Command *command);
 
 struct _Gotham_Module
 {
@@ -163,6 +164,7 @@ typedef struct _Gotham_Module_Command
               *desc;
 
    Eina_Hash *vars;
+   Gotham_Module_Command_Cb cb;
 } Gotham_Module_Command;
 #endif
 
@@ -189,7 +191,7 @@ GOTHAM_API void gotham_command_json_answer(const char *cmd, const char *params, 
 GOTHAM_API Eina_Inlist *gotham_modules_list(void);
 GOTHAM_API Gotham_Module *gotham_modules_single_module_load(const char *name, Gotham *gotham);
 GOTHAM_API void gotham_modules_unload(const char *name);
-GOTHAM_API Eina_Bool gotham_modules_command_add(const char *module_name, const char *command, const char *desc);
+GOTHAM_API Eina_Bool gotham_modules_command_add(const char *module_name, const char *command, const char *desc, Gotham_Module_Command_Cb callback);
 GOTHAM_API void gotham_modules_command_del(const char *module_name, const char *command);
 GOTHAM_API Eina_Bool gotham_modules_command_var_set(Gotham_Module_Command *command, const char *name, const char *value, ...);
 GOTHAM_API const char *gotham_modules_command_var_get(Gotham_Module_Command *command, const char *name);

@@ -54,16 +54,16 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("module", ".module",
                               "[.module] - "
                               "This command allows you to "
-                              "list loaded modules.");
+                              "list loaded modules.", NULL);
    gotham_modules_command_add("module", ".module load",
                               "[.module load module_name] - "
-                              "This command allows you to load a module.");
+                              "This command allows you to load a module.", NULL);
    gotham_modules_command_add("module", ".module unload",
                               "[.module unload module_name] - "
-                              "This command allows you to unload a module.");
+                              "This command allows you to unload a module.", NULL);
    gotham_modules_command_add("module", ".module reload",
                               "[.module reload module_name] - "
-                              "This command allows you to reload a module.");
+                              "This command allows you to reload a module.", NULL);
    mod->access_allowed = gotham_modules_function_get("access",
                                                      "access_allowed");
    return mod;

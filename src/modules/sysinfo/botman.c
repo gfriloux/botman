@@ -198,7 +198,7 @@ botman_commands_add(Module_Sysinfo *obj)
    gotham_modules_command_add("sysinfo", ".sysinfo",
                               "[.sysinfo] - "
                               "This command allows you to get some system "
-                              "informations (manufacturer, serial #, ...)");
+                              "informations (manufacturer, serial #, ...)", NULL);
 
    /* Run through obj->commands and add matching commands */
    it = eina_hash_iterator_tuple_new(obj->commands);
@@ -210,7 +210,7 @@ botman_commands_add(Module_Sysinfo *obj)
         sprintf(desc, "[%s] - Run %s on server",
                       (char *)t->key, (char *)t->data);
 
-        gotham_modules_command_add("sysinfo", t->key, desc);
+        gotham_modules_command_add("sysinfo", t->key, desc, NULL);
      }
    eina_iterator_free(it);
 }

@@ -237,7 +237,7 @@ version_botman_commands_register(void)
                               "This command returns the version of some "
                               "installed softwares. Software list and custom "
                               "version commands can be specified in "
-                              "version.conf.");
+                              "version.conf.", NULL);
 }
 
 /**

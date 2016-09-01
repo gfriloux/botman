@@ -48,7 +48,8 @@ gotham_modules_list(void)
 Eina_Bool
 gotham_modules_command_add(const char *module_name,
                            const char *command,
-                           const char *desc)
+                           const char *desc,
+                           Gotham_Module_Command_Cb callback)
 {
    Gotham_Module *module;
    Gotham_Module_Command *mc;
@@ -65,6 +66,7 @@ gotham_modules_command_add(const char *module_name,
         mc->command = strdup(command);
         mc->desc = strdup(desc);
         mc->vars = eina_hash_string_superfast_new(_gotham_modules_command_var_free);
+        mc->cb = callback;
 
         module->commands = eina_inlist_append(module->commands,
                                               EINA_INLIST_GET(mc));

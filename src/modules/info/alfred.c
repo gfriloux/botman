@@ -217,11 +217,11 @@ info_alfred_commands_register(void)
    gotham_modules_command_add("info", ".info",
                               "[.info pattern] - "
                               "This command allows to access some custom "
-                              "variables from botmans of a given pattern.");
+                              "variables from botmans of a given pattern.", NULL);
    gotham_modules_command_add("info", ".info find",
                               "[.info find variable [(=|!=) value] - "
                               "This command allows to search for custom variables "
-                              "and eventually a given value.");
+                              "and eventually a given value.", NULL);
 }
 
 void

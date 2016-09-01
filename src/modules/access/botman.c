@@ -20,7 +20,7 @@ void
 botman_commands_register(void)
 {
    gotham_modules_command_add("access", ".access",
-                              "This command will list all user accesses.");
+                              "This command will list all user accesses.", NULL);
 }
 
 /**

@@ -185,7 +185,7 @@ alfred_commands_add(Module_Sysinfo *obj EINA_UNUSED)
                               "[.sysinfo pattern] - "
                               "This command allows you to get some system "
                               "informations (manufacturer, serial #, ...) "
-                              "for each botman that matches pattern");
+                              "for each botman that matches pattern", NULL);
 }
 
 

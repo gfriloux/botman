@@ -192,13 +192,13 @@ version_alfred_commands_register(void)
                               "This command returns the version of some "
                               "installed softwares. Software list and custom "
                               "version commands can be specified in "
-                              "version.conf.");
+                              "version.conf.", NULL);
 
    gotham_modules_command_add("version", ".version find",
                               "[.version find software sign version] - "
                               "This command will list all botmans that "
                               "match the [software_name] [sign] [version].\n"
-                              "[sign] can be : <, <=, =, >=, >");
+                              "[sign] can be : <, <=, =, >=, >", NULL);
 }
 
 /**

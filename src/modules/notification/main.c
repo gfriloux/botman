@@ -48,26 +48,26 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("notification", ".notification groupadd",
                               "[.notification groupadd groupname] - "
                               "This command allows you to create a new "
-                              "group.");
+                              "group.", NULL);
 
    gotham_modules_command_add("notification", ".notification groupdel",
                               "[.notification groupdel groupname] - "
-                              "This command allows you to delete a group.");
+                              "This command allows you to delete a group.", NULL);
 
    gotham_modules_command_add("notification", ".notification useradd",
                               "[.notification useradd groupname username] - "
                               "This command allows you to add a given JID "
-                              "into a group.");
+                              "into a group.", NULL);
 
    gotham_modules_command_add("notification", ".notification userdel",
                               "[.notification userdel groupname username] - "
                               "This command allows you to delete a given JID "
-                              "from a group.");
+                              "from a group.", NULL);
 
    gotham_modules_command_add("notification", ".notification send",
                               "[.notification send groupname message] - "
                               "This command allows you to send a message to "
-                              "a group of users.");
+                              "a group of users.", NULL);
 
    notification->access_allowed = gotham_modules_function_get("access", "access_allowed");
 

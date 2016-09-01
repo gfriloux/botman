@@ -81,15 +81,15 @@ module_register(Gotham *gotham)
                                    "[.ssh] - "
                                    "This command will show informations "
                                    "about the tunnel (opened or not, "
-                                   "which port)");
+                                   "which port)", NULL);
         gotham_modules_command_add("ssh_tunnel", ".ssh on",
                                    "[.ssh on] - "
                                    "This command will try to open a "
-                                   "tunnel and send back the port to use. ");
+                                   "tunnel and send back the port to use. ", NULL);
         gotham_modules_command_add("ssh_tunnel", ".ssh off",
                                    "[.ssh off] - "
                                    "This command will shut down the tunnel "
-                                   "if it's opened.");
+                                   "if it's opened.", NULL);
      }
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
@@ -98,7 +98,7 @@ module_register(Gotham *gotham)
                                    "[.ssh pattern] - "
                                    "This command will show informations "
                                    "about the tunnel for the matching "
-                                   "pattern");
+                                   "pattern", NULL);
      }
 
    return obj;

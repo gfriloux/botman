@@ -151,8 +151,27 @@ func_end:
 void
 gotham_event_command_new(Gotham_Citizen_Command *command)
 {
+   Eina_Inlist *l;
+   Gotham_Module *module;
+   Gotham_Module_Command *module_command;
+
    ecore_event_add(GOTHAM_EVENT_CITIZEN_COMMAND, command,
                    _gotham_event_message_free, NULL);
+
+   l = gotham_modules_list();
+
+   EINA_INLIST_FOREACH(l, module)
+     {
+        EINA_INLIST_FOREACH(module->commands, module_command)
+          {
+             size_t len = strlen(module_command->command);
+
+             if (strncmp(module_command->command, command->message, len))
+               continue;
+
+             if (module_command->cb) module_command->cb(module->module_data, command);
+          }
+     }
 }
 
 /**

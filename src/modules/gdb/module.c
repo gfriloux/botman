@@ -48,13 +48,13 @@ module_register(Gotham *gotham)
 
    gotham_modules_command_add("gdb", ".gdb list",
                               "[.gdb list] - "
-                              "This command will list coredumps inside the coredumps directory.");
+                              "This command will list coredumps inside the coredumps directory.", NULL);
    gotham_modules_command_add("gdb", ".gdb delete",
                               "[.gdb delete <pattern>] - "
-                              "This command will delete coredumps matching given parttern.");
+                              "This command will delete coredumps matching given parttern.", NULL);
    gotham_modules_command_add("gdb", ".gdb fetch",
                               "[.gdb fetch <coredump>] - "
-                              "This command will retrieve the backtrace from a given coredump.");
+                              "This command will retrieve the backtrace from a given coredump.", NULL);
 
    return gdb;
 }

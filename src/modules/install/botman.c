@@ -516,16 +516,16 @@ module_install_botman_commands_register(void)
 {
    gotham_modules_command_add("install", ".install",
                               "[.install softwarelist] - "
-                              "Install softwarelist.");
+                              "Install softwarelist.", NULL);
    gotham_modules_command_add("install", ".upgrade",
                               "[.upgrade] - "
-                              "Performs an upgrade on all repositories.");
+                              "Performs an upgrade on all repositories.", NULL);
    gotham_modules_command_add("install", ".jobs",
                               "[.jobs] - "
-                              "List running install / upgrade jobs");
+                              "List running install / upgrade jobs", NULL);
    gotham_modules_command_add("install", ".kill",
                               "[.jobs job_id] - "
-                              "Kill running install / upgrade job.");
+                              "Kill running install / upgrade job.", NULL);
 }
 
 /**

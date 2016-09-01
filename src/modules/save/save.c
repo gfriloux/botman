@@ -64,11 +64,11 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("save", ".save",
                               "[.save] - "
                               "This command will show informations "
-                              "about the backup.");
+                              "about the backup.", NULL);
    gotham_modules_command_add("save", ".save set",
                               "[.save set variable value] - "
                               "This command allows you to set a variable. "
-                              "Possible variables : 'interval'.");
+                              "Possible variables : 'interval'.", NULL);
    return _obj;
 }
 

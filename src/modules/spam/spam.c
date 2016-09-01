@@ -59,7 +59,7 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("spam", ".spam",
                               "[.spam pattern command] - "
                               "This command allows you to send commands "
-                              "to multiple botmans at once.");
+                              "to multiple botmans at once.", NULL);
    spam->queue.t = ecore_timer_add(30, queue_timer, spam);
    return spam;
 }
