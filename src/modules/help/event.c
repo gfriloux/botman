@@ -8,24 +8,6 @@
 #include "help.h"
 
 /**
- * @addtogroup Gotham_Module_Help
- * @{
- */
-
-/**
- * Authorization macro
- */
-#define AUTH(_a, _b, _c)                                                       \
-   {                                                                           \
-      if ((_a) && (!_a(_b, _c->citizen)))                                      \
-        {                                                                      \
-           gotham_command_send(_c, "Access denied");                           \
-           return;                                                             \
-        }                                                                      \
-   }
-/* "debug" */
-
-/**
  * @brief Callback when all modules are loaded.
  * Set the function pointer for access_allwed using
  * @ref gotham_modules_function_get
@@ -58,9 +40,6 @@ event_help_list(void *data,
    if ((command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN) ||
        (command->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED))
      return;
-
-   AUTH(help->access_allowed, gotham_modules_command_get(".help"),
-        command);
 
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of commands :\n");
