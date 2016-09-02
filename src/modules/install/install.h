@@ -71,15 +71,6 @@ void module_install_event_botman_command(Module_Install *install,
 Module_Install_Cmd *module_install_cmd_new(Module_Install *install, Gotham_Citizen_Command *command);
 void module_install_cmd_free(Module_Install_Cmd *obj);
 
-void module_install_json_answer(const char *cmd,
-                                const char *params,
-                                Eina_Bool status,
-                                Eina_Strbuf *content,
-                                Gotham *gotham,
-                                Gotham_Citizen *citizen,
-                                Eina_Bool send_to_alfred);
-
-
 Eina_Bool job_add(Module_Install *install, Ecore_Exe *exe, const char *jid, const char **args);
 Eina_Bool job_del(Module_Install *install, Ecore_Exe *exe);
 Eina_Bool job_find(Module_Install *install, Ecore_Exe *exe);

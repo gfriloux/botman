@@ -14,58 +14,6 @@
  * @{
  */
 
-/**
- * @brief Send answer in JSON format.
- * @param cmd Command requested
- * @param params Command parameters
- * @param status EINA_TRUE on success, EINA_FALSE otherwise
- * @param gotham Gotham structure
- * @param content String buffer containing message content
- * @param citizen Gotham_Citizen we reply to
- * @param send_to_alfred EINA_TRUE if message has to be also sent
-          to Alfred, EINA_FALSE otherwise
- */
-void
-module_install_json_answer(const char *cmd,
-                           const char *params,
-                           Eina_Bool status,
-                           Eina_Strbuf *content,
-                           Gotham *gotham,
-                           Gotham_Citizen *citizen,
-                           Eina_Bool send_to_alfred)
-{
-   cJSON *json_obj,
-         *json_content;
-   char **split;
-   unsigned int i;
-   char *ptr;
-
-   json_obj = cJSON_CreateObject();
-   cJSON_AddStringToObject(json_obj, "command", cmd);
-   cJSON_AddStringToObject(json_obj, "parameters", params);
-   cJSON_AddStringToObject(json_obj, "status", status ? "ok" : "ko");
-
-   json_content = cJSON_CreateArray();
-   split = eina_str_split(eina_strbuf_string_get(content), "\n", 0);
-   for (i=0; split[i]; i++)
-     if (split[i][0])
-       cJSON_AddItemToArray(json_content, cJSON_CreateString(split[i]));
-
-   cJSON_AddItemToObject(json_obj, "content", json_content);
-   if (split[0]) free(split[0]);
-   free(split);
-
-   ptr = cJSON_Print(json_obj);
-   cJSON_Delete(json_obj);
-   gotham_citizen_send(citizen, ptr);
-
-   if (send_to_alfred && (strcmp(citizen->jid, gotham->alfred->jid)))
-     gotham_citizen_send(gotham->alfred, ptr);
-
-   free(ptr);
-   return;
-}
-
 Eina_Bool
 _this_is_my_process(Module_Install *install, Ecore_Exe *process_exe)
 {
@@ -163,13 +111,9 @@ _install_del_cb(void *data,
      eina_strbuf_append_printf(buf, "%s ", obj->command[i]);
    eina_strbuf_trim(buf);
 
-   module_install_json_answer(obj->command[0],
-                              eina_strbuf_string_get(buf),
-                              obj->ok,
-                              obj->buf,
-                              obj->install->gotham,
-                              obj->citizen,
-                              EINA_TRUE);
+   gotham_command_json_answer(obj->command[0], eina_strbuf_string_get(buf),
+                              obj->ok, obj->buf, obj->install->gotham,
+                              obj->citizen, EINA_TRUE);
 
    eina_strbuf_free(buf);
 
@@ -215,13 +159,8 @@ module_install_jobs_list(Module_Install *install,
      }
 
 answer:
-   module_install_json_answer(command->command[0],
-                              "",
-                              EINA_TRUE,
-                              buf,
-                              install->gotham,
-                              command->citizen,
-                              EINA_FALSE);
+   gotham_command_json_answer(command->command[0], "", EINA_TRUE, buf,
+                              install->gotham, command->citizen, EINA_FALSE);
    eina_strbuf_free(buf);
 
    return;
@@ -259,12 +198,8 @@ module_install_job_kill(Module_Install *install,
    eina_strbuf_append_printf(buf, "Thread #%s killed.", command->command[1]);
 
 answer:
-   module_install_json_answer(command->command[0],
-                              command->command[1],
-                              success,
-                              buf,
-                              install->gotham,
-                              command->citizen,
+   gotham_command_json_answer(command->command[0], command->command[1], success,
+                              buf, install->gotham, command->citizen,
                               EINA_FALSE);
    eina_strbuf_free(buf);
 
@@ -350,13 +285,10 @@ module_install_event_botman_command(Module_Install *install,
         eina_strbuf_append(buf, "Software(s) install/upgrade will begin "
                                 "in a few seconds.");
 
-        module_install_json_answer(".install_begins",
+        gotham_command_json_answer(".install_begins",
                                    eina_strbuf_string_get(bufargs),
-                                   EINA_TRUE,
-                                   buf,
-                                   install->gotham,
-                                   command->citizen,
-                                   EINA_FALSE);
+                                   EINA_TRUE, buf, install->gotham,
+                                   command->citizen, EINA_FALSE);
 
         eina_strbuf_free(buf);
         eina_strbuf_free(bufargs);
