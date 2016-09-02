@@ -154,6 +154,7 @@ gotham_event_command_new(Gotham_Citizen_Command *command)
    Eina_Inlist *l;
    Gotham_Module *module;
    Gotham_Module_Command *module_command;
+   Gotham *gotham = command->citizen->gotham;
 
    ecore_event_add(GOTHAM_EVENT_CITIZEN_COMMAND, command,
                    _gotham_event_message_free, NULL);
@@ -169,11 +170,25 @@ gotham_event_command_new(Gotham_Citizen_Command *command)
              if (strncmp(module_command->command, command->message, len))
                continue;
 
-             if (module_command->cb)
+             if (!module_command->cb) continue;
+
+             command->handled = EINA_TRUE;
+
+             /* Checking access rights */
+             if ((gotham->access_allowed) &&
+                 (!gotham->access_allowed(module_command, command->citizen)))
                {
-                  command->handled = EINA_TRUE;
-                  module_command->cb(module->module_data, command);
+                  Eina_Strbuf *buf = eina_strbuf_new();
+                  ERR("%s is not autorized to execute command [%s]",
+                      command->citizen->jid, module_command->command);
+                  eina_strbuf_append(buf, "Access denied");
+                  gotham_command_json_answer(command->command[0], "",
+                                             EINA_FALSE, buf,
+                                             command->citizen->gotham,
+                                             command->citizen, EINA_FALSE);
+                  eina_strbuf_free(buf);
                }
+             else module_command->cb(module->module_data, command);
           }
      }
 }

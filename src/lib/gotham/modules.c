@@ -238,6 +238,12 @@ _gotham_modules_load(Gotham *gotham)
 #endif
    eina_array_free(mods);
    DBG("Loaded %d modules", eina_inlist_count(_gotham_modules_list));
+
+   /*
+    * Getting this function pointer will help us doing access
+    * control over commands, from inside gotham.
+    */
+   gotham->access_allowed = gotham_modules_function_get("access", "access_allowed");
 }
 
 /**

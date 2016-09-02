@@ -99,6 +99,7 @@ struct _Gotham
    Eina_Hash *citizens;
 
    Gotham_Citizen *alfred;
+   Eina_Bool (*access_allowed)(void *, void *);
 };
 
 struct _Gotham_Citizen
