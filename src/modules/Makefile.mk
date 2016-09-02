@@ -16,7 +16,6 @@ BUILT_SOURCES += .sources_notification
 src_modules_notification_la_SOURCES = \
    src/modules/notification/main.c \
    src/modules/notification/main.h \
-   src/modules/notification/event.c \
    src/modules/notification/alfred.c \
    src/modules/notification/utils.c \
    src/modules/notification/Module_Common_Azy.c \

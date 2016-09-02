@@ -21,12 +21,12 @@ int _module_notification_log_dom;
 #define NFO(...) EINA_LOG_DOM_INFO(_module_notification_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_notification_log_dom, __VA_ARGS__)
 
-void alfred_group_print(Module_Notification *notification, Gotham_Citizen_Command *command);
-void alfred_group_add(Module_Notification *notification, Gotham_Citizen_Command *command);
-void alfred_group_del(Module_Notification *notification, Gotham_Citizen_Command *command);
-void alfred_user_add(Module_Notification *notification, Gotham_Citizen_Command *command);
-void alfred_user_del(Module_Notification *notification, Gotham_Citizen_Command *command);
-void alfred_send(Module_Notification *notification, Gotham_Citizen_Command *command);
+void alfred_group_print(void *data, Gotham_Citizen_Command *command);
+void alfred_group_add(void *data, Gotham_Citizen_Command *command);
+void alfred_group_del(void *data, Gotham_Citizen_Command *command);
+void alfred_user_add(void *data, Gotham_Citizen_Command *command);
+void alfred_user_del(void *data, Gotham_Citizen_Command *command);
+void alfred_send(void *data, Gotham_Citizen_Command *command);
 
 Module_Notification_Conf_Group * utils_group_find(Module_Notification *notification, const char *name);
 const char * utils_user_find(Module_Notification_Conf_Group *group, const char *name);

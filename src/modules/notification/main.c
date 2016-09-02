@@ -45,29 +45,36 @@ module_register(Gotham *gotham)
         EINA_SAFETY_ON_NULL_GOTO(notification->conf, free_notification);
      }
 
+   gotham_modules_command_add("notification", ".notification",
+                              "[.notification] - "
+                              "This command allows you to print the list "
+                              "of groups and users link to thoses.",
+                              alfred_group_print);
+
    gotham_modules_command_add("notification", ".notification groupadd",
                               "[.notification groupadd groupname] - "
                               "This command allows you to create a new "
-                              "group.", NULL);
+                              "group.", alfred_group_add);
 
    gotham_modules_command_add("notification", ".notification groupdel",
                               "[.notification groupdel groupname] - "
-                              "This command allows you to delete a group.", NULL);
+                              "This command allows you to delete a group.",
+                              alfred_group_del);
 
    gotham_modules_command_add("notification", ".notification useradd",
                               "[.notification useradd groupname username] - "
                               "This command allows you to add a given JID "
-                              "into a group.", NULL);
+                              "into a group.", alfred_user_add);
 
    gotham_modules_command_add("notification", ".notification userdel",
                               "[.notification userdel groupname username] - "
                               "This command allows you to delete a given JID "
-                              "from a group.", NULL);
+                              "from a group.", alfred_user_del);
 
    gotham_modules_command_add("notification", ".notification send",
                               "[.notification send groupname message] - "
                               "This command allows you to send a message to "
-                              "a group of users.", NULL);
+                              "a group of users.", alfred_send);
 
    notification->access_allowed = gotham_modules_function_get("access", "access_allowed");
 
