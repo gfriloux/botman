@@ -9,8 +9,6 @@
 typedef struct _Module_Notification
 {
    Gotham *gotham;
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
-
    Module_Notification_Conf *conf;
 } Module_Notification;
 

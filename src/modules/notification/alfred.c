@@ -9,21 +9,6 @@
            return;                                                             \
         }                                                                      \
    } while (0)
-#define AUTH(_a, _b, _c)                                                       \
-   do {                                                                        \
-      if ((_a->access_allowed) &&                                              \
-          (!_a->access_allowed(gotham_modules_command_get(_b), _c)))           \
-        {                                                                      \
-           Eina_Strbuf *buf = eina_strbuf_new();                               \
-           ERR("%s is not autorized", _c->jid);                                \
-           eina_strbuf_append(buf, "Access denied");                           \
-           gotham_command_json_answer(".notification", "", EINA_FALSE,         \
-                                      buf, _a->gotham, _c, EINA_FALSE);        \
-           eina_strbuf_free(buf);                                              \
-           return;                                                             \
-        }                                                                      \
-   } while (0)
-
 
 void
 alfred_group_print(void *data,
@@ -66,8 +51,6 @@ alfred_group_add(void *data,
    const char *name;
    Eina_List *l;
 
-   AUTH(notification, ".notification groupadd", command->citizen);
-
    if (!command->command[2]) return;
 
    name = command->command[2];
@@ -96,7 +79,6 @@ alfred_group_del(void *data,
    Module_Notification *notification = data;
    Module_Notification_Conf_Group *group;
 
-   AUTH(notification, ".notification groupdel", command->citizen);
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
 
    group = utils_group_find(notification, command->command[2]);
@@ -120,7 +102,6 @@ alfred_user_add(void *data,
    const char *username;
    Gotham_Citizen *citizen;
 
-   AUTH(notification, ".notification useradd", command->citizen);
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
@@ -151,7 +132,6 @@ alfred_user_del(void *data,
    Module_Notification_Conf_Group *group;
    const char *username;
 
-   AUTH(notification, ".notification userdel", command->citizen);
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
@@ -183,7 +163,6 @@ alfred_send(void *data,
    Eina_Strbuf *buf;
    Eina_List *l;
 
-   AUTH(notification, ".notification send", command->citizen);
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
@@ -216,6 +195,5 @@ alfred_send(void *data,
 print_usage:
    gotham_command_send(command, "Incorrect usage, please see .help");
 }
-#undef AUTH
 #undef _IF_SEND
 #undef _WRITE_CONF

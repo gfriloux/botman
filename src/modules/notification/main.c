@@ -76,8 +76,6 @@ module_register(Gotham *gotham)
                               "This command allows you to send a message to "
                               "a group of users.", alfred_send);
 
-   notification->access_allowed = gotham_modules_function_get("access", "access_allowed");
-
    return notification;
 
 free_notification:
