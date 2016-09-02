@@ -28,6 +28,9 @@ void conf_save(Module_Save *save);
 Eina_Bool conf_backup(void *data);
 Eina_Bool conf_restore(Module_Save *save);
 
+void event_citizen_save_info(void *data, Gotham_Citizen_Command *command);
+void event_citizen_save_set(void *data, Gotham_Citizen_Command *command);
+
 int utils_json_number_get(cJSON *json, const char *varname);
 const char * utils_json_string_get(cJSON *json, const char *varname);
 Eina_Bool utils_isnumber(char c);

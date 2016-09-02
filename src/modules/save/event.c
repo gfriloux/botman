@@ -18,7 +18,7 @@
       if ((_a) && (!_a(gotham_modules_command_get(_b), _c->citizen)))          \
         {                                                                      \
            gotham_command_send(_c, "Access denied");                           \
-           return EINA_TRUE;                                                   \
+           return;                                                             \
         }                                                                      \
    }
 
@@ -26,14 +26,13 @@
  * @brief Reply backup interval and last backup time.
  * @param save Module_Save object
  * @param command Gotham_Citizen_Command incoming command
- * @return const char * string to reply
  */
-const char *
-_event_citizen_save_info(Module_Save *save,
-                         Gotham_Citizen_Command *command)
+void
+event_citizen_save_info(void *data,
+                        Gotham_Citizen_Command *command)
 {
-   const char *p,
-              *love;
+   Module_Save *save = data;
+   const char *love;
    char file[PATH_MAX],
         date[25];
    Eina_Strbuf *buf;
@@ -43,13 +42,20 @@ _event_citizen_save_info(Module_Save *save,
    struct tm temp;
    Eina_Bool am_i_alfred = EINA_FALSE;
 
+   if (command->command[1]) return;
+
+   AUTH(save->access_allowed, ".save", command);
+
    snprintf(file, sizeof(file), "%s%.64s.%.255s.save",
             MODULE_SAVE_BACKUP,
             save->gotham->conf->xmpp.login,
             save->gotham->conf->xmpp.server);
    ef = eina_file_open(file, EINA_FALSE);
    if (!ef)
-     return strdup("No backups found");
+     {
+        gotham_command_send(command, "No backups found");
+        return;
+     }
 
    file_size = eina_file_size_get(ef);
    file_time = eina_file_mtime_get(ef);
@@ -76,9 +82,8 @@ _event_citizen_save_info(Module_Save *save,
                              save->interval, date, file_size,
                              am_i_alfred ? "Alfred" : "Botman");
 
-   p = eina_strbuf_string_steal(buf);
+   gotham_command_send(command, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-   return p;
 }
 
 /**
@@ -86,21 +91,28 @@ _event_citizen_save_info(Module_Save *save,
  * Once updated, save new conf to file.
  * @param save Module_Save object
  * @param command const char ** incoming command
- * @return const char * string to reply
  */
-const char *
-_event_citizen_save_set(Module_Save *save, const char **command)
+void
+event_citizen_save_set(void *data,
+                       Gotham_Citizen_Command *command)
 {
-   if ((!command[2])                    ||
-       (!command[3])                    ||
-       (strcmp(command[2], "interval")) ||
-       (!utils_isnumber(command[3][0])))
-     return strdup("Wrong command");
+   Module_Save *save = data;
 
-   save->interval = atoi(command[3]);
+   AUTH(save->access_allowed, ".save set", command);
+
+   if ((!command->command[2])                    ||
+       (!command->command[3])                    ||
+       (strcmp(command->command[2], "interval")) ||
+       (!utils_isnumber(command->command[3][0])))
+     {
+        gotham_command_send(command, "Wrong command");
+        return;
+     }
+
+   save->interval = atoi(command->command[3]);
    conf_save(save);
 
-   return strdup("Modification done.");
+   gotham_command_send(command, "Modification done.");
 }
 
 /**
@@ -122,49 +134,6 @@ event_modules_ready(void *data,
    save->access_allowed = gotham_modules_function_get("access",
                                                       "access_allowed");
    conf_restore(save);
-   return EINA_TRUE;
-}
-
-/**
- * @brief Callback when a citizen sends a command.
- * Check citizen auth level / compare to the command access level. Citizen
- * level has to be at least equal to command level in order to run it.
- * @param data Module_Save object
- * @param type UNUSED
- * @param ev Gotham_Citizen_Command structure
- * @return EINA_TRUE
- */
-Eina_Bool
-event_citizen_command(void *data,
-                      int type EINA_UNUSED,
-                      void *ev)
-{
-   Module_Save *save = data;
-   Gotham_Citizen_Command *command = ev;
-   const char **save_command = command->command,
-              *answer = NULL;
-
-   DBG("save[%p] command[%p]=%s", save, command, command->name);
-
-   if (strncmp(command->name, ".save", 5))
-     return EINA_TRUE;
-
-   if (!save_command[1])
-     {
-        command->handled = EINA_TRUE;
-        AUTH(save->access_allowed, ".save", command);
-        answer = _event_citizen_save_info(save, command);
-     }
-   else if (!strcmp(save_command[1], "set"))
-     {
-        command->handled = EINA_TRUE;
-        AUTH(save->access_allowed, ".save set", command);
-        answer = _event_citizen_save_set(save, save_command);
-     }
-
-   gotham_command_send(command,
-                       (answer) ? answer : "Failed to execute command");
-   free((char *)answer);
    return EINA_TRUE;
 }
 
