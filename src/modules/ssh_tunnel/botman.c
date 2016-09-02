@@ -223,21 +223,21 @@ ssh_tunnel_cb_end(void *data,
  * Otherwise, duplicate incoming object (containing command and citizen)
  * and give it as event_data to ecore_exe_pipe_run.
  * Also store the process id in Module's object.
- * @param obj Module object
+ * @param data Module_Ssh_Tunnel object
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-ssh_tunnel_open(Module_Ssh_Tunnel *obj,
-                Gotham_Citizen_Command *command)
+ssh_tunnel_on(void *data,
+              Gotham_Citizen_Command *command)
 {
+   Module_Ssh_Tunnel *obj = data;
    Eina_Strbuf *buf;
    Gotham_Citizen *ctz;
    Gotham_Citizen_Command *cmd;
 
-   EINA_SAFETY_ON_NULL_RETURN(obj);
-   EINA_SAFETY_ON_NULL_RETURN(command);
-
    DBG("obj[%p] command[%p]", obj, command);
+
+   AUTH(obj, gotham_modules_command_get(".ssh on"), command->citizen);
 
    buf = eina_strbuf_new();
 
@@ -282,17 +282,20 @@ ssh_tunnel_open(Module_Ssh_Tunnel *obj,
  * In reality, it will close the child of the pid we know, as
  * the real tunnel will be a child of bash (and if we kill bash,
  * the tunnel will get PID#1 as PPID and will never ends).
- * @param obj Module object
+ * @param data Module_Ssh_Tunnel object
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-ssh_tunnel_close(Module_Ssh_Tunnel *obj,
-                 Gotham_Citizen_Command *command)
+ssh_tunnel_off(void *data,
+               Gotham_Citizen_Command *command)
 {
+   Module_Ssh_Tunnel *obj = data;
    Eina_Strbuf *buf;
    const char *cmd;
 
    DBG("obj[%p]", obj);
+
+   AUTH(obj, gotham_modules_command_get(".ssh off"), command->citizen);
 
    buf = eina_strbuf_new();
 
@@ -317,14 +320,17 @@ ssh_tunnel_close(Module_Ssh_Tunnel *obj,
 
 /**
  * @brief Returns the current tunnel's port if opened.
- * @param obj Module object
+ * @param data Module_Ssh_Tunnel object
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-ssh_tunnel_get(Module_Ssh_Tunnel *obj,
+ssh_tunnel_get(void *data,
                Gotham_Citizen_Command *command)
 {
+   Module_Ssh_Tunnel *obj = data;
    Eina_Strbuf *buf;
+
+   AUTH(obj, gotham_modules_command_get(".ssh"), command->citizen);
 
    buf = eina_strbuf_new();
 

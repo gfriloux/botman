@@ -41,21 +41,32 @@ typedef struct _Module_Ssh_Tunnel
 #define NFO(...) EINA_LOG_DOM_INFO(_module_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_log_dom, __VA_ARGS__)
 
+#define AUTH(_a, _b, _c)                                                       \
+{                                                                              \
+   if ((_a->access_allowed) && (!_a->access_allowed(_b, _c)))                  \
+     {                                                                         \
+        Eina_Strbuf *buf = eina_strbuf_new();                                  \
+        ERR("%s is not autorized", _c->jid);                                   \
+        eina_strbuf_append(buf, "Access denied");                              \
+        gotham_command_json_answer(".ssh", "", EINA_FALSE,                     \
+                                   buf, _a->gotham, _c, EINA_FALSE);           \
+        eina_strbuf_free(buf);                                                 \
+        return;                                                                \
+     }                                                                         \
+}
+/* "debug" */
+
 void conf_load(Module_Ssh_Tunnel *obj);
 
 void ssh_tunnel_check(Module_Ssh_Tunnel *obj);
-void ssh_tunnel_open(Module_Ssh_Tunnel *obj,
-                     Gotham_Citizen_Command *command);
-void ssh_tunnel_close(Module_Ssh_Tunnel *obj,
-                      Gotham_Citizen_Command *command);
-void ssh_tunnel_get(Module_Ssh_Tunnel *obj,
-                    Gotham_Citizen_Command *command);
+void ssh_tunnel_on(void *data, Gotham_Citizen_Command *command);
+void ssh_tunnel_off(void *data, Gotham_Citizen_Command *command);
+void ssh_tunnel_get(void *data, Gotham_Citizen_Command *command);
 
 Eina_Bool ssh_tunnel_cb_data(void *data, int type, void *event);
 Eina_Bool ssh_tunnel_cb_end(void *data, int type, void *event);
 
-void alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
-                                 Gotham_Citizen_Command *command);
+void alfred_command_tunnels_show(void *data, Gotham_Citizen_Command *command);
 void botman_answer_get(Module_Ssh_Tunnel *obj,
                        Gotham_Citizen_Command *command);
 #endif

@@ -46,9 +46,10 @@ _ssh_tunnel_sort(void *data1, void *data2)
  * @param command Gotham_Citizen_Command containing pattern to show
  */
 void
-alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
+alfred_command_tunnels_show(void *module_data,
                             Gotham_Citizen_Command *command)
 {
+   Module_Ssh_Tunnel *obj = module_data;
    Eina_Strbuf *buf;
    Eina_Bool found = EINA_FALSE;
    Eina_Iterator *it;
@@ -56,8 +57,14 @@ alfred_command_tunnels_show(Module_Ssh_Tunnel *obj,
 
    DBG("obj[%p], command[%p]", obj, command);
 
-   EINA_SAFETY_ON_NULL_RETURN(obj);
-   EINA_SAFETY_ON_NULL_RETURN(command);
+   /* Alfred receives a Botman answser : no auth check */
+   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+     {
+        botman_answer_get(obj, command);
+        return;
+     }
+
+   AUTH(obj, gotham_modules_command_get(".ssh"), command->citizen);
 
    buf = eina_strbuf_new();
    eina_strbuf_append_printf(buf, "\nContacts with an opened tunnel :\n");

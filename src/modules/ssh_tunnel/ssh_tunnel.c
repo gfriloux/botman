@@ -66,40 +66,43 @@ module_register(Gotham *gotham)
      }
    obj->gotham = gotham;
 
-   if (gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
-     {
-        conf_load(obj);
-        obj->tunnel.eh_data = ecore_event_handler_add(ECORE_EXE_EVENT_DATA,
-                                                      ssh_tunnel_cb_data,
-                                                      obj);
+   conf_load(obj);
 
-        obj->tunnel.eh_end = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
-                                                     ssh_tunnel_cb_end,
-                                                     obj);
-
-        gotham_modules_command_add("ssh_tunnel", ".ssh",
-                                   "[.ssh] - "
-                                   "This command will show informations "
-                                   "about the tunnel (opened or not, "
-                                   "which port)", NULL);
-        gotham_modules_command_add("ssh_tunnel", ".ssh on",
-                                   "[.ssh on] - "
-                                   "This command will try to open a "
-                                   "tunnel and send back the port to use. ", NULL);
-        gotham_modules_command_add("ssh_tunnel", ".ssh off",
-                                   "[.ssh off] - "
-                                   "This command will shut down the tunnel "
-                                   "if it's opened.", NULL);
-     }
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
-        conf_load(obj);
         gotham_modules_command_add("ssh_tunnel", ".ssh",
                                    "[.ssh pattern] - "
                                    "This command will show informations "
                                    "about the tunnel for the matching "
-                                   "pattern", NULL);
+                                   "pattern",
+                                   alfred_command_tunnels_show);
+        return obj;
      }
+
+   obj->tunnel.eh_data = ecore_event_handler_add(ECORE_EXE_EVENT_DATA,
+                                                 ssh_tunnel_cb_data,
+                                                 obj);
+
+   obj->tunnel.eh_end = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
+                                                ssh_tunnel_cb_end,
+                                                obj);
+
+   gotham_modules_command_add("ssh_tunnel", ".ssh",
+                              "[.ssh] - "
+                              "This command will show informations "
+                              "about the tunnel (opened or not, "
+                              "which port)",
+                              ssh_tunnel_get);
+   gotham_modules_command_add("ssh_tunnel", ".ssh on",
+                              "[.ssh on] - "
+                              "This command will try to open a "
+                              "tunnel and send back the port to use. ",
+                              ssh_tunnel_on);
+   gotham_modules_command_add("ssh_tunnel", ".ssh off",
+                              "[.ssh off] - "
+                              "This command will shut down the tunnel "
+                              "if it's opened.",
+                              ssh_tunnel_off);
 
    return obj;
 }
