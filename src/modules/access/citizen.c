@@ -73,8 +73,6 @@ citizen_access_list(void *data,
 
    if (command->command[1]) return;
 
-   AUTH(".access", command);
-
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of access rights :\n");
 
@@ -109,8 +107,6 @@ citizen_access_set(void *module_data,
    void *data;
    const char **cmd = command->command;
    Eina_List *l;
-
-   AUTH(".access set", command);
 
    if ((!cmd[2]) || (!cmd[3]) || (!_isnumber(cmd[3][0])))
      {
@@ -182,8 +178,6 @@ citizen_access_del(void *module_data,
 
    DBG("access[%p] command[%p]", access, command);
 
-   AUTH(".access del", command);
-
    if (!pattern)
      {
         gotham_command_send(command, "Wrong use of .access del");
@@ -243,8 +237,6 @@ citizen_access_add(void *module_data,
    const char **cmd = command->command;
    const char *p;
 
-   AUTH(".access add", command);
-
    if ((!cmd[2]) || (!cmd[3]) ||
        (!_isnumber(cmd[3][0])) || (!cmd[4]))
      {
@@ -303,8 +295,6 @@ citizen_access_sync(void *module_data,
    Eina_Strbuf *buf;
    Eina_Iterator *it;
    void *data;
-
-   AUTH(".access sync", command);
 
    s = gotham_serialize_struct_to_string(access, (Gotham_Serialization_Function)Module_Access_Conf_to_azy_value);
 

@@ -22,15 +22,6 @@
  */
 #define MODULE_ACCESS_CONF SYSCONF_DIR"/gotham/modules.conf.d/access.conf"
 
-#define AUTH(_a, _b)                                                           \
-   do {                                                                        \
-      if (!access_allowed(gotham_modules_command_get(_a), _b->citizen))        \
-        {                                                                      \
-           gotham_command_send(_b, "Access denied");                           \
-           return;                                                             \
-        }                                                                      \
-   } while (0)
-
 int _module_access_log_dom;
 
 typedef struct _Module_Access
