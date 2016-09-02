@@ -15,7 +15,6 @@ typedef struct _Module_Seen
 {
    Gotham *gotham;
    Module_Seen_Conf *conf;
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Seen;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_seen_log_dom, __VA_ARGS__)

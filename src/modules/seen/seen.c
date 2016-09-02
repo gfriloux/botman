@@ -72,9 +72,6 @@ module_register(Gotham *gotham)
                               "users. It uses JID to search them, but "
                               "additional criterias can be specified in "
                               "seen.conf.", event_command_seen);
-
-   seen->access_allowed = gotham_modules_function_get("access",
-                                                      "access_allowed");
    return seen;
 }
 

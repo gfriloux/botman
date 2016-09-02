@@ -13,26 +13,6 @@
  * @{
  */
 
-/**
- * @brief Callback when all modules are loaded.
- * Set the function pointer for access_allwed using
- * @ref gotham_modules_function_get
- * @param data Module_Seen object
- * @param type UNUSED
- * @param ev UNUSED
- * @return EINA_TRUE
- */
-Eina_Bool
-event_modules_ready(void *data,
-                    int type EINA_UNUSED,
-                    void *ev EINA_UNUSED)
-{
-   Module_Seen *seen = data;
-   seen->access_allowed = gotham_modules_function_get("access",
-                                                      "access_allowed");
-   return EINA_TRUE;
-}
-
 void
 event_command_seen(void *data,
                    Gotham_Citizen_Command *command)
@@ -43,14 +23,6 @@ event_command_seen(void *data,
    EINA_SAFETY_ON_TRUE_RETURN(command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN);
 
    DBG("seen[%p] command[%p][%s]", seen, command, command->name);
-
-   if ((seen->access_allowed) &&
-       (!seen->access_allowed(gotham_modules_command_get(".seen"),
-                              command->citizen)))
-     {
-        gotham_command_send(command, "Access denied");
-        return;
-     }
 
    if (!command->command[1])
      {
