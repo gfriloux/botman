@@ -20,7 +20,11 @@ void
 botman_commands_register(void)
 {
    gotham_modules_command_add("access", ".access",
-                              "This command will list all user accesses.", NULL);
+                              "This command will list all user accesses.",
+                              citizen_access_list);
+   gotham_modules_command_add("access", ".access set",
+                              "This command will set access rights",
+                              botman_access_sync);
 }
 
 /**
@@ -31,6 +35,7 @@ void
 botman_commands_unregister(void)
 {
    gotham_modules_command_del("access", ".access");
+   gotham_modules_command_del("access", ".access set");
 }
 
 /**
@@ -61,12 +66,14 @@ botman_access_alfred_add(Module_Access *access)
 
 /**
  * @brief Set new access rules to a botman from an incoming message.
- * @param access Module_Access structure
+ * @param data Module_Access structure
  * @param command Gotham_Citizen_Command containing new access rules
  */
 void
-botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
+botman_access_sync(void *data,
+                   Gotham_Citizen_Command *command)
 {
+   Module_Access *access = data;
    cJSON *json;
    Module_Access_Conf_Rule *rule;
    const char *p;
@@ -99,18 +106,10 @@ botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    EINA_LIST_FREE(access->conf->citizens, rule)
-     {
-        free((char *)rule->pattern);
-        free((char *)rule->description);
-        free(rule);
-     }
+     Module_Access_Conf_Rule_free(rule);
 
    EINA_LIST_FREE(access->conf->commands, rule)
-     {
-        free((char *)rule->pattern);
-        free((char *)rule->description);
-        free(rule);
-     }
+     Module_Access_Conf_Rule_free(rule);
 
    botman_access_alfred_add(access);
    access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);

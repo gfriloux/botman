@@ -58,17 +58,22 @@ citizen_access_eval(Module_Access *access, Gotham_Citizen *citizen)
 
 /**
  * @brief List all citizen and their access levels.
- * @param access Module_Access structure
- * @return const char * Citizen list
+ * @param data Module_Access structure
+ * @param command Incoming message (splitted)
  */
-const char *
-citizen_access_list(Module_Access *access)
+void
+citizen_access_list(void *data,
+                    Gotham_Citizen_Command *command)
 {
+   Module_Access *access = data;
    Eina_Strbuf *buf;
    unsigned int i = 0;
    Module_Access_Conf_Rule *rule;
-   const char *answer;
    Eina_List *l;
+
+   if (command->command[1]) return;
+
+   AUTH(".access", command);
 
    buf = eina_strbuf_new();
    eina_strbuf_append(buf, "\nList of access rights :\n");
@@ -82,20 +87,20 @@ citizen_access_list(Module_Access *access)
                                   rule->description);
      }
 
-   answer = eina_strbuf_string_steal(buf);
+   gotham_command_send(command, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-   return answer;
 }
 
 /**
  * @brief Set new access levels to a pattern.
- * @param access Module_Access structure
+ * @param module_data Module_Access structure
  * @param command Incoming message (splitted)
- * @return const char * answer (error, ok, ...)
  */
-const char *
-citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
+void
+citizen_access_set(void *module_data,
+                   Gotham_Citizen_Command *command)
 {
+   Module_Access *access = module_data;
    Eina_Iterator *it;
    const char *pattern;
    unsigned int level;
@@ -105,8 +110,13 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
    const char **cmd = command->command;
    Eina_List *l;
 
+   AUTH(".access set", command);
+
    if ((!cmd[2]) || (!cmd[3]) || (!_isnumber(cmd[3][0])))
-     return strdup("Wrong use of “.access set”");
+     {
+        gotham_command_send(command, "Wrong use of .access set");
+        return;
+     }
 
    pattern = cmd[2];
    level = atoi(cmd[3]);
@@ -123,7 +133,10 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    if (!rule_found)
-     return strdup("You gave me an unknown pattern!");
+     {
+        gotham_command_send(command, "You gave me an unknown pattern!");
+        return;
+     }
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))
@@ -145,18 +158,19 @@ citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command)
    /* We should sync to disk */
    access->conf->revision++;
    _WRITE_CONF();
-   return strdup("Modification done");
+   gotham_command_send(command, "Modification done");
 }
 
 /**
  * @brief Remove a specific user access pattern.
- * @param access Module_Access
+ * @param module_data Module_Access
  * @param command Incoming message (splitted)
- * @return const char * answer (error, ok, ...)
  */
-const char *
-citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
+void
+citizen_access_del(void *module_data,
+                   Gotham_Citizen_Command *command)
 {
+   Module_Access *access = module_data;
    Eina_Iterator *it;
    void *data;
    const char **cmd = command->command;
@@ -168,8 +182,13 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
 
    DBG("access[%p] command[%p]", access, command);
 
+   AUTH(".access del", command);
+
    if (!pattern)
-     return strdup("Wrong use of “.access del”");
+     {
+        gotham_command_send(command, "Wrong use of .access del");
+        return;
+     }
 
    EINA_LIST_FOREACH_SAFE(access->conf->citizens, l, l2, rule)
      {
@@ -185,7 +204,10 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
      }
 
    if (!found)
-     return strdup("Pattern not found");
+     {
+        gotham_command_send(command, "Pattern not found");
+        return;
+     }
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))
@@ -194,39 +216,41 @@ citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command)
         const char *citizen_pattern;
 
         citizen_pattern = gotham_citizen_var_get(citizen, "access_pattern");
-        if (!citizen_pattern)
-          continue;
-
-        if (strcasecmp(pattern, citizen_pattern))
-          continue;
+        if (!citizen_pattern) continue;
+        if (strcasecmp(pattern, citizen_pattern)) continue;
 
         citizen_access_eval(access, citizen);
      }
 
    access->conf->revision++;
    _WRITE_CONF();
-
-   return strdup("Modification done");
+   gotham_command_send(command, "Modification done");
 }
 
 /**
  * @brief Add a new access pattern.
- * @param access Module_Access structure
+ * @param module_data Module_Access structure
  * @param command Incoming message (splitted)
- * @return const char * answer (error, ok, ...)
  */
-const char *
-citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
+void
+citizen_access_add(void *module_data,
+                   Gotham_Citizen_Command *command)
 {
+   Module_Access *access = module_data;
    Module_Access_Conf_Rule *rule;
    Eina_Iterator *it;
    void *data;
    const char **cmd = command->command;
    const char *p;
 
+   AUTH(".access add", command);
+
    if ((!cmd[2]) || (!cmd[3]) ||
        (!_isnumber(cmd[3][0])) || (!cmd[4]))
-     return strdup("Wrong use of “.access add”");
+     {
+        gotham_command_send(command, "Modification done");
+        return;
+     }
 
    rule = calloc(1, sizeof(Module_Access_Conf_Rule));
    rule->pattern = strdup(cmd[2]);
@@ -260,24 +284,27 @@ citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command)
 
    access->conf->revision++;
    _WRITE_CONF();
-
-   return strdup("Modification done");
+   gotham_command_send(command, "Modification done");
 }
 
 /**
  * @brief Sync access levels to botmans.
  * Load access rules in a cJSON structure,
  * run through citizens and send access rules if citizen is a Botman.
- * @param access Module_Access
- * @return const char * status (ok, failed...)
+ * @param module_data Module_Access
+ * @param command Incoming message (splitted)
  */
-const char *
-citizen_access_sync(Module_Access *access)
+void
+citizen_access_sync(void *module_data,
+                    Gotham_Citizen_Command *command)
 {
+   Module_Access *access = module_data;
    char *s;
    Eina_Strbuf *buf;
    Eina_Iterator *it;
    void *data;
+
+   AUTH(".access sync", command);
 
    s = gotham_serialize_struct_to_string(access, (Gotham_Serialization_Function)Module_Access_Conf_to_azy_value);
 
@@ -289,15 +316,13 @@ citizen_access_sync(Module_Access *access)
    while(eina_iterator_next(it, &data))
      {
         Gotham_Citizen *citizen = data;
-
-        if (citizen->type != GOTHAM_CITIZEN_TYPE_BOTMAN)
-          continue;
+        if (citizen->type != GOTHAM_CITIZEN_TYPE_BOTMAN) continue;
 
         gotham_citizen_send(citizen, eina_strbuf_string_get(buf));
      }
    eina_strbuf_free(buf);
 
-   return strdup("Everyone seems to be up2date");
+   gotham_command_send(command, "Everyone seems to be up2date");
 }
 
 #undef _WRITE_CONF

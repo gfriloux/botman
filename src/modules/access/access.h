@@ -22,6 +22,15 @@
  */
 #define MODULE_ACCESS_CONF SYSCONF_DIR"/gotham/modules.conf.d/access.conf"
 
+#define AUTH(_a, _b)                                                           \
+   do {                                                                        \
+      if (!access_allowed(gotham_modules_command_get(_a), _b->citizen))        \
+        {                                                                      \
+           gotham_command_send(_b, "Access denied");                           \
+           return;                                                             \
+        }                                                                      \
+   } while (0)
+
 int _module_access_log_dom;
 
 typedef struct _Module_Access
@@ -33,11 +42,11 @@ typedef struct _Module_Access
 Eina_Bool access_allowed(Gotham_Module_Command *mc, Gotham_Citizen *citizen);
 
 void citizen_access_eval(Module_Access *access, Gotham_Citizen *citizen);
-const char * citizen_access_list(Module_Access *access);
-const char * citizen_access_set(Module_Access *access, Gotham_Citizen_Command *command);
-const char * citizen_access_del(Module_Access *access, Gotham_Citizen_Command *command);
-const char * citizen_access_add(Module_Access *access, Gotham_Citizen_Command *command);
-const char * citizen_access_sync(Module_Access *access);
+void citizen_access_list(void *data, Gotham_Citizen_Command *command);
+void citizen_access_set(void *data, Gotham_Citizen_Command *command);
+void citizen_access_del(void *data, Gotham_Citizen_Command *command);
+void citizen_access_add(void *data, Gotham_Citizen_Command *command);
+void citizen_access_sync(void *data, Gotham_Citizen_Command *command);
 
 unsigned int modules_commands_level_find(Module_Access *access, const char *command);
 void modules_commands_check(Module_Access *access, Gotham_Module *module);
@@ -45,7 +54,7 @@ void modules_commands_check(Module_Access *access, Gotham_Module *module);
 void alfred_commands_register(void);
 void alfred_commands_unregister(void);
 
-void botman_access_sync(Module_Access *access, Gotham_Citizen_Command *command);
+void botman_access_sync(void *data, Gotham_Citizen_Command *command);
 void botman_commands_register(void);
 void botman_commands_unregister(void);
 void botman_access_alfred_add(Module_Access *access);
