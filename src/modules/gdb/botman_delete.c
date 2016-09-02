@@ -7,14 +7,17 @@
 #include "gdb.h"
 
 void
-botman_delete_send(Module_Gdb *gdb,
+botman_delete_send(void *data,
                    Gotham_Citizen_Command *command)
 {
+   Module_Gdb *gdb = data;
    Eina_List *l;
    char *s,
         *p;
    int r;
    Eina_Strbuf *buf;
+
+   AUTH(gdb, gotham_modules_command_get(".gdb delete"), command->citizen);
 
    buf = eina_strbuf_new();
    EINA_SAFETY_ON_NULL_GOTO(buf, error);

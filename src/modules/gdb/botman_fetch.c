@@ -5,11 +5,14 @@
 #include "gdb.h"
 
 void
-botman_fetch_send(Module_Gdb *gdb,
+botman_fetch_send(void *data,
                   Gotham_Citizen_Command *command)
 {
+   Module_Gdb *gdb = data;
    char *coredump;
    Eina_Bool r;
+
+   AUTH(gdb, gotham_modules_command_get(".gdb fetch"), command->citizen);
 
    coredump = utils_dupf("%s%s", gdb->conf->dir, command->command[2]);
 
