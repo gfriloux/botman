@@ -57,14 +57,12 @@ alfred_command_tunnels_show(void *module_data,
 
    DBG("obj[%p], command[%p]", obj, command);
 
-   /* Alfred receives a Botman answser : no auth check */
+   /* Alfred receives a Botman answser */
    if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      {
         botman_answer_get(obj, command);
         return;
      }
-
-   AUTH(obj, gotham_modules_command_get(".ssh"), command->citizen);
 
    buf = eina_strbuf_new();
    eina_strbuf_append_printf(buf, "\nContacts with an opened tunnel :\n");

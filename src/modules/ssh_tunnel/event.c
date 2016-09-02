@@ -28,8 +28,6 @@ event_modules_ready(void *data,
                     void *ev EINA_UNUSED)
 {
    Module_Ssh_Tunnel *obj = data;
-   obj->access_allowed = gotham_modules_function_get("access",
-                                                     "access_allowed");
    obj->save_conf = gotham_modules_function_get("save",
                                                 "save_conf");
    return EINA_TRUE;

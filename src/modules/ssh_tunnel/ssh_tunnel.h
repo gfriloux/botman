@@ -32,7 +32,6 @@ typedef struct _Module_Ssh_Tunnel
 
    Eina_List *vars;
 
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
    void (*save_conf)(void);
 } Module_Ssh_Tunnel;
 
@@ -40,21 +39,6 @@ typedef struct _Module_Ssh_Tunnel
 #define DBG(...) EINA_LOG_DOM_DBG(_module_log_dom, __VA_ARGS__)
 #define NFO(...) EINA_LOG_DOM_INFO(_module_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_log_dom, __VA_ARGS__)
-
-#define AUTH(_a, _b, _c)                                                       \
-{                                                                              \
-   if ((_a->access_allowed) && (!_a->access_allowed(_b, _c)))                  \
-     {                                                                         \
-        Eina_Strbuf *buf = eina_strbuf_new();                                  \
-        ERR("%s is not autorized", _c->jid);                                   \
-        eina_strbuf_append(buf, "Access denied");                              \
-        gotham_command_json_answer(".ssh", "", EINA_FALSE,                     \
-                                   buf, _a->gotham, _c, EINA_FALSE);           \
-        eina_strbuf_free(buf);                                                 \
-        return;                                                                \
-     }                                                                         \
-}
-/* "debug" */
 
 void conf_load(Module_Ssh_Tunnel *obj);
 

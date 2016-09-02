@@ -237,8 +237,6 @@ ssh_tunnel_on(void *data,
 
    DBG("obj[%p] command[%p]", obj, command);
 
-   AUTH(obj, gotham_modules_command_get(".ssh on"), command->citizen);
-
    buf = eina_strbuf_new();
 
    if (obj->tunnel.pid && obj->tunnel.port)
@@ -295,8 +293,6 @@ ssh_tunnel_off(void *data,
 
    DBG("obj[%p]", obj);
 
-   AUTH(obj, gotham_modules_command_get(".ssh off"), command->citizen);
-
    buf = eina_strbuf_new();
 
    if (!obj->tunnel.pid || !obj->tunnel.port)
@@ -329,8 +325,6 @@ ssh_tunnel_get(void *data,
 {
    Module_Ssh_Tunnel *obj = data;
    Eina_Strbuf *buf;
-
-   AUTH(obj, gotham_modules_command_get(".ssh"), command->citizen);
 
    buf = eina_strbuf_new();
 
