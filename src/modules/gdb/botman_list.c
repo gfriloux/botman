@@ -15,8 +15,6 @@ botman_list_send(void *data,
    int r;
    Eina_Strbuf *buf;
 
-   AUTH(gdb, gotham_modules_command_get(".gdb list"), command->citizen);
-
    buf = eina_strbuf_new();
    EINA_SAFETY_ON_NULL_GOTO(buf, error);
 

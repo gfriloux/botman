@@ -12,8 +12,6 @@ botman_fetch_send(void *data,
    char *coredump;
    Eina_Bool r;
 
-   AUTH(gdb, gotham_modules_command_get(".gdb fetch"), command->citizen);
-
    coredump = utils_dupf("%s%s", gdb->conf->dir, command->command[2]);
 
    {

@@ -41,9 +41,6 @@ module_register(Gotham *gotham)
    DBG("gdb->conf->notification[%p][%s] gdb->conf->dir[%p][%s]",
        gdb->conf->notification, gdb->conf->notification, gdb->conf->dir, gdb->conf->dir);
 
-   gdb->access_allowed = gotham_modules_function_get("access",
-                                                     "access_allowed");
-
    gdb->dumps.poll = ecore_timer_add(20.0, botman_dumps_poll, gdb);
 
    gotham_modules_command_add("gdb", ".gdb list",
