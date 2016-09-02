@@ -11,18 +11,6 @@
  */
 
 /**
- * Authorization macro
- */
-#define AUTH(_a, _b, _c)                                                       \
-   {                                                                           \
-      if ((_a) && (!_a(gotham_modules_command_get(_b), _c->citizen)))          \
-        {                                                                      \
-           gotham_command_send(_c, "Access denied");                           \
-           return;                                                             \
-        }                                                                      \
-   }
-
-/**
  * @brief Reply backup interval and last backup time.
  * @param save Module_Save object
  * @param command Gotham_Citizen_Command incoming command
@@ -43,8 +31,6 @@ event_citizen_save_info(void *data,
    Eina_Bool am_i_alfred = EINA_FALSE;
 
    if (command->command[1]) return;
-
-   AUTH(save->access_allowed, ".save", command);
 
    snprintf(file, sizeof(file), "%s%.64s.%.255s.save",
             MODULE_SAVE_BACKUP,
@@ -98,8 +84,6 @@ event_citizen_save_set(void *data,
 {
    Module_Save *save = data;
 
-   AUTH(save->access_allowed, ".save set", command);
-
    if ((!command->command[2])                    ||
        (!command->command[3])                    ||
        (strcmp(command->command[2], "interval")) ||
@@ -131,8 +115,6 @@ event_modules_ready(void *data,
 {
    Module_Save *save = data;
 
-   save->access_allowed = gotham_modules_function_get("access",
-                                                      "access_allowed");
    conf_restore(save);
    return EINA_TRUE;
 }

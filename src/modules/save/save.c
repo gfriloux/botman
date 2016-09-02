@@ -58,8 +58,6 @@ module_register(Gotham *gotham)
 
    _obj->et_backup = ecore_timer_add(_obj->interval,
                                      conf_backup, _obj);
-   _obj->access_allowed = gotham_modules_function_get("access",
-                                                      "access_allowed");
 
    gotham_modules_command_add("save", ".save",
                               "[.save] - "

@@ -15,7 +15,6 @@ typedef struct _Module_Save
    Gotham *gotham;
    unsigned int interval;
    Ecore_Timer *et_backup;
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Save;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_save_log_dom, __VA_ARGS__)
