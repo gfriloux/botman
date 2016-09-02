@@ -17,4 +17,5 @@ typedef struct _Module_Help
    Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Help;
 
+void event_help_list(void *data, Gotham_Citizen_Command *command);
 #endif

@@ -60,7 +60,8 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("help", ".help",
                               "[.help] - "
                               "This command allows you to list all the "
-                              "commands registered by modules.", NULL);
+                              "commands registered by modules.",
+                              event_help_list);
    return help;
 }
 

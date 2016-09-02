@@ -20,7 +20,7 @@
       if ((_a) && (!_a(_b, _c->citizen)))                                      \
         {                                                                      \
            gotham_command_send(_c, "Access denied");                           \
-           return EINA_TRUE;                                                   \
+           return;                                                             \
         }                                                                      \
    }
 /* "debug" */
@@ -45,40 +45,19 @@ event_modules_ready(void *data,
    return EINA_TRUE;
 }
 
-/**
- * @brief Callback when a citizen sends a command.
- * Check citizen auth level / compare to the command access level. Citizen
- * level has to be at least equal to command level in order to run it.
- * Run through gotham_modules_list, get registered commands for each module.
- * Send back the functions list with description
- * @param data Module_Help structure
- * @param type UNUSED
- * @param ev Gotham_Citizen_Command structure
- * @return EINA_TRUE
- */
-Eina_Bool
-event_citizen_command(void *data,
-                      int type EINA_UNUSED,
-                      void *ev)
+void
+event_help_list(void *data,
+                Gotham_Citizen_Command *command)
 {
    Module_Help *help = data;
-   Gotham_Citizen_Command *command = ev;
    Gotham_Module *module;
    Eina_Strbuf *buf;
 
-   EINA_SAFETY_ON_NULL_RETURN_VAL(help, EINA_TRUE);
-   EINA_SAFETY_ON_NULL_RETURN_VAL(command, EINA_TRUE);
-
    DBG("help[%p] command[%p]=%s", help, command, command->name);
-
-   if (strcmp(command->name, ".help"))
-     return EINA_TRUE;
 
    if ((command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN) ||
        (command->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED))
-     return EINA_TRUE;
-
-   command->handled = EINA_TRUE;
+     return;
 
    AUTH(help->access_allowed, gotham_modules_command_get(".help"),
         command);
@@ -127,7 +106,6 @@ event_citizen_command(void *data,
 
    gotham_command_send(command, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-   return EINA_TRUE;
 }
 
 #undef AUTH
