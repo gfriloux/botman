@@ -7,199 +7,166 @@
 
 #include "module.h"
 
-#define _ANS(...) { sprintf(answer, __VA_ARGS__); return answer; }
-
 /**
  * @addtogroup Gotham_Module_Module
  * @{
  */
 
+#define _IF(_a, _b)                                                            \
+   do {                                                                        \
+      if (_a)                                                                  \
+        {                                                                      \
+           gotham_citizen_send(command->citizen, _b);                          \
+           return;                                                             \
+        }                                                                      \
+   } while (0)
+
 /**
  * @brief List loaded modules in gotham lib.
- * @param mod Module_Module object
+ * @param data Module_Module object
  * @param module_command const char ** incoming command
- * @return char * result string
  */
-char *
-_module_list(Module_Module *mod,
-             const char **module_command)
+void
+_module_list(void *data,
+             Gotham_Citizen_Command *command EINA_UNUSED)
 {
+   Module_Module *mod = data;
    Eina_Strbuf *buf;
    Gotham_Module *module;
-   Eina_Bool found = EINA_FALSE;
-   char * answer = NULL;
 
-   DBG("mod[%p], module_command[%p]", mod, module_command);
+   DBG("mod[%p]", mod);
 
    buf = eina_strbuf_new();
-   eina_strbuf_append(buf, "\nLoaded modules :\n");
 
    EINA_INLIST_FOREACH(gotham_modules_list(), module)
      {
-        if (!module)
-          continue;
-
-        found = EINA_TRUE;
-        eina_strbuf_append_printf(buf,
-                                  "\t%s (%s)\n",
+        eina_strbuf_append_printf(buf, "\t%s (%s)\n",
                                   module->name,
                                   eina_module_file_get(module->module));
      }
 
-   if (!found)
-     eina_strbuf_append(buf, "\tNo modules found.");
-
-   answer = eina_strbuf_string_steal(buf);
+   if (!eina_strbuf_length_get(buf)) eina_strbuf_append(buf, "\tNo modules found.");
+   eina_strbuf_prepend(buf, "\nLoaded modules :\n");
+   gotham_citizen_send(command->citizen, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-   return answer;
 }
 
 /**
  * @brief Load a new module in gotham lib
- * @param mod Module_Module object
+ * @param data Module_Module object
  * @param module_command const char ** incoming command
- * @return char * result string
  */
-char *
-_module_load(Module_Module *mod,
-             const char **module_command)
+void
+_module_load(void *data,
+             Gotham_Citizen_Command *command)
 {
-   char * answer = NULL;
+   Module_Module *mod = data;
    const char *name;
    Gotham_Module *gothmod;
    Gotham *gotham = mod->gotham;
 
-   DBG("mod[%p], module_command[%p]", mod, module_command);
+   DBG("mod[%p]", mod);
 
-   answer = calloc(1, sizeof(char) * 100);
+   _IF(!command->command[2], "Usage : .module load <module_name>");
 
-   if (!module_command[2])
-     {
-        _ANS("Usage : .module load <module_name>");
-     }
-
-   name = module_command[2];
+   name = command->command[2];
 
    /**
     * Check if module is already loaded
     */
    EINA_INLIST_FOREACH(gotham_modules_list(), gothmod)
      {
-        if (strcasecmp(gothmod->name, name))
-          continue;
-        _ANS("Module %s is already loaded.", name);
+        if (strcasecmp(gothmod->name, name)) continue;
+        gotham_citizen_send(command->citizen, "Module is already loaded.");
+        return;
      }
 
    gothmod = gotham_modules_single_module_load(name, gotham);
-   if (!gothmod)
-     {
-        _ANS("Unable to load module %s.", name);
-     }
+   _IF(!gothmod, "Unable to load module.");
 
    gotham_modules_register(gotham, gothmod);
-   _ANS("Module %s successfully loaded.", name);
+   gotham_citizen_send(command->citizen, "Module successfully loaded.");
 }
 
 /**
  * @brief Unload a new module in gotham lib
- * @param mod Module_Module object
+ * @param data Module_Module object
  * @param module_command const char ** incoming command
- * @return char * result string
  */
-char *
-_module_unload(Module_Module *mod,
-               const char **module_command)
+void
+_module_unload(void *data,
+               Gotham_Citizen_Command *command)
 {
-   char * answer = NULL;
+   Module_Module *mod = data;
    const char *name;
    Gotham_Module *module;
    Eina_Bool found = EINA_FALSE;
 
-   DBG("mod[%p], module_command[%p]", mod, module_command);
+   DBG("mod[%p]", mod);
 
-   answer = calloc(1, sizeof(char) * 100);
+   _IF(!command->command[2], "Usage : .module unload <module_name>");
+   _IF(!strcmp(command->command[2], "module"), "Cannot load or unload module “module”.");
 
-   if (!module_command[2])
-     {
-        _ANS("Usage : .module unload <module_name>");
-     }
-
-   name = module_command[2];
+   name = command->command[2];
 
    /**
     * Check if module is loaded
     */
    EINA_INLIST_FOREACH(gotham_modules_list(), module)
      {
-        if (strcasecmp(module->name, name))
-          continue;
+        if (strcasecmp(module->name, name)) continue;
         found = EINA_TRUE;
         break;
      }
 
-   if (!found)
-     {
-        _ANS("Unable to unload module %s (not loaded)", name);
-     }
+   _IF(!found, "Unable to unload module (not loaded).");
 
    gotham_modules_unload(name);
-   _ANS("Module %s successfully unloaded.", name);
+   gotham_citizen_send(command->citizen, "Module successfully unloaded.");
 }
 
 /**
  * @brief Reload a new module in gotham lib
  * @param mod Module_Module object
  * @param module_command const char ** incoming command
- * @return char * result string
  */
-char *
-_module_reload(Module_Module *mod,
-               const char **module_command)
+void
+_module_reload(void *data,
+               Gotham_Citizen_Command *command)
 {
+   Module_Module *mod = data;
    Gotham *gotham;
-   char * answer = NULL;
    const char *name;
    Gotham_Module *module;
    Eina_Bool found = EINA_FALSE;
 
-   DBG("mod[%p], module_command[%p]", mod, module_command);
+   DBG("mod[%p]", mod);
 
-   answer = calloc(1, sizeof(char) * 100);
+   _IF(!command->command[2], "Usage : .module reload <module_name>");
+   _IF(!strcmp(command->command[2], "module"), "Cannot load or unload module “module”.");
 
-   if (!module_command[2])
-     {
-        _ANS("Usage : .module reload <module_name>");
-     }
-
-   name = module_command[2];
+   name = command->command[2];
 
    /**
     * Check if module is already loaded
     */
    EINA_INLIST_FOREACH(gotham_modules_list(), module)
      {
-        if (strcasecmp(module->name, name))
-          continue;
+        if (strcasecmp(module->name, name)) continue;
         found = EINA_TRUE;
         break;
      }
-   if (!found)
-     {
-        _ANS("Module %s not found", name);
-     }
+
+   _IF(!found, "Module not found");
 
    gotham = mod->gotham;
    gotham_modules_unload(name);
 
    module = gotham_modules_single_module_load(name, gotham);
-
-   if (!module)
-     {
-        _ANS("Unable to reload module %s.", name);
-     }
+   _IF(!module, "Unable to reload module.");
 
    gotham_modules_register(gotham, module);
-   _ANS("Module %s successfully reloaded.", name);
+   gotham_citizen_send(command->citizen, "Module successfully reloaded.");
 }
 
 #undef _ANS

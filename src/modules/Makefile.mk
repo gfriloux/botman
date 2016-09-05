@@ -71,7 +71,6 @@ src_modules_help_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_module_la_SOURCES = \
    src/modules/module/actions.c \
-   src/modules/module/event.c \
    src/modules/module/module.c \
    src/modules/module/module.h
 src_modules_module_la_CFLAGS = $(GOTHAM_CFLAGS)

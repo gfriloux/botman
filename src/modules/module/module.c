@@ -54,18 +54,20 @@ module_register(Gotham *gotham)
    gotham_modules_command_add("module", ".module",
                               "[.module] - "
                               "This command allows you to "
-                              "list loaded modules.", NULL);
+                              "list loaded modules.",
+                              _module_list);
    gotham_modules_command_add("module", ".module load",
                               "[.module load module_name] - "
-                              "This command allows you to load a module.", NULL);
+                              "This command allows you to load a module.",
+                              _module_load);
    gotham_modules_command_add("module", ".module unload",
                               "[.module unload module_name] - "
-                              "This command allows you to unload a module.", NULL);
+                              "This command allows you to unload a module.",
+                              _module_unload);
    gotham_modules_command_add("module", ".module reload",
                               "[.module reload module_name] - "
-                              "This command allows you to reload a module.", NULL);
-   mod->access_allowed = gotham_modules_function_get("access",
-                                                     "access_allowed");
+                              "This command allows you to reload a module.",
+                              _module_reload);
    return mod;
 }
 
@@ -83,6 +85,7 @@ module_unregister(void *data)
    gotham_modules_command_del("module", ".module list");
    gotham_modules_command_del("module", ".module load");
    gotham_modules_command_del("module", ".module unload");
+   gotham_modules_command_del("module", ".module reload");
 }
 
 /**

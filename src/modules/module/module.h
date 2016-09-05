@@ -12,7 +12,6 @@ int _module_module_log_dom;
 typedef struct _Module_Module
 {
    Gotham *gotham;
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Module;
 
 
@@ -25,9 +24,9 @@ static inline void
 _module_fake_free(void *d EINA_UNUSED, void *d2 EINA_UNUSED)
 {}
 
-char * _module_list(Module_Module *mod, const char **module_command);
-char * _module_load(Module_Module *mod, const char **module_command);
-char * _module_unload(Module_Module *mod, const char **module_command);
-char * _module_reload(Module_Module *mod, const char **module_command);
+void _module_list(void *data, Gotham_Citizen_Command *command);
+void _module_load(void *data, Gotham_Citizen_Command *command);
+void _module_unload(void *data, Gotham_Citizen_Command *command);
+void _module_reload(void *data, Gotham_Citizen_Command *command);
 
 #endif
