@@ -174,9 +174,7 @@ citizen_access_del(void *module_data,
         if (strcasecmp(pattern, rule->pattern)) continue;
 
         access->conf->citizens = eina_list_remove(access->conf->citizens, rule);
-        free((char *)rule->pattern);
-        free((char *)rule->description);
-        free(rule);
+        Module_Access_Conf_Rule_free(rule);
         found = EINA_TRUE;
         break;
      }
