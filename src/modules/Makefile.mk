@@ -50,8 +50,7 @@ src_modules_access_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_access_la_LIBADD = \
-   src/lib/libgotham.la \
-   src/lib/libcjson.la
+   src/lib/libgotham.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_access: src/modules/access/access.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/access \
@@ -96,8 +95,7 @@ src_modules_seen_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_seen_la_LIBADD = \
-   src/lib/libgotham.la \
-   src/lib/libcjson.la
+   src/lib/libgotham.la
 src_modules_seen_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_seen: src/modules/seen/seen.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/seen \
@@ -137,8 +135,7 @@ src_modules_spam_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_spam_la_LIBADD = \
-   src/lib/libgotham.la \
-   src/lib/libcjson.la
+   src/lib/libgotham.la
 src_modules_spam_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_spam: src/modules/spam/spam.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/spam \
@@ -164,8 +161,7 @@ src_modules_info_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_info_la_LIBADD = \
-   src/lib/libgotham.la \
-   src/lib/libcjson.la
+   src/lib/libgotham.la
 src_modules_info_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_info: src/modules/info/info.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/info \
