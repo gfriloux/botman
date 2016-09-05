@@ -8,44 +8,6 @@
 #include "version.h"
 
 /**
- * @addtogroup Gotham_Module_Version
- * @{
- */
-
-/**
- * Authorization macro
- */
-#define AUTH(_a, _b, _c)                                                       \
-   {                                                                           \
-      if ((_a) && (!_a(_b, _c)))                                               \
-        {                                                                      \
-           gotham_citizen_send(_c, "Access denied");                           \
-           return EINA_TRUE;                                                   \
-        }                                                                      \
-   }
-/* "debug" */
-
-/**
- * @brief Callback when all modules are loaded.
- * Set the function pointer for access_allwed using
- * @ref gotham_modules_function_get
- * @param data Module object
- * @param type UNUSED
- * @param ev UNUSED
- * @return EINA_TRUE
- */
-Eina_Bool
-event_modules_ready(void *data,
-                    int type EINA_UNUSED,
-                    void *ev EINA_UNUSED)
-{
-   Module_Version *version = data;
-   version->access_allowed = gotham_modules_function_get("access",
-                                                         "access_allowed");
-   return EINA_TRUE;
-}
-
-/**
  * @brief Callback for a citizen connection.
  * @param data Module object
  * @param type UNUSED

@@ -52,7 +52,6 @@ typedef struct _Module_Version
       const char *default_cmd;
       Eina_List *list;
    } versions;
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Version;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_version_log_dom, __VA_ARGS__)
