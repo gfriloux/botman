@@ -72,7 +72,8 @@ module_register(Gotham *gotham)
 
    gotham_modules_command_add("rewrite", ".rewrite",
                               "[.rewrite] - "
-                              "This command will list all know rewrite rules.", NULL);
+                              "This command will list all know rewrite rules.",
+                              event_citizen_command_list);
 
    EINA_LIST_FOREACH(rewrite->conf->rules, l, rule)
      gotham_modules_command_add("rewrite", rule->name, rule->description, NULL);

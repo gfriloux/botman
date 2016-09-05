@@ -26,6 +26,7 @@ typedef struct _Module_Rewrite
 
 void conf_load(Module_Rewrite *rewrite);
 Eina_Bool events_citizen_command(void *data, int type, void *ev);
+void event_citizen_command_list(void *data, Gotham_Citizen_Command *command);
 char * utils_escape(const char *str);
 const char * utils_rewrite(Module_Rewrite_Conf_Rule *rule, const char *s);
 char * utils_strdupargs(const char *s, ...);

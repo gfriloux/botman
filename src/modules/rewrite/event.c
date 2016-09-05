@@ -36,11 +36,12 @@ event_modules_ready(void *data,
  * @param rewrite Module_Rewrite object
  * @return const char * list of rewrited functions
  */
-const char *
-_event_citizen_command_list(Module_Rewrite *rewrite)
+void
+event_citizen_command_list(void *data,
+                           Gotham_Citizen_Command *command)
 {
+   Module_Rewrite *rewrite = data;
    Eina_Strbuf *b;
-   const char *s;
    Module_Rewrite_Conf_Rule *rule;
    Eina_List *l;
 
@@ -58,9 +59,8 @@ _event_citizen_command_list(Module_Rewrite *rewrite)
                                   rule->rule, rule->description);
      }
 
-   s = eina_strbuf_string_steal(b);
+   gotham_command_send(command, eina_strbuf_string_get(b));
    eina_strbuf_free(b);
-   return s;
 }
 
 /**
@@ -91,16 +91,6 @@ event_citizen_command(void *data,
 
    if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      return EINA_TRUE;
-
-   if (!strcmp(command->name, ".rewrite"))
-     {
-        command->handled = EINA_TRUE;
-        const char *answer = _event_citizen_command_list(rewrite);
-        gotham_command_send(command,
-                            (answer) ? answer : "Failed to execute command");
-        free((char *)answer);
-        return EINA_TRUE;
-     }
 
    gcc = eina_hash_find(rewrite->rw, command);
    if (gcc)
