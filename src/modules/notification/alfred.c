@@ -1,14 +1,6 @@
 #include "main.h"
 
 #define _WRITE_CONF() gotham_serialize_struct_to_file(notification->conf, MODULE_NOTIFICATION_CONF, (Gotham_Serialization_Function)Module_Notification_Conf_to_azy_value)
-#define _IF_SEND(_a, _b)                                                       \
-   do {                                                                        \
-      if (_a)                                                                  \
-        {                                                                      \
-           gotham_command_send(command, _b);                                   \
-           return;                                                             \
-        }                                                                      \
-   } while (0)
 
 void
 alfred_group_print(void *data,
@@ -82,7 +74,7 @@ alfred_group_del(void *data,
    EINA_SAFETY_ON_NULL_GOTO(command->command[2], print_usage);
 
    group = utils_group_find(notification, command->command[2]);
-   _IF_SEND(!group, "Group not found.");
+   GOTHAM_IF_SEND_RETURN(!group, command, "Group not found.");
 
    notification->conf->groups = eina_list_remove(notification->conf->groups, group);
    _WRITE_CONF();
@@ -106,13 +98,13 @@ alfred_user_add(void *data,
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
    citizen = eina_hash_find(notification->gotham->citizens, command->command[3]);
-   _IF_SEND(!citizen, "This user is not known to me.");
+   GOTHAM_IF_SEND_RETURN(!citizen, command, "This user is not known to me.");
 
    group = utils_group_find(notification, command->command[2]);
-   _IF_SEND(!group, "Group not found.");
+   GOTHAM_IF_SEND_RETURN(!group, command, "Group not found.");
 
    username = utils_user_find(group, command->command[3]);
-   _IF_SEND(username, "User already exists in this group");
+   GOTHAM_IF_SEND_RETURN(username, command, "User already exists in this group");
 
    username = eina_stringshare_add(command->command[3]);
    group->users = eina_list_append(group->users, username);
@@ -136,10 +128,10 @@ alfred_user_del(void *data,
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
    group = utils_group_find(notification, command->command[2]);
-   _IF_SEND(!group, "Group not found.");
+   GOTHAM_IF_SEND_RETURN(!group, command, "Group not found.");
 
    username = utils_user_find(group, command->command[3]);
-   _IF_SEND(!username, "User not found.");
+   GOTHAM_IF_SEND_RETURN(!username, command, "User not found.");
 
    group->users = eina_list_remove(group->users, username);
    eina_stringshare_del(username);
@@ -167,7 +159,7 @@ alfred_send(void *data,
    EINA_SAFETY_ON_NULL_GOTO(command->command[3], print_usage);
 
    group = utils_group_find(notification, command->command[2]);
-   _IF_SEND(!group, "Group not found.");
+   GOTHAM_IF_SEND_RETURN(!group, command, "Group not found.");
 
    buf = eina_strbuf_new();
 
@@ -195,5 +187,4 @@ alfred_send(void *data,
 print_usage:
    gotham_command_send(command, "Incorrect usage, please see .help");
 }
-#undef _IF_SEND
 #undef _WRITE_CONF

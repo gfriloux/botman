@@ -92,11 +92,7 @@ _info_alfred_command_citizen_list(void *data,
 
    DBG("info[%p] command[%p]", info, command);
 
-   if (!command->command[1])
-     {
-        gotham_command_send(command, "Usage : .info pattern");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!command->command[1], command, "Usage : .info pattern");
 
    buf = eina_strbuf_new();
    EINA_SAFETY_ON_NULL_RETURN(buf);
@@ -154,11 +150,7 @@ _info_alfred_command_citizen_find(void *data,
    Alfred_Sort *as;
    char *s;
 
-   if (!command->command[2])
-     {
-        gotham_command_send(command, "Usage : .info find variable");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!command->command[2], command, "Usage : .info find variable");
 
    as = alfred_sort_new(info);
 

@@ -52,6 +52,20 @@ typedef struct _Gotham_Module Gotham_Module;
 typedef Eina_Bool (*Gotham_Deserialization_Function)(const Eina_Value *, void **);
 typedef Eina_Value * (*Gotham_Serialization_Function)(const void *);
 
+#define GOTHAM_IF_SEND_RETURN(_a, _b, _c)                                      \
+   do {                                                                        \
+      if (!_a) break;                                                          \
+      gotham_command_send(_b, _c);                                             \
+      return;                                                                  \
+   } while (0)
+
+#define GOTHAM_IF_SEND_RETURN_VAL(_a, _b, _c, _d)                              \
+   do {                                                                        \
+      if (!_a) break;                                                          \
+      gotham_command_send(_b, _c);                                             \
+      return _d;                                                               \
+   } while (0)
+
 typedef enum
 {
    GOTHAM_CITIZEN_TYPE_UNIDENTIFIED = 1,

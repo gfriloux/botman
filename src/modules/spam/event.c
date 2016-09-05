@@ -82,23 +82,14 @@ event_citizen_command(void *data,
    command->handled = EINA_TRUE;
 
    AUTH(spam->access_allowed, ".spam", command);
-
-   if (!spam_cmd[1] || !spam_cmd[2])
-     {
-        gotham_command_send(command, "Wrong arguments. Usage : "
-                                     ".spam <pattern> <command>");
-        return EINA_TRUE;
-     }
+   GOTHAM_IF_SEND_RETURN_VAL((!spam_cmd[1] || !spam_cmd[2]), command,
+                             "Wrong arguments. Usage : .spam <pattern> <command>", EINA_TRUE);
 
    lc = gotham_citizen_match(spam->gotham,
                              spam_cmd[1],
                              GOTHAM_CITIZEN_TYPE_BOTMAN,
                              spam->conf->vars);
-   if (!lc)
-     {
-        gotham_command_send(command, "No one matches your query");
-        return EINA_TRUE;
-     }
+   GOTHAM_IF_SEND_RETURN_VAL(!lc, command, "No one matches your query", EINA_TRUE);
 
    /**
     * List contacts that match and reply to sender with this list

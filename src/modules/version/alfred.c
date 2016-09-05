@@ -81,11 +81,7 @@ version_alfred_command(void *data,
 
    gotham = version->gotham;
 
-   if (!version_cmd[1])
-     {
-        gotham_command_send(command, "Usage : .version pattern");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!version_cmd[1], command, "Usage : .version pattern");
 
    buf = eina_strbuf_new();
    result_buf = eina_strbuf_new();

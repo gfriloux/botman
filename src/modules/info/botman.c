@@ -75,9 +75,8 @@ info_botman_command(Module_Info *info,
    return;
 
 not_found_msg:
-   if (strcmp(command->citizen->jid, info->gotham->alfred->jid))
-     gotham_command_send(command, "Given info variable not found.");
-   else
+   GOTHAM_IF_SEND_RETURN(strcmp(command->citizen->jid, info->gotham->alfred->jid), command, "Given info variable not found.");
+
      {
         Eina_Strbuf *buf;
 

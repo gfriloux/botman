@@ -24,12 +24,7 @@ event_command_seen(void *data,
 
    DBG("seen[%p] command[%p][%s]", seen, command, command->name);
 
-   if (!command->command[1])
-     {
-        gotham_command_send(command, "Usage : .seen pattern");
-        return;
-     }
-
+   GOTHAM_IF_SEND_RETURN(!command->command[1], command, "Usage : .seen pattern");
    s = seen_query(seen, command->command[1]);
    gotham_command_send(command, s);
    free((char *)s);

@@ -108,11 +108,7 @@ citizen_access_set(void *module_data,
    const char **cmd = command->command;
    Eina_List *l;
 
-   if ((!cmd[2]) || (!cmd[3]) || (!_isnumber(cmd[3][0])))
-     {
-        gotham_command_send(command, "Wrong use of .access set");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN((!cmd[2]) || (!cmd[3]) || (!_isnumber(cmd[3][0])), command, "Wrong use of .access set");
 
    pattern = cmd[2];
    level = atoi(cmd[3]);
@@ -128,11 +124,7 @@ citizen_access_set(void *module_data,
         rule_found = rule;
      }
 
-   if (!rule_found)
-     {
-        gotham_command_send(command, "You gave me an unknown pattern!");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!rule_found, command, "You gave me an unknown pattern!");
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))
@@ -141,11 +133,9 @@ citizen_access_set(void *module_data,
         const char *citizen_pattern;
 
         citizen_pattern = gotham_citizen_var_get(citizen, "access_pattern");
-        if (!citizen_pattern)
-          continue;
+        if (!citizen_pattern) continue;
 
-        if (strcasecmp(citizen_pattern, rule_found->pattern))
-          continue;
+        if (strcasecmp(citizen_pattern, rule_found->pattern)) continue;
 
         gotham_citizen_var_set(citizen, "access_level", "%u",
                                rule_found->level);
@@ -178,16 +168,10 @@ citizen_access_del(void *module_data,
 
    DBG("access[%p] command[%p]", access, command);
 
-   if (!pattern)
-     {
-        gotham_command_send(command, "Wrong use of .access del");
-        return;
-     }
-
+   GOTHAM_IF_SEND_RETURN(!pattern, command, "Wrong use of .access del");
    EINA_LIST_FOREACH_SAFE(access->conf->citizens, l, l2, rule)
      {
-        if (strcasecmp(pattern, rule->pattern))
-          continue;
+        if (strcasecmp(pattern, rule->pattern)) continue;
 
         access->conf->citizens = eina_list_remove(access->conf->citizens, rule);
         free((char *)rule->pattern);
@@ -197,11 +181,7 @@ citizen_access_del(void *module_data,
         break;
      }
 
-   if (!found)
-     {
-        gotham_command_send(command, "Pattern not found");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!found, command, "Pattern not found");
 
    it = eina_hash_iterator_data_new(access->gotham->citizens);
    while (eina_iterator_next(it, &data))
@@ -237,12 +217,11 @@ citizen_access_add(void *module_data,
    const char **cmd = command->command;
    const char *p;
 
-   if ((!cmd[2]) || (!cmd[3]) ||
-       (!_isnumber(cmd[3][0])) || (!cmd[4]))
-     {
-        gotham_command_send(command, "Modification done");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN((!cmd[2])               ||
+                         (!cmd[3])               ||
+                         (!_isnumber(cmd[3][0])) ||
+                         (!cmd[4]),
+                         command, "Modification done");
 
    rule = calloc(1, sizeof(Module_Access_Conf_Rule));
    rule->pattern = strdup(cmd[2]);

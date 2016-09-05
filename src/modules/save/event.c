@@ -37,11 +37,7 @@ event_citizen_save_info(void *data,
             save->gotham->conf->xmpp.login,
             save->gotham->conf->xmpp.server);
    ef = eina_file_open(file, EINA_FALSE);
-   if (!ef)
-     {
-        gotham_command_send(command, "No backups found");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN(!ef, command, "No backups found");
 
    file_size = eina_file_size_get(ef);
    file_time = eina_file_mtime_get(ef);
@@ -83,15 +79,11 @@ event_citizen_save_set(void *data,
                        Gotham_Citizen_Command *command)
 {
    Module_Save *save = data;
-
-   if ((!command->command[2])                    ||
-       (!command->command[3])                    ||
-       (strcmp(command->command[2], "interval")) ||
-       (!utils_isnumber(command->command[3][0])))
-     {
-        gotham_command_send(command, "Wrong command");
-        return;
-     }
+   GOTHAM_IF_SEND_RETURN((!command->command[2])                    ||
+                         (!command->command[3])                    ||
+                         (strcmp(command->command[2], "interval")) ||
+                         (!utils_isnumber(command->command[3][0])),
+                         command, "Wrong command");
 
    save->interval = atoi(command->command[3]);
    conf_save(save);

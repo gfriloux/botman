@@ -30,10 +30,9 @@ botman_fetch_send(void *data,
    r = backtrace_new(gdb, coredump, command->citizen->jid, EINA_FALSE);
    if (!r)
      {
-        if (strcmp(command->citizen->jid, gdb->gotham->alfred->jid))
-          gotham_command_send(command, "Failed to fetch coredump.");
-        else
-          gotham_command_json_answer(".gdb", "fetch", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
+        GOTHAM_IF_SEND_RETURN(strcmp(command->citizen->jid, gdb->gotham->alfred->jid),
+                              command, "Failed to fetch coredump.");
+        gotham_command_json_answer(".gdb", "fetch", EINA_FALSE, NULL, gdb->gotham, command->citizen, EINA_FALSE);
      }
 end:
    free(coredump);
