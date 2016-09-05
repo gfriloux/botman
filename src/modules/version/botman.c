@@ -179,9 +179,10 @@ version_botman_fetch(void *data, Eina_Bool *update)
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-version_botman_command(Module_Version *version,
+version_botman_command(void *data,
                        Gotham_Citizen_Command *command)
 {
+   Module_Version *version = data;
    char *s;
    Eina_Bool updated;
 
@@ -237,7 +238,8 @@ version_botman_commands_register(void)
                               "This command returns the version of some "
                               "installed softwares. Software list and custom "
                               "version commands can be specified in "
-                              "version.conf.", NULL);
+                              "version.conf.",
+                              version_botman_command);
 }
 
 /**

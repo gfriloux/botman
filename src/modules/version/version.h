@@ -63,14 +63,14 @@ typedef struct _Module_Version
 void version_alfred_conf_load(Module_Version *version);
 void version_alfred_commands_register(void);
 void version_alfred_commands_unregister(void);
-void version_alfred_command(Module_Version *version, Gotham_Citizen_Command *command);
-void version_alfred_find_command(Module_Version *version, Gotham_Citizen_Command *command);
+void version_alfred_command(void *data, Gotham_Citizen_Command *command);
+void version_alfred_find_command(void *data, Gotham_Citizen_Command *command);
 void version_alfred_answer_get(Module_Version *version, Gotham_Citizen_Command *command);
 
 void version_botman_conf_load(Module_Version *version);
 void version_botman_commands_register(void);
 void version_botman_commands_unregister(void);
-void version_botman_command(Module_Version *version, Gotham_Citizen_Command *command);
+void version_botman_command(void *data, Gotham_Citizen_Command *command);
 char * version_botman_fetch(void *data, Eina_Bool *update);
 Eina_Bool version_botman_poll(void *data);
 

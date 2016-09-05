@@ -220,9 +220,10 @@ _module_version_software_compare(Module_Version_Software *wanted,
  * @param command Gotham_Citizen_Command inconming command
  */
 void
-version_alfred_find_command(Module_Version *version,
+version_alfred_find_command(void *module_data,
                             Gotham_Citizen_Command *command)
 {
+   Module_Version *version = module_data;
    Gotham *gotham;
    const char **version_cmd = command->command;
    char *software,

@@ -60,9 +60,10 @@ _version_citizen_result_print(Module_Version *version EINA_UNUSED,
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-version_alfred_command(Module_Version *version,
+version_alfred_command(void *data,
                        Gotham_Citizen_Command *command)
 {
+   Module_Version *version = data;
    Gotham *gotham;
    Gotham_Citizen *citizen;
    Eina_Strbuf *buf,
@@ -72,8 +73,11 @@ version_alfred_command(Module_Version *version,
    Eina_List *l_citizen,
              *l;
 
-   EINA_SAFETY_ON_NULL_RETURN(version);
-   EINA_SAFETY_ON_NULL_RETURN(command);
+   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+     {
+        version_alfred_answer_get(version, command);
+        return;
+     }
 
    gotham = version->gotham;
 
@@ -192,13 +196,15 @@ version_alfred_commands_register(void)
                               "This command returns the version of some "
                               "installed softwares. Software list and custom "
                               "version commands can be specified in "
-                              "version.conf.", NULL);
+                              "version.conf.",
+                              version_alfred_command);
 
    gotham_modules_command_add("version", ".version find",
                               "[.version find software sign version] - "
                               "This command will list all botmans that "
                               "match the [software_name] [sign] [version].\n"
-                              "[sign] can be : <, <=, =, >=, >", NULL);
+                              "[sign] can be : <, <=, =, >=, >",
+                              version_alfred_find_command);
 }
 
 /**
