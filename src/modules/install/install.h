@@ -15,8 +15,7 @@ typedef enum _Module_Install_Type
    MODULE_INSTALL_TYPE_INSTALL,
    MODULE_INSTALL_TYPE_UPGRADE,
    MODULE_INSTALL_TYPE_JOBS,
-   MODULE_INSTALL_TYPE_KILL,
-   MODULE_INSTALL_TYPE_WAZUFUK
+   MODULE_INSTALL_TYPE_KILL
 } Module_Install_Type;
 
 
@@ -28,8 +27,6 @@ typedef struct _Module_Install
    Eina_Hash *install,
              *upgrade,
              *jobs;
-
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Install;
 
 typedef struct _Module_Install_Cmd

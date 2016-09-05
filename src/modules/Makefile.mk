@@ -184,7 +184,6 @@ mod_LTLIBRARIES += \
 src_modules_install_la_SOURCES = \
    src/modules/install/botman.c \
    src/modules/install/conf.c \
-   src/modules/install/event.c \
    src/modules/install/jobs.c \
    src/modules/install/install.c \
    src/modules/install/install.h

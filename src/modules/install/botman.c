@@ -133,9 +133,10 @@ _install_del_cb(void *data,
  * @param command Gotham_Citizen_Command
  */
 void
-module_install_jobs_list(Module_Install *install,
+module_install_jobs_list(void *data,
                          Gotham_Citizen_Command *command)
 {
+   Module_Install *install = data;
    Eina_List *jobs = NULL;
    char *job_line = NULL;
    Eina_Strbuf *buf;
@@ -173,9 +174,10 @@ answer:
  * @param command Gotham_Citizen_Command object
  */
 void
-module_install_job_kill(Module_Install *install,
+module_install_job_kill(void *data,
                         Gotham_Citizen_Command *command)
 {
+   Module_Install *install = data;
    Eina_Strbuf *buf;
    Eina_Bool success = EINA_FALSE;
 
@@ -237,17 +239,6 @@ module_install_event_botman_command(Module_Install *install,
    EINA_SAFETY_ON_NULL_RETURN(command);
 
    DBG("install[%p], command[%p]", install, command);
-
-   if (type == MODULE_INSTALL_TYPE_JOBS)
-     {
-        module_install_jobs_list(install, command);
-        return;
-     }
-   if (type == MODULE_INSTALL_TYPE_KILL)
-     {
-        module_install_job_kill(install, command);
-        return;
-     }
 
    /**
     * Get hash data
@@ -432,6 +423,24 @@ module_install_cmd_free(Module_Install_Cmd *obj)
    free(obj);
 }
 
+void
+module_install_command_install(void *data,
+                               Gotham_Citizen_Command *command)
+{
+   Module_Install *install = data;
+
+   module_install_event_botman_command(install, MODULE_INSTALL_TYPE_INSTALL, command);
+}
+
+void
+module_install_command_upgrade(void *data,
+                               Gotham_Citizen_Command *command)
+{
+   Module_Install *install = data;
+
+   module_install_event_botman_command(install, MODULE_INSTALL_TYPE_UPGRADE, command);
+}
+
 /**
  * @brief Register Botman commands.
  * Command list :<br />
@@ -448,16 +457,20 @@ module_install_botman_commands_register(void)
 {
    gotham_modules_command_add("install", ".install",
                               "[.install softwarelist] - "
-                              "Install softwarelist.", NULL);
+                              "Install softwarelist.",
+                              module_install_command_install);
    gotham_modules_command_add("install", ".upgrade",
                               "[.upgrade] - "
-                              "Performs an upgrade on all repositories.", NULL);
+                              "Performs an upgrade on all repositories.",
+                              module_install_command_upgrade);
    gotham_modules_command_add("install", ".jobs",
                               "[.jobs] - "
-                              "List running install / upgrade jobs", NULL);
+                              "List running install / upgrade jobs",
+                              module_install_jobs_list);
    gotham_modules_command_add("install", ".kill",
                               "[.jobs job_id] - "
-                              "Kill running install / upgrade job.", NULL);
+                              "Kill running install / upgrade job.",
+                              module_install_job_kill);
 }
 
 /**
