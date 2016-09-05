@@ -52,13 +52,10 @@ botman_access_alfred_add(Module_Access *access)
 
    DBG("access[%p]", access);
 
-   arule = calloc(1, sizeof(Module_Access_Conf_Rule));
-   arule->pattern = strdup(alfred->jid);
+   arule = Module_Access_Conf_Rule_new();
+   eina_stringshare_replace(&arule->pattern, alfred->jid);
+   eina_stringshare_replace(&arule->description, alfred->nickname ? alfred->nickname : "Alfred Pennyworth");
    arule->level = 10;
-   arule->description = strdup(alfred->nickname ?
-                                 alfred->nickname :
-                                 "Alfred Pennyworth");
-
    access->conf->citizens = eina_list_append(access->conf->citizens, arule);
 
    return;
