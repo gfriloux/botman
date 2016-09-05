@@ -12,15 +12,6 @@
  * @{
  */
 
-#define _IF(_a, _b)                                                            \
-   do {                                                                        \
-      if (_a)                                                                  \
-        {                                                                      \
-           gotham_citizen_send(command->citizen, _b);                          \
-           return;                                                             \
-        }                                                                      \
-   } while (0)
-
 /**
  * @brief List loaded modules in gotham lib.
  * @param data Module_Module object
@@ -67,7 +58,7 @@ _module_load(void *data,
 
    DBG("mod[%p]", mod);
 
-   _IF(!command->command[2], "Usage : .module load <module_name>");
+   GOTHAM_IF_SEND_RETURN(!command->command[2], command, "Usage : .module load <module_name>");
 
    name = command->command[2];
 
@@ -82,7 +73,7 @@ _module_load(void *data,
      }
 
    gothmod = gotham_modules_single_module_load(name, gotham);
-   _IF(!gothmod, "Unable to load module.");
+   GOTHAM_IF_SEND_RETURN(!gothmod, command, "Unable to load module.");
 
    gotham_modules_register(gotham, gothmod);
    gotham_citizen_send(command->citizen, "Module successfully loaded.");
@@ -104,8 +95,8 @@ _module_unload(void *data,
 
    DBG("mod[%p]", mod);
 
-   _IF(!command->command[2], "Usage : .module unload <module_name>");
-   _IF(!strcmp(command->command[2], "module"), "Cannot load or unload module “module”.");
+   GOTHAM_IF_SEND_RETURN(!command->command[2], command, "Usage : .module unload <module_name>");
+   GOTHAM_IF_SEND_RETURN(!strcmp(command->command[2], "module"), command, "Cannot load or unload module “module”.");
 
    name = command->command[2];
 
@@ -119,7 +110,7 @@ _module_unload(void *data,
         break;
      }
 
-   _IF(!found, "Unable to unload module (not loaded).");
+   GOTHAM_IF_SEND_RETURN(!found, command, "Unable to unload module (not loaded).");
 
    gotham_modules_unload(name);
    gotham_citizen_send(command->citizen, "Module successfully unloaded.");
@@ -142,8 +133,8 @@ _module_reload(void *data,
 
    DBG("mod[%p]", mod);
 
-   _IF(!command->command[2], "Usage : .module reload <module_name>");
-   _IF(!strcmp(command->command[2], "module"), "Cannot load or unload module “module”.");
+   GOTHAM_IF_SEND_RETURN(!command->command[2], command, "Usage : .module reload <module_name>");
+   GOTHAM_IF_SEND_RETURN(!strcmp(command->command[2], "module"), command, "Cannot load or unload module “module”.");
 
    name = command->command[2];
 
@@ -157,13 +148,13 @@ _module_reload(void *data,
         break;
      }
 
-   _IF(!found, "Module not found");
+   GOTHAM_IF_SEND_RETURN(!found, command, "Module not found");
 
    gotham = mod->gotham;
    gotham_modules_unload(name);
 
    module = gotham_modules_single_module_load(name, gotham);
-   _IF(!module, "Unable to reload module.");
+   GOTHAM_IF_SEND_RETURN(!module, command, "Unable to reload module.");
 
    gotham_modules_register(gotham, module);
    gotham_citizen_send(command->citizen, "Module successfully reloaded.");
