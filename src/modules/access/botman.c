@@ -75,7 +75,6 @@ botman_access_sync(void *data,
 {
    Module_Access *access = data;
    cJSON *json;
-   Module_Access_Conf_Rule *rule;
    const char *p;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
@@ -105,11 +104,8 @@ botman_access_sync(void *data,
         return;
      }
 
-   EINA_LIST_FREE(access->conf->citizens, rule)
-     Module_Access_Conf_Rule_free(rule);
-
-   EINA_LIST_FREE(access->conf->commands, rule)
-     Module_Access_Conf_Rule_free(rule);
+   Array_Module_Access_Conf_Rule_free(access->conf->citizens);
+   Array_Module_Access_Conf_Rule_free(access->conf->commands);
 
    botman_access_alfred_add(access);
    access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
