@@ -73,15 +73,22 @@ _citizen_result_print(Module_Info *info EINA_UNUSED,
 }
 
 void
-_info_alfred_command_citizen_list(Module_Info *info,
+_info_alfred_command_citizen_list(void *data,
                                   Gotham_Citizen_Command *command)
 {
+   Module_Info *info = data;
    Gotham_Citizen *citizen;
    Eina_Strbuf *buf,
                *result_buf;
    Eina_Bool found = EINA_FALSE;
    Eina_List *l_citizen,
              *l;
+
+   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+     {
+        _info_alfred_command_botman(info, command);
+        return;
+     }
 
    DBG("info[%p] command[%p]", info, command);
 
@@ -136,9 +143,10 @@ free_buf:
 }
 
 void
-_info_alfred_command_citizen_find(Module_Info *info,
+_info_alfred_command_citizen_find(void *data,
                                   Gotham_Citizen_Command *command)
 {
+   Module_Info *info = data;
    Eina_List *l_citizen,
              *l;
    Gotham_Citizen *citizen;
@@ -186,42 +194,18 @@ _info_alfred_command_citizen_find(Module_Info *info,
 }
 
 void
-_info_alfred_command_citizen(Module_Info *info,
-                             Gotham_Citizen_Command *command)
-{
-   DBG("info[%p] command[%p]", info, command);
-
-   if ( (command->command[1]) &&
-        (!strcmp(command->command[1], "find"))
-      )
-     _info_alfred_command_citizen_find(info, command);
-   else
-     _info_alfred_command_citizen_list(info, command);
-}
-
-void
-info_alfred_command(Module_Info *info,
-                    Gotham_Citizen_Command *command)
-{
-   DBG("info[%p] command[%p]", info, command);
-
-   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
-     _info_alfred_command_botman(info, command);
-   else
-     _info_alfred_command_citizen(info, command);
-}
-
-void
 info_alfred_commands_register(void)
 {
    gotham_modules_command_add("info", ".info",
                               "[.info pattern] - "
                               "This command allows to access some custom "
-                              "variables from botmans of a given pattern.", NULL);
+                              "variables from botmans of a given pattern.",
+                              _info_alfred_command_citizen_list);
    gotham_modules_command_add("info", ".info find",
                               "[.info find variable [(=|!=) value] - "
                               "This command allows to search for custom variables "
-                              "and eventually a given value.", NULL);
+                              "and eventually a given value.",
+                              _info_alfred_command_citizen_find);
 }
 
 void
