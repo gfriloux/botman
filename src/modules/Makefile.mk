@@ -253,13 +253,17 @@ src_modules_version_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_version_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_sshtunnel
 src_modules_ssh_tunnel_la_SOURCES = \
    src/modules/ssh_tunnel/alfred.c \
    src/modules/ssh_tunnel/ssh_tunnel.c \
    src/modules/ssh_tunnel/ssh_tunnel.h \
    src/modules/ssh_tunnel/botman.c \
-   src/modules/ssh_tunnel/conf.c \
-   src/modules/ssh_tunnel/event.c
+   src/modules/ssh_tunnel/event.c \
+   src/modules/ssh_tunnel/Module_Common_Azy.c \
+   src/modules/ssh_tunnel/Module_Common_Azy.h \
+   src/modules/ssh_tunnel/Module_Common.c \
+   src/modules/ssh_tunnel/Module_Common.h
 src_modules_ssh_tunnel_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
@@ -269,6 +273,9 @@ src_modules_ssh_tunnel_la_LDFLAGS = \
 src_modules_ssh_tunnel_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_sshtunnel: src/modules/ssh_tunnel/ssh_tunnel.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/ssh_tunnel \
+	$(top_srcdir)/src/modules/ssh_tunnel/ssh_tunnel.azy
 
 BUILT_SOURCES += .sources_gdb
 src_modules_gdb_la_SOURCES = \

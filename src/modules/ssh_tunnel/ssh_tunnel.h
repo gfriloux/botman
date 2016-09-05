@@ -4,6 +4,8 @@
 #include <Ecore.h>
 #include <Gotham.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define MODULE_CONF SYSCONF_DIR"/gotham/modules.conf.d/ssh_tunnel.conf"
@@ -13,6 +15,7 @@ int _module_log_dom;
 typedef struct _Module_Ssh_Tunnel
 {
    Gotham *gotham;
+   Module_Ssh_Tunnel_Conf *conf;
 
    struct
    {
@@ -29,9 +32,6 @@ typedef struct _Module_Ssh_Tunnel
                           *eh_end;
       Ecore_Exe *exe;
    } tunnel;
-
-   Eina_List *vars;
-
    void (*save_conf)(void);
 } Module_Ssh_Tunnel;
 
@@ -39,8 +39,6 @@ typedef struct _Module_Ssh_Tunnel
 #define DBG(...) EINA_LOG_DOM_DBG(_module_log_dom, __VA_ARGS__)
 #define NFO(...) EINA_LOG_DOM_INFO(_module_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_log_dom, __VA_ARGS__)
-
-void conf_load(Module_Ssh_Tunnel *obj);
 
 void ssh_tunnel_check(Module_Ssh_Tunnel *obj);
 void ssh_tunnel_on(void *data, Gotham_Citizen_Command *command);

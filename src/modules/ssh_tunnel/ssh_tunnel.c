@@ -66,7 +66,8 @@ module_register(Gotham *gotham)
      }
    obj->gotham = gotham;
 
-   conf_load(obj);
+   obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,
+                                               (Gotham_Deserialization_Function)azy_value_to_Module_Ssh_Tunnel_Conf);
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
@@ -118,7 +119,6 @@ module_unregister(void *data)
 {
 #define _FREE(a) if (obj->a) free((char *)obj->a)
    Module_Ssh_Tunnel *obj = data;
-   char *item;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
 
@@ -135,9 +135,9 @@ module_unregister(void *data)
 
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
-        EINA_LIST_FREE(obj->vars, item) free(item);
         gotham_modules_command_del("ssh_tunnel", ".ssh");
      }
+   Module_Ssh_Tunnel_Conf_free(obj->conf);
 
    free(obj);
 #undef _FREE

@@ -82,7 +82,7 @@ alfred_command_tunnels_show(void *module_data,
 
         found = EINA_TRUE;
 
-        line = gotham_citizen_match_print(obj->vars, citizen, EINA_TRUE, EINA_FALSE);
+        line = gotham_citizen_match_print(obj->conf->vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "%s : Port %s\n", line, var);
         free((char *)line);
      }

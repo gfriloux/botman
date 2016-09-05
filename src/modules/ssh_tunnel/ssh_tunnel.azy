@@ -1,0 +1,10 @@
+Azy_Namespace Module;
+
+struct Ssh_Tunnel_Conf
+{
+   string host;
+   string login;
+   string key;
+   int port;
+   array<string> vars;
+};
