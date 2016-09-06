@@ -9,6 +9,6 @@ struct Version_Conf_Software
 struct Version_Conf
 {
    string default_cmd;
-   array<Version_Conf_Version> softwares;
+   array<Version_Conf_Software> softwares;
    array<string> vars;
 };

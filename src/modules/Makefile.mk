@@ -236,7 +236,11 @@ src_modules_version_la_SOURCES = \
    src/modules/version/find.c \
    src/modules/version/utils.c \
    src/modules/version/version.c \
-   src/modules/version/version.h
+   src/modules/version/version.h \
+   src/modules/version/Module_Common_Azy.c \
+   src/modules/version/Module_Common_Azy.h \
+   src/modules/version/Module_Common.c \
+   src/modules/version/Module_Common.h
 src_modules_version_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_version_la_LDFLAGS = \
