@@ -46,8 +46,8 @@ gotham_citizen_new(Gotham *gotham, const char *jid)
 
    citizen->jid = eina_stringshare_add(jid);
 
-   if ((!gotham->conf->xmpp.alfred) ||
-       (!strncmp(gotham->conf->xmpp.alfred, jid, strlen(gotham->conf->xmpp.alfred))))
+   if ((!gotham->conf->xmpp->alfred) ||
+       (!strncmp(gotham->conf->xmpp->alfred, jid, strlen(gotham->conf->xmpp->alfred))))
      citizen->type = GOTHAM_CITIZEN_TYPE_ALFRED;
    else
      citizen->type = GOTHAM_CITIZEN_TYPE_UNIDENTIFIED;

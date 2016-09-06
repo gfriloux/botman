@@ -8,3 +8,19 @@ struct Command_Json_Answer
 
    array<string> content;
 };
+
+struct Conf_Xmpp
+{
+   string server;
+   string login;
+   string passwd;
+   string resource;
+   string alfred;
+};
+
+struct Conf
+{
+   Conf_Xmpp xmpp;
+   array<string> modules;
+   array<string> friends;
+};

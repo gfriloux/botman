@@ -48,7 +48,7 @@ GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_LEAVE;
 typedef struct _Gotham Gotham;
 typedef struct _Gotham_Citizen Gotham_Citizen;
 typedef struct _Gotham_Module Gotham_Module;
-
+typedef struct Gotham_Conf Gotham_Conf;
 typedef Eina_Bool (*Gotham_Deserialization_Function)(const Eina_Value *, void **);
 typedef Eina_Value * (*Gotham_Serialization_Function)(const void *);
 
@@ -81,21 +81,6 @@ typedef enum
    GOTHAM_CITIZEN_STATUS_BUSY,
    GOTHAM_CITIZEN_STATUS_OFFLINE
 } Gotham_Citizen_Status;
-
-typedef struct _Gotham_Conf
-{
-   struct
-   {
-      const char *server,
-                 *login,
-                 *passwd,
-                 *resource,
-                 *alfred;
-   } xmpp;
-
-   Eina_List *modules,
-             *friends;
-} Gotham_Conf;
 
 struct _Gotham
 {

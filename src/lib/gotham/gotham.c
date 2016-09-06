@@ -118,7 +118,7 @@ gotham_new(Gotham_Citizen_Type type,
      }
 
    gotham = calloc(1, sizeof(Gotham));
-   gotham->conf = _gotham_conf_load(conf_file);
+   gotham->conf = gotham_serialize_file_to_struct(conf_file,  (Gotham_Deserialization_Function)azy_value_to_Gotham_Conf);
    if (!gotham->conf)
      {
         ERR("Failed to load configuration");
@@ -130,8 +130,8 @@ gotham_new(Gotham_Citizen_Type type,
 
    /* Create our own citizen, aka : me */
    jid = eina_stringshare_printf("%s@%s",
-                                 gotham->conf->xmpp.login,
-                                 gotham->conf->xmpp.server);
+                                 gotham->conf->xmpp->login,
+                                 gotham->conf->xmpp->server);
    gotham->me = gotham_citizen_new(gotham, jid);
    eina_stringshare_del(jid);
    if (!gotham->me)
@@ -145,11 +145,11 @@ gotham_new(Gotham_Citizen_Type type,
      }
 
    if ((type == GOTHAM_CITIZEN_TYPE_BOTMAN) &&
-       (gotham->conf->xmpp.alfred))
+       (gotham->conf->xmpp->alfred))
      {
         jid = eina_stringshare_printf("%s@%s",
-                                      gotham->conf->xmpp.alfred,
-                                      gotham->conf->xmpp.server);
+                                      gotham->conf->xmpp->alfred,
+                                      gotham->conf->xmpp->server);
         gotham->alfred = gotham_citizen_new(gotham, jid);
         eina_hash_direct_add(gotham->citizens, gotham->alfred->jid, gotham->alfred);
         eina_stringshare_del(jid);
@@ -172,30 +172,30 @@ gotham_new(Gotham_Citizen_Type type,
 #undef EVADD
 
 
-   gotham->shotgun = shotgun_new(gotham->conf->xmpp.server,
-                                 gotham->conf->xmpp.login,
-                                 gotham->conf->xmpp.server);
+   gotham->shotgun = shotgun_new(gotham->conf->xmpp->server,
+                                 gotham->conf->xmpp->login,
+                                 gotham->conf->xmpp->server);
    if (!gotham->shotgun)
      {
         ERR("Failed to create shotgun object");
-        _gotham_conf_free(gotham->conf);
+        Gotham_Conf_free(gotham->conf);
         free(gotham);
         return NULL;
      }
 
-   shotgun_resource_set(gotham->shotgun, gotham->conf->xmpp.resource);
-   shotgun_password_set(gotham->shotgun, gotham->conf->xmpp.passwd);
+   shotgun_resource_set(gotham->shotgun, gotham->conf->xmpp->resource);
+   shotgun_password_set(gotham->shotgun, gotham->conf->xmpp->passwd);
    shotgun_ping_delay_set(gotham->shotgun, 20);
    shotgun_ping_timeout_set(gotham->shotgun, 18);
    shotgun_ping_max_attempts_set(gotham->shotgun, 3);
 
    DBG("Connect to %s as %s",
-       gotham->conf->xmpp.server, gotham->conf->xmpp.login);
+       gotham->conf->xmpp->server, gotham->conf->xmpp->login);
 
    if (!shotgun_connect(gotham->shotgun))
      {
         ERR("shotgun_connect failed");
-        _gotham_conf_free(gotham->conf);
+        Gotham_Conf_free(gotham->conf);
         shotgun_free(gotham->shotgun);
         free(gotham);
         return NULL;
@@ -234,7 +234,7 @@ void gotham_free(Gotham *gotham)
      shotgun_disconnect(gotham->shotgun);
 
    shotgun_free(gotham->shotgun);
-   _gotham_conf_free(gotham->conf);
+   Gotham_Conf_free(gotham->conf);
 
    eina_hash_free(gotham->citizens);
    free(gotham);

@@ -312,8 +312,8 @@ conf_backup(void *data)
    json_text = cJSON_Print(json);
    cJSON_Delete(json);
    snprintf(file, sizeof(file), "%s%.64s.%.255s.save", MODULE_SAVE_BACKUP,
-            save->gotham->conf->xmpp.login,
-            save->gotham->conf->xmpp.server);
+            save->gotham->conf->xmpp->login,
+            save->gotham->conf->xmpp->server);
    snprintf(file_tmp, sizeof(file), "%s.tmp", file);
 
    fd = open(file_tmp, O_WRONLY | O_CREAT | O_TRUNC, 0700);
@@ -471,7 +471,7 @@ conf_restore(Module_Save *save)
 
 
    snprintf(file, sizeof(file), "%s%.64s.%.255s.save", MODULE_SAVE_BACKUP,
-            gotham->conf->xmpp.login, gotham->conf->xmpp.server);
+            gotham->conf->xmpp->login, gotham->conf->xmpp->server);
    fh = eina_file_open(file, EINA_FALSE);
    if (!fh)
      {

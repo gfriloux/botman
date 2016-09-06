@@ -16,7 +16,6 @@ src_lib_libgotham_la_SOURCES =                                                 \
    src/lib/gotham/gotham_private.h                                             \
    src/lib/gotham/citizen.c                                                    \
    src/lib/gotham/command.c                                                    \
-   src/lib/gotham/conf.c                                                       \
    src/lib/gotham/emoticons.c                                                  \
    src/lib/gotham/event.c                                                      \
    src/lib/gotham/modules.c                                                    \

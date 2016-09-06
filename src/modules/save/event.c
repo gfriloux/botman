@@ -34,8 +34,8 @@ event_citizen_save_info(void *data,
 
    snprintf(file, sizeof(file), "%s%.64s.%.255s.save",
             MODULE_SAVE_BACKUP,
-            save->gotham->conf->xmpp.login,
-            save->gotham->conf->xmpp.server);
+            save->gotham->conf->xmpp->login,
+            save->gotham->conf->xmpp->server);
    ef = eina_file_open(file, EINA_FALSE);
    GOTHAM_IF_SEND_RETURN(!ef, command, "No backups found");
 

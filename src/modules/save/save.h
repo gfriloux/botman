@@ -5,6 +5,8 @@
 #include <Gotham.h>
 #include <cJSON.h>
 
+#include "../../lib/gotham/Gotham_Common.h"
+
 #define MODULE_SAVE_CONF SYSCONF_DIR"/gotham/modules.conf.d/save.conf"
 #define MODULE_SAVE_BACKUP DATA_DIR"/gotham/modules.d/save/"
 

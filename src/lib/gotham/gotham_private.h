@@ -33,9 +33,6 @@ Eina_Bool _gotham_citizen_vars_match(Eina_List *vars,
 Eina_Bool _gotham_citizen_authorized(Gotham *gotham,
                                      const char *jid);
 
-void _gotham_conf_free(Gotham_Conf *conf);
-Gotham_Conf *_gotham_conf_load(const char *conf_file);
-
 Eina_Bool _gotham_event_connect(void *data, int type, void *ev);
 Eina_Bool _gotham_event_disconnect(void *data, int type, void *ev);
 void _gotham_event_message_free(void *data, void *ev);

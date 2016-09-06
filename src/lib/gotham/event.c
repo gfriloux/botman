@@ -484,8 +484,8 @@ _gotham_event_presence(void *data,
        gotham, presence, presence->jid, presence->type);
 
    /* We dont care about ourself */
-   if (!strncmp(presence->jid, gotham->conf->xmpp.login,
-                strlen(gotham->conf->xmpp.login)))
+   if (!strncmp(presence->jid, gotham->conf->xmpp->login,
+                strlen(gotham->conf->xmpp->login)))
      return EINA_TRUE;
 
    if (presence->type == SHOTGUN_PRESENCE_TYPE_SUBSCRIBE)
