@@ -117,6 +117,8 @@ version_botman_fetch(void *data,
    Gotham_Citizen *citizen;
    Eina_Strbuf *buf;
 
+   DBG("data[%p]", data);
+
    *update = EINA_FALSE;
 
    EINA_SAFETY_ON_NULL_RETURN(data);
@@ -151,7 +153,7 @@ version_botman_fetch(void *data,
 
      }
 
-   if ((!command->citizen) || (command->citizen == version->gotham->alfred))
+   if ((!command) || (command->citizen == version->gotham->alfred))
      gotham_command_json_answer(".version", "", EINA_TRUE, buf, version->gotham,
                                 version->gotham->alfred, EINA_FALSE);
    else
