@@ -54,7 +54,11 @@ module_register(Gotham *gotham)
    EINA_LIST_FOREACH(version->conf->softwares, l, software)
      {
         if ((!software->command) || (!strlen(software->command)))
-          eina_stringshare_replace(&software->command, version->conf->default_cmd);
+          {
+             eina_stringshare_del(software->command);
+             software->command = eina_stringshare_printf(version->conf->default_cmd, software->name);
+             DBG("Command for software [%s] : [%s]", software->name, software->command);
+          }
      }
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
