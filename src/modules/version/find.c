@@ -318,7 +318,7 @@ version_alfred_find_command(void *module_data,
 
    EINA_LIST_FREE(l_citizen, data)
      {
-        const char *line = gotham_citizen_match_print(version->vars, data->citizen, EINA_TRUE, EINA_FALSE);
+        const char *line = gotham_citizen_match_print(version->conf->vars, data->citizen, EINA_TRUE, EINA_FALSE);
 
         if ((!current_version) || (strcmp(current_version, data->version)))
           {

@@ -105,43 +105,36 @@ free_buffer:
 /**
  * @brief Gather softwares version by running a system calls.
  * @param data Module_Version structure.
- * @return JSON data of .version command.
  */
-char *
-version_botman_fetch(void *data, Eina_Bool *update)
+void
+version_botman_fetch(void *data,
+                     Gotham_Citizen_Command *command,
+                     Eina_Bool *update)
 {
    Module_Version *version;
-   Module_Version_Element *mve;
-   cJSON *json,
-         *json_content;
-   char *p = NULL;
+   Module_Version_Conf_Software *mvcs;
    Eina_List *l;
    Gotham_Citizen *citizen;
+   Eina_Strbuf *buf;
 
    *update = EINA_FALSE;
 
-   EINA_SAFETY_ON_NULL_RETURN_VAL(data, NULL);
+   EINA_SAFETY_ON_NULL_RETURN(data);
 
    version = data;
    citizen = version->gotham->me;
 
-   json = cJSON_CreateObject();
-   cJSON_AddStringToObject(json, "command", ".version");
-   cJSON_AddStringToObject(json, "parameters", "");
+   buf = eina_strbuf_new();
 
-   json_content = cJSON_CreateArray();
-   EINA_LIST_FOREACH(version->versions.list, l, mve)
+   EINA_LIST_FOREACH(version->conf->softwares, l, mvcs)
      {
         const char *s;
-        char *version_item,
-             *var;
+        char *version_item;
 
-        s = _version_botman_version_get(mve->cmd);
-        if (!s)
-          s = strdup("-- Not found --");
+        s =  _version_botman_version_get(mvcs->command);
+        if (!s) s = strdup("-- Not found --");
 
-        /* Set local custom vars, prefixed with version_ */
-        version_item = dupf("version_%s", mve->name);
+        version_item = dupf("version_%s", mvcs->name);
         if (version_item)
           {
              const char *old;
@@ -154,23 +147,17 @@ version_botman_fetch(void *data, Eina_Bool *update)
                }
           }
         free(version_item);
+        eina_strbuf_append_printf(buf, "%s : %s\n", mvcs->name, s);
 
-        var = dupf("%s : %s", mve->name, s);
-        if (var)
-          cJSON_AddItemToArray(json_content, cJSON_CreateString(var));
-        free(var);
-        free((char *)s);
      }
 
-   cJSON_AddStringToObject(json, "status", "ok");
-   cJSON_AddItemToObject(json, "content", json_content);
-
-   p = cJSON_Print(json);
-   if (!p)
-     ERR("Failed to serialize JSON");
-
-   cJSON_Delete(json);
-   return p;
+   if ((!command->citizen) || (command->citizen == version->gotham->alfred))
+     gotham_command_json_answer(".version", "", EINA_TRUE, buf, version->gotham,
+                                version->gotham->alfred, EINA_FALSE);
+   else
+     gotham_command_json_answer(".version", "", EINA_TRUE, buf, version->gotham,
+                                command->citizen, EINA_FALSE);
+   eina_strbuf_free(buf);
 }
 
 /**
@@ -183,19 +170,12 @@ version_botman_command(void *data,
                        Gotham_Citizen_Command *command)
 {
    Module_Version *version = data;
-   char *s;
    Eina_Bool updated;
 
    EINA_SAFETY_ON_NULL_RETURN(version);
    EINA_SAFETY_ON_NULL_RETURN(command);
 
-   s = version_botman_fetch(version, &updated);
-
-   gotham_citizen_send(version->gotham->alfred, s);
-   if (command->citizen != version->gotham->alfred)
-     gotham_command_send(command, s);
-
-   free(s);
+   version_botman_fetch(version, command, &updated);
    return;
 }
 
@@ -203,25 +183,15 @@ Eina_Bool
 version_botman_poll(void *data)
 {
    Module_Version *version;
-   char *s;
    Eina_Bool updated;
 
    EINA_SAFETY_ON_NULL_RETURN_VAL(data, EINA_TRUE);
 
    version = data;
-   s = version_botman_fetch(version, &updated);
-   if (!s)
-     return EINA_TRUE;
+   version_botman_fetch(version, NULL, &updated);
 
-   if (updated)
-     {
-        DBG("Sending new version info to alfred");
-        gotham_citizen_send(version->gotham->alfred, s);
-        version->sent_once = EINA_TRUE;
-     }
-   else
-     DBG("No version change detected");
-   free(s);
+   if (updated) version->sent_once = EINA_TRUE;
+   else DBG("No version change detected");
    return EINA_TRUE;
 }
 

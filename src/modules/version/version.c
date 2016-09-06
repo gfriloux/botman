@@ -42,27 +42,21 @@ module_register(Gotham *gotham)
 {
    Module_Version *version;
 
-   if ((gotham->me->type != GOTHAM_CITIZEN_TYPE_ALFRED) &&
-       (gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN))
-     return NULL;
-
    version = calloc(1, sizeof(Module_Version));
-   if (!version)
-     {
-        ERR("Failed to alloc");
-        return NULL;
-     }
+   EINA_SAFETY_ON_NULL_RETURN_VAL(version, NULL);
+
    version->gotham = gotham;
+   version->conf = gotham_serialize_file_to_struct(MODULE_VERSION_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Version_Conf);
+   EINA_SAFETY_ON_NULL_GOTO(version->conf, free_version);
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
-     {
-        version_botman_commands_register();
-        version_botman_conf_load(version);
-        return version;
-     }
-   version_alfred_commands_register();
-   version_alfred_conf_load(version);
+     version_botman_commands_register();
+   else version_alfred_commands_register();
    return version;
+
+free_version:
+   free(version);
+   return NULL;
 }
 
 /**
@@ -74,31 +68,20 @@ void
 module_unregister(void *data)
 {
    Module_Version *version;
-   Module_Version_Element *e;
-   char *item;
 
    EINA_SAFETY_ON_NULL_RETURN(data);
 
    version = data;
 
-   EINA_LIST_FREE(version->versions.list, e)
-     {
-        eina_stringshare_del(e->name);
-        eina_stringshare_del(e->cmd);
-     }
-   eina_stringshare_del(version->versions.default_cmd);
+   Module_Version_Conf_free(version->conf);
 
    if (version->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      {
         version_botman_commands_unregister();
         ecore_timer_del(version->poll);
-        goto version_free;
      }
+   else version_alfred_commands_unregister();
 
-   EINA_LIST_FREE(version->vars, item) free(item);
-   version_alfred_commands_unregister();
-
-version_free:
    free(version);
 }
 

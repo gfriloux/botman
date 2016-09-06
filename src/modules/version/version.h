@@ -4,6 +4,8 @@
 #include <Ecore.h>
 #include <Gotham.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define MODULE_VERSION_CONF SYSCONF_DIR"/gotham/modules.conf.d/version.conf"
@@ -33,25 +35,13 @@ typedef struct _Module_Version_Software
                 nb_p;
 } Module_Version_Software;
 
-
-typedef struct _Module_Version_Element
-{
-   const char *name,
-              *cmd;
-} Module_Version_Element;
-
 typedef struct _Module_Version
 {
    Gotham *gotham;
-   Eina_List *vars;
+   Module_Version_Conf *conf;
+
    Ecore_Timer *poll;
    Eina_Bool sent_once: 1;
-
-   struct
-   {
-      const char *default_cmd;
-      Eina_List *list;
-   } versions;
 } Module_Version;
 
 #define CRI(...) EINA_LOG_DOM_CRIT(_module_version_log_dom, __VA_ARGS__)
@@ -70,7 +60,7 @@ void version_botman_conf_load(Module_Version *version);
 void version_botman_commands_register(void);
 void version_botman_commands_unregister(void);
 void version_botman_command(void *data, Gotham_Citizen_Command *command);
-char * version_botman_fetch(void *data, Eina_Bool *update);
+void version_botman_fetch(void *data, Gotham_Citizen_Command *command, Eina_Bool *update);
 Eina_Bool version_botman_poll(void *data);
 
 char * dupf(const char *s, ...);

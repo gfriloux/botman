@@ -90,7 +90,7 @@ version_alfred_command(void *data,
    l_citizen = gotham_citizen_match(gotham,
                                     version_cmd[1],
                                     GOTHAM_CITIZEN_TYPE_BOTMAN,
-                                    version->vars);
+                                    version->conf->vars);
 
    EINA_LIST_FOREACH(l_citizen, l, citizen)
      {
@@ -98,7 +98,7 @@ version_alfred_command(void *data,
 
         found = EINA_TRUE;
 
-        line = gotham_citizen_match_print(version->vars, citizen, EINA_TRUE, EINA_FALSE);
+        line = gotham_citizen_match_print(version->conf->vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         eina_strbuf_append_printf(result_buf, "%s :\n", line);
         free((char *)line);

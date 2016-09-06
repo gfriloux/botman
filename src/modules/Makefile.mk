@@ -228,10 +228,10 @@ src_modules_sysinfo_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
 
+BUILT_SOURCES += .sources_version
 src_modules_version_la_SOURCES = \
    src/modules/version/alfred.c \
    src/modules/version/botman.c \
-   src/modules/version/conf.c \
    src/modules/version/event.c \
    src/modules/version/find.c \
    src/modules/version/utils.c \
@@ -245,6 +245,9 @@ src_modules_version_la_LDFLAGS = \
 src_modules_version_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_version_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_version: src/modules/version/version.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/version \
+	                    $(top_srcdir)/src/modules/version/version.azy
 
 BUILT_SOURCES += .sources_sshtunnel
 src_modules_ssh_tunnel_la_SOURCES = \

@@ -1,0 +1,14 @@
+Azy_Namespace Module;
+
+struct Version_Conf_Software
+{
+   string name;
+   string command;
+};
+
+struct Version_Conf
+{
+   string default_cmd;
+   array<Version_Conf_Version> softwares;
+   array<string> vars;
+};

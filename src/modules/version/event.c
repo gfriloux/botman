@@ -21,7 +21,6 @@ event_citizen_connect(void *data,
 {
    Module_Version *version = data;
    Gotham_Citizen *citizen = ev;
-   char *s;
    Eina_Bool updated;
 
    EINA_SAFETY_ON_NULL_RETURN_VAL(version, EINA_TRUE);
@@ -38,16 +37,8 @@ event_citizen_connect(void *data,
        (version->sent_once))
      return EINA_TRUE;
 
-   s = version_botman_fetch(version, &updated);
-   if (!s)
-     {
-        ERR("Failed to fetch version infos");
-        return EINA_TRUE;
-     }
-   DBG("Sending version info to alfred");
-   gotham_citizen_send(version->gotham->alfred, s);
+   version_botman_fetch(version, NULL, &updated);
    version->sent_once = EINA_TRUE;
-   free(s);
    return EINA_TRUE;
 }
 
@@ -66,7 +57,6 @@ event_connect(void *data,
               void *ev EINA_UNUSED)
 {
    Module_Version *version = data;
-   char *s;
    Eina_Bool updated;
 
    DBG("version[%p]", version);
@@ -80,17 +70,8 @@ event_connect(void *data,
        (version->gotham->alfred->status == GOTHAM_CITIZEN_STATUS_OFFLINE))
      return EINA_TRUE;
 
-   s = version_botman_fetch(version, &updated);
-   if (!s)
-     {
-        ERR("Failed to fetch version infos");
-        return EINA_TRUE;
-     }
-
-   DBG("Sending version info to alfred");
-   gotham_citizen_send(version->gotham->alfred, s);
+   version_botman_fetch(version, NULL, &updated);
    version->sent_once = EINA_TRUE;
-   free(s);
    return EINA_TRUE;
 }
 
