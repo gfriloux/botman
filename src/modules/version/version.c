@@ -41,6 +41,8 @@ void *
 module_register(Gotham *gotham)
 {
    Module_Version *version;
+   Module_Version_Conf_Software *software;
+   Eina_List *l;
 
    version = calloc(1, sizeof(Module_Version));
    EINA_SAFETY_ON_NULL_RETURN_VAL(version, NULL);
@@ -48,6 +50,12 @@ module_register(Gotham *gotham)
    version->gotham = gotham;
    version->conf = gotham_serialize_file_to_struct(MODULE_VERSION_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Version_Conf);
    EINA_SAFETY_ON_NULL_GOTO(version->conf, free_version);
+
+   EINA_LIST_FOREACH(version->conf->softwares, l, software)
+     {
+        if ((!software->command) || (!strlen(software->command)))
+          eina_stringshare_replace(&software->command, version->conf->default_cmd);
+     }
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      version_botman_commands_register();
