@@ -44,19 +44,9 @@ module_register(Gotham *gotham)
 {
    Module_Sysinfo *obj;
 
-   if ((gotham->me->type != GOTHAM_CITIZEN_TYPE_ALFRED) &&
-       (gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN))
-     {
-        NFO("Cant load for this gotham type");
-        return NULL;
-     }
-
    obj = calloc(1, sizeof(Module_Sysinfo));
-   if (!obj)
-     {
-        ERR("Faild to alloc");
-        return NULL;
-     }
+   EINA_SAFETY_ON_NULL_RETURN_VAL(obj, NULL);
+
    obj->gotham = gotham;
    obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Sysinfo_Conf);
 
@@ -66,8 +56,7 @@ module_register(Gotham *gotham)
         botman_sysinfo_get(obj);
         botman_commands_add(obj);
      }
-
-   if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
+   else
      alfred_commands_add(obj);
 
    return obj;
