@@ -98,9 +98,10 @@ botman_sysinfo_get(Module_Sysinfo *obj)
  * @param command Gotham_Citizen_Command incoming command
  */
 void
-botman_sysinfo_send(Module_Sysinfo *obj,
+botman_sysinfo_send(void *data,
                     Gotham_Citizen_Command *command)
 {
+   Module_Sysinfo *obj = data;
    Eina_Strbuf *buf;
    Gotham_Citizen *citizen;
    Module_Sysinfo_Conf_Item *item;
@@ -133,9 +134,10 @@ botman_sysinfo_send(Module_Sysinfo *obj,
  * @param command Gotham_Citizen_Command incoming command and citizen
  */
 void
-botman_sysinfo_command_run(Module_Sysinfo *obj,
+botman_sysinfo_command_run(void *data,
                            Gotham_Citizen_Command *command)
 {
+   Module_Sysinfo *obj = data;
    const char *value;
    Eina_Strbuf *buf;
    Module_Sysinfo_Conf_Item *item;
@@ -184,14 +186,15 @@ botman_commands_add(Module_Sysinfo *obj)
    gotham_modules_command_add("sysinfo", ".sysinfo",
                               "[.sysinfo] - "
                               "This command allows you to get some system "
-                              "informations (manufacturer, serial #, ...)", NULL);
+                              "informations (manufacturer, serial #, ...)",
+                              botman_sysinfo_send);
 
    EINA_LIST_FOREACH(obj->conf->commands, l, item)
      {
         char desc[100];
         sprintf(desc, "[%s] - Run %s on server", item->name, item->command);
         DBG("%s", desc);
-        gotham_modules_command_add("sysinfo", item->name, desc, NULL);
+        gotham_modules_command_add("sysinfo", item->name, desc, botman_sysinfo_command_run);
      }
 }
 

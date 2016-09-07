@@ -58,9 +58,10 @@ _citizen_result_print(Module_Sysinfo *obj,
  * @param command Gotham_Citizen_Command containing pattern to show
  */
 void
-alfred_sysinfo_show(Module_Sysinfo *obj,
+alfred_sysinfo_show(void *data,
                     Gotham_Citizen_Command *command)
 {
+   Module_Sysinfo *obj = data;
    Gotham_Citizen *citizen;
    Eina_Strbuf *buf,
                *result_buf;
@@ -70,8 +71,11 @@ alfred_sysinfo_show(Module_Sysinfo *obj,
 
    DBG("obj[%p], command[%p]", obj, command);
 
-   EINA_SAFETY_ON_NULL_RETURN(obj);
-   EINA_SAFETY_ON_NULL_RETURN(command);
+   if (command->citizen->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
+     {
+        alfred_botman_answer_get(obj, command);
+        return;
+     }
 
    buf = eina_strbuf_new();
    result_buf = eina_strbuf_new();
@@ -177,7 +181,8 @@ alfred_commands_add(Module_Sysinfo *obj EINA_UNUSED)
                               "[.sysinfo pattern] - "
                               "This command allows you to get some system "
                               "informations (manufacturer, serial #, ...) "
-                              "for each botman that matches pattern", NULL);
+                              "for each botman that matches pattern",
+                              alfred_sysinfo_show);
 }
 
 

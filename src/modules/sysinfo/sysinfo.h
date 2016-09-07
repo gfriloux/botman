@@ -22,8 +22,6 @@ typedef struct _Module_Sysinfo
 {
    Gotham *gotham;
    Module_Sysinfo_Conf *conf;
-
-   Eina_Bool (*access_allowed)(Gotham_Module_Command *, Gotham_Citizen *);
 } Module_Sysinfo;
 
 void botman_commands_add(Module_Sysinfo *obj);
@@ -33,13 +31,12 @@ void alfred_commands_add(Module_Sysinfo *obj);
 void alfred_commands_del(Module_Sysinfo *obj);
 
 void alfred_botman_answer_get(Module_Sysinfo *obj, Gotham_Citizen_Command *command);
-void alfred_sysinfo_show(Module_Sysinfo *obj, Gotham_Citizen_Command *command);
+void alfred_sysinfo_show(void *data, Gotham_Citizen_Command *command);
 
 void botman_sysinfo_get(Module_Sysinfo *obj);
-void botman_sysinfo_send(Module_Sysinfo *obj, Gotham_Citizen_Command *command);
+void botman_sysinfo_send(void *data, Gotham_Citizen_Command *command);
 
-void botman_sysinfo_command_run(Module_Sysinfo *obj,
-                                Gotham_Citizen_Command *command);
+void botman_sysinfo_command_run(void *data, Gotham_Citizen_Command *command);
 
 Module_Sysinfo_Conf_Item * utils_item_find(Eina_List *list, const char *name);
 #endif
