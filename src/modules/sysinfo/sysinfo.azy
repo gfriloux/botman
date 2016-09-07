@@ -1,0 +1,14 @@
+Azy_Namespace Module;
+
+struct Sysinfo_Conf_Item
+{
+   string name;
+   string command;
+};
+
+struct Sysinfo_Conf
+{
+   array<Sysinfo_Conf_Item> hw;
+   array<Sysinfo_Conf_Item> commands;
+   array<string> vars;
+};

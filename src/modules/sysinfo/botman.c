@@ -61,26 +61,20 @@ void
 botman_sysinfo_get(Module_Sysinfo *obj)
 {
    Gotham_Citizen *citizen;
-   Eina_Iterator *it;
-   void *data;
+   Eina_List *l;
+   Module_Sysinfo_Conf_Item *item;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
    citizen = obj->gotham->me;
 
-   /* Run through obj->hw (values to store in custom vars) */
-   it = eina_hash_iterator_tuple_new(obj->hw);
-
-   while(eina_iterator_next(it, &data))
+   EINA_LIST_FOREACH(obj->conf->hw, l, item)
      {
-        Eina_Hash_Tuple *t = data;
-        const char *value,
-                   *name = t->key,
-                   *cmd = t->data;
+        const char *value;
+        char s[strlen(item->name)+8];
         Eina_Strbuf *buf;
-        char item[strlen(name)+8];
 
-        value = _botman_pipe_read(cmd);
-        sprintf(item, "sysinfo_%s", name);
+        value = _botman_pipe_read(item->command);
+        sprintf(s, "sysinfo_%s", item->name);
 
         buf = eina_strbuf_new();
 
@@ -89,12 +83,11 @@ botman_sysinfo_get(Module_Sysinfo *obj)
         eina_strbuf_trim(buf);
         eina_strbuf_replace_all(buf, "\n", "");
 
-        DBG("var : %s=%s", item, eina_strbuf_string_get(buf));
-        VARSET(item, "%s", eina_strbuf_string_get(buf));
+        DBG("var : %s=%s", s, eina_strbuf_string_get(buf));
+        VARSET(s, "%s", eina_strbuf_string_get(buf));
         eina_strbuf_free(buf);
         free((char *)value);
      }
-   eina_iterator_free(it);
 }
 
 /**
@@ -110,34 +103,27 @@ botman_sysinfo_send(Module_Sysinfo *obj,
 {
    Eina_Strbuf *buf;
    Gotham_Citizen *citizen;
-   Eina_Iterator *it;
-   void *data;
+   Module_Sysinfo_Conf_Item *item;
+   Eina_List *l;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
    citizen = obj->gotham->me;
 
    buf = eina_strbuf_new();
 
-   /* Run through obj->hw to get custom vars */
-   it = eina_hash_iterator_key_new(obj->hw);
-
-   while(eina_iterator_next(it, &data))
+   EINA_LIST_FOREACH(obj->conf->hw, l, item)
      {
         const char *value;
-        const char *name = data;
+        char s[strlen(item->name)+8];
 
-        char item[strlen(name)+8];
+        sprintf(s, "sysinfo_%s", item->name);
 
-        sprintf(item, "sysinfo_%s", name);
-
-        value = VARGET(item);
-        eina_strbuf_append_printf(buf, "%s : %s\n", name, value);
+        value = VARGET(s);
+        eina_strbuf_append_printf(buf, "%s : %s\n", item->name, value);
      }
-   eina_iterator_free(it);
 
    gotham_command_json_answer(".sysinfo", "", EINA_TRUE, buf,
                               obj->gotham, command->citizen, EINA_TRUE);
-
    eina_strbuf_free(buf);
 }
 
@@ -150,17 +136,17 @@ void
 botman_sysinfo_command_run(Module_Sysinfo *obj,
                            Gotham_Citizen_Command *command)
 {
-   const char *cmd,
-              *value;
+   const char *value;
    Eina_Strbuf *buf;
+   Module_Sysinfo_Conf_Item *item;
    Eina_Bool ret = EINA_FALSE;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
 
    buf = eina_strbuf_new();
 
-   cmd = eina_hash_find(obj->commands, command->name);
-   if (!cmd)
+   item = utils_item_find(obj->conf->commands, command->name);
+   if (!item)
      {
         eina_strbuf_append_printf(buf, "Can't get command line "
                                        "for %s, aborting.",
@@ -169,7 +155,7 @@ botman_sysinfo_command_run(Module_Sysinfo *obj,
         goto func_end;
      }
 
-   value = _botman_pipe_read(cmd);
+   value = _botman_pipe_read(item->command);
    eina_strbuf_append(buf, value);
    free((char *)value);
    ret = EINA_TRUE;
@@ -192,27 +178,21 @@ func_end:
 void
 botman_commands_add(Module_Sysinfo *obj)
 {
-   Eina_Iterator *it;
-   void *data;
+   Eina_List *l;
+   Module_Sysinfo_Conf_Item *item;
 
    gotham_modules_command_add("sysinfo", ".sysinfo",
                               "[.sysinfo] - "
                               "This command allows you to get some system "
                               "informations (manufacturer, serial #, ...)", NULL);
 
-   /* Run through obj->commands and add matching commands */
-   it = eina_hash_iterator_tuple_new(obj->commands);
-
-   while(eina_iterator_next(it, &data))
+   EINA_LIST_FOREACH(obj->conf->commands, l, item)
      {
-        Eina_Hash_Tuple *t = data;
         char desc[100];
-        sprintf(desc, "[%s] - Run %s on server",
-                      (char *)t->key, (char *)t->data);
-
-        gotham_modules_command_add("sysinfo", t->key, desc, NULL);
+        sprintf(desc, "[%s] - Run %s on server", item->name, item->command);
+        DBG("%s", desc);
+        gotham_modules_command_add("sysinfo", item->name, desc, NULL);
      }
-   eina_iterator_free(it);
 }
 
 
@@ -223,20 +203,15 @@ botman_commands_add(Module_Sysinfo *obj)
 void
 botman_commands_del(Module_Sysinfo *obj)
 {
-   Eina_Iterator *it;
-   void *data;
+   Eina_List *l;
+   Module_Sysinfo_Conf_Item *item;
 
    gotham_modules_command_del("sysinfo", ".sysinfo");
 
-   /* Run through obj->commands and add matching commands */
-   it = eina_hash_iterator_key_new(obj->commands);
-
-   while(eina_iterator_next(it, &data))
+   EINA_LIST_FOREACH(obj->conf->commands, l, item)
      {
-        const char *key = data;
-        gotham_modules_command_del("sysinfo", key);
+        gotham_modules_command_del("sysinfo", item->name);
      }
-   eina_iterator_free(it);
 }
 
 

@@ -19,17 +19,6 @@
 static const char *name = "Sysinfo";
 
 /**
- * @brief Callback for freeing a eina_hash value from the obj->hw hash
- * @param data data to free
- */
-static void
-_hash_free_cb(void *data)
-{
-   EINA_SAFETY_ON_NULL_RETURN(data);
-   free(data);
-}
-
-/**
  * @brief Module init function.
  * Init needed libraries (eina, ecore), and register in eina_log_domain
  * @return Module name
@@ -69,11 +58,7 @@ module_register(Gotham *gotham)
         return NULL;
      }
    obj->gotham = gotham;
-
-   obj->hw = eina_hash_string_small_new(_hash_free_cb);
-   obj->commands = eina_hash_string_small_new(_hash_free_cb);
-
-   conf_load(obj);
+   obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Sysinfo_Conf);
 
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      {
@@ -97,7 +82,6 @@ void
 module_unregister(void *data)
 {
    Module_Sysinfo *obj = data;
-   char *item;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
 
@@ -107,9 +91,9 @@ module_unregister(void *data)
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      alfred_commands_del(obj);
 
-   EINA_LIST_FREE(obj->vars, item) free(item);
-
-   eina_hash_free(obj->hw);
+   Array_Module_Sysinfo_Conf_Item_free(obj->conf->hw);
+   Array_Module_Sysinfo_Conf_Item_free(obj->conf->commands);
+   Array_string_free(obj->conf->vars);
 
    free(obj);
 }

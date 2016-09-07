@@ -172,7 +172,7 @@ event_citizen_command(void *data,
    /* Botman receives another command : search in obj->commands,
       handle it if needeed */
    else if ((obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN) &&
-            (eina_hash_find(obj->commands, command->name)))
+            (utils_item_find(obj->conf->commands, command->name)))
      {
         command->handled = EINA_TRUE;
         AUTH(obj, gotham_modules_command_get(command->name),

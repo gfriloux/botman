@@ -24,34 +24,26 @@ _citizen_result_print(Module_Sysinfo *obj,
                       Gotham_Citizen *citizen)
 {
    Eina_Strbuf *buf;
-   Eina_Iterator *it;
-   void *data;
    const char *ptr;
-   Eina_Bool found = EINA_FALSE;
+   Eina_List *l;
+   Module_Sysinfo_Conf_Item *item;
 
    buf = eina_strbuf_new();
 
    /* Run through obj->hw (values to found in custom vars) */
-   it = eina_hash_iterator_key_new(obj->hw);
-
-   while(eina_iterator_next(it, &data))
+   EINA_LIST_FOREACH(obj->conf->hw, l, item)
      {
         const char *var;
-        const char *name = data;
-        char item[strlen(name)+8];
+        char s[strlen(item->name)+8];
 
-        sprintf(item, "sysinfo_%s", name);
-        var = VARGET(item);
+        sprintf(s, "sysinfo_%s", item->name);
+        var = VARGET(s);
 
         if (!var) continue;
-
-        found = EINA_TRUE;
-        eina_strbuf_append_printf(buf, "\t%s : %s\n", name, var);
+        eina_strbuf_append_printf(buf, "\t%s : %s\n", item->name, var);
      }
-   eina_iterator_free(it);
 
-   if (!found)
-     eina_strbuf_append(buf, "\tNo system information found\n");
+   if (eina_strbuf_length_get(buf)) eina_strbuf_append(buf, "\tNo system information found\n");
 
    ptr = eina_strbuf_string_steal(buf);
    eina_strbuf_free(buf);
@@ -88,13 +80,13 @@ alfred_sysinfo_show(Module_Sysinfo *obj,
    l_citizen = gotham_citizen_match(obj->gotham,
                                     command->command[1],
                                     GOTHAM_CITIZEN_TYPE_BOTMAN,
-                                    obj->vars);
+                                    obj->conf->vars);
 
    EINA_LIST_FOREACH(l_citizen, l, citizen)
      {
         const char *line;
 
-        line = gotham_citizen_match_print(obj->vars, citizen, EINA_TRUE, EINA_FALSE);
+        line = gotham_citizen_match_print(obj->conf->vars, citizen, EINA_TRUE, EINA_FALSE);
         eina_strbuf_append_printf(buf, "\t%s\n", line);
         eina_strbuf_append_printf(result_buf, "%s :\n", line);
         free((char *)line);

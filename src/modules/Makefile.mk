@@ -212,13 +212,18 @@ src_modules_rewrite_la_LIBADD = \
 	azy_parser -H -p -o $(top_srcdir)/src/modules/rewrite \
 	                    $(top_srcdir)/src/modules/rewrite/rewrite.azy
 
+BUILT_SOURCES += .sources_sysinfo
 src_modules_sysinfo_la_SOURCES = \
    src/modules/sysinfo/alfred.c \
    src/modules/sysinfo/botman.c \
-   src/modules/sysinfo/conf.c \
    src/modules/sysinfo/event.c \
    src/modules/sysinfo/sysinfo.c \
-   src/modules/sysinfo/sysinfo.h
+   src/modules/sysinfo/sysinfo.h \
+   src/modules/sysinfo/utils.c \
+   src/modules/sysinfo/Module_Common_Azy.c \
+   src/modules/sysinfo/Module_Common_Azy.h \
+   src/modules/sysinfo/Module_Common.c \
+   src/modules/sysinfo/Module_Common.h
 src_modules_sysinfo_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_sysinfo_la_LDFLAGS = \
@@ -227,6 +232,9 @@ src_modules_sysinfo_la_LDFLAGS = \
 src_modules_sysinfo_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_sysinfo: src/modules/sysinfo/sysinfo.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/sysinfo \
+	                    $(top_srcdir)/src/modules/sysinfo/sysinfo.azy
 
 BUILT_SOURCES += .sources_version
 src_modules_version_la_SOURCES = \
