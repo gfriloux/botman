@@ -4,6 +4,8 @@
 #include <Gotham.h>
 #include <time.h>
 
+#include "Module_Common_Azy.h"
+
 #define VARSET(_a, _b, ...) gotham_citizen_var_set(citizen, _a, _b, __VA_ARGS__)
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
 #define MODULE_INSTALL_CONF SYSCONF_DIR"/gotham/modules.conf.d/install.conf"
@@ -22,11 +24,9 @@ typedef enum _Module_Install_Type
 typedef struct _Module_Install
 {
    Gotham *gotham;
-   Eina_Array *vars;
+   Module_Install_Conf *conf;
 
-   Eina_Hash *install,
-             *upgrade,
-             *jobs;
+   Eina_Hash *jobs;
 } Module_Install;
 
 typedef struct _Module_Install_Cmd
@@ -57,7 +57,6 @@ typedef struct _Module_Install_Job
 #define NFO(...) EINA_LOG_DOM_INFO(_module_install_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_install_log_dom, __VA_ARGS__)
 
-void module_install_botman_conf_load(Module_Install *install);
 void module_install_botman_commands_register(void);
 void module_install_botman_commands_unregister(void);
 

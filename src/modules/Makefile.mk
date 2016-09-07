@@ -175,13 +175,17 @@ mod_LTLIBRARIES += \
    src/modules/version.la \
    src/modules/ssh_tunnel.la \
    src/modules/gdb.la
-   
+
+BUILT_SOURCES += .sources_install   
 src_modules_install_la_SOURCES = \
    src/modules/install/botman.c \
-   src/modules/install/conf.c \
    src/modules/install/jobs.c \
    src/modules/install/install.c \
-   src/modules/install/install.h
+   src/modules/install/install.h \
+   src/modules/install/Module_Common_Azy.c \
+   src/modules/install/Module_Common_Azy.h \
+   src/modules/install/Module_Common.c \
+   src/modules/install/Module_Common.h
 src_modules_install_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_install_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
@@ -189,6 +193,9 @@ src_modules_install_la_LDFLAGS = \
 src_modules_install_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_install_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_install:  src/modules/install/install.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/install \
+	                    $(top_srcdir)/src/modules/install/install.azy
 
 BUILT_SOURCES += .sources_rewrite
 src_modules_rewrite_la_SOURCES = \

@@ -225,7 +225,7 @@ module_install_event_botman_command(Module_Install *install,
                                     Gotham_Citizen_Command *command)
 {
    Eina_Strbuf *buf;
-   Eina_Hash *h = NULL;
+   Module_Install_Conf_Item *h = NULL;
    Module_Install_Cmd *obj;
    const char **install_cmd = command->command;
    const char *pre,
@@ -244,21 +244,15 @@ module_install_event_botman_command(Module_Install *install,
     * Get hash data
     */
    if (type == MODULE_INSTALL_TYPE_INSTALL)
-     h = install->install;
+     h = install->conf->install;
    else if (type == MODULE_INSTALL_TYPE_UPGRADE)
-     h = install->upgrade;
+     h = install->conf->upgrade;
 
-   DBG("Searching keys in h[%p] (%d vars)", h, eina_hash_population(h));
+   pre = h->pre;
+   cmd = h->cmd;
+   post = h->post;
 
-   pre = eina_hash_find(h, "pre");
-   cmd = eina_hash_find(h, "cmd");
-   post = eina_hash_find(h, "post");
-
-   if (!cmd)
-     {
-        ERR("Wutzufuk ?! No command ?!");
-        return;
-     }
+   EINA_SAFETY_ON_NULL_RETURN(cmd);
 
    /**
     * Reply to sender with the install_begins message, informing that install

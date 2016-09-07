@@ -18,17 +18,6 @@
 static const char *name = "Install";
 
 /**
- * @brief Callback for freeing a eina_hash value from an install object
- * @param data data to free
- */
-static void
-_module_install_hash_free_cb(void *data)
-{
-   EINA_SAFETY_ON_NULL_RETURN(data);
-   free(data);
-}
-
-/**
  * @brief Callback for freeing a eina_hash from a job object
  * @param data data to free
  */
@@ -68,19 +57,12 @@ module_register(Gotham *gotham)
      return NULL;
 
    install = calloc(1, sizeof(Module_Install));
-   if (!install)
-     {
-        ERR("Failed to alloc");
-        return NULL;
-     }
+   EINA_SAFETY_ON_NULL_RETURN_VAL(install, NULL);
 
    install->gotham = gotham;
-
-   install->install = eina_hash_string_small_new(_module_install_hash_free_cb);
-   install->upgrade = eina_hash_string_small_new(_module_install_hash_free_cb);
    install->jobs = eina_hash_pointer_new(_job_free_cb);
+   install->conf = gotham_serialize_file_to_struct(MODULE_INSTALL_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Install_Conf);
 
-   module_install_botman_conf_load(install);
    module_install_botman_commands_register();
 
    return install;
@@ -99,8 +81,6 @@ module_unregister(void *data)
    EINA_SAFETY_ON_NULL_RETURN(install);
 
    module_install_botman_commands_unregister();
-   eina_hash_free(install->install);
-   eina_hash_free(install->upgrade);
    eina_hash_free(install->jobs);
 
    free(install);

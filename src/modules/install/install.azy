@@ -1,0 +1,15 @@
+Azy_Namespace Module;
+
+struct Install_Conf_Item
+{
+   string pre;
+   string cmd;
+   string post;
+};
+
+struct Install_Conf
+{
+   Install_Conf_Item install;
+   Install_Conf_Item upgrade;
+   array<string> vars;
+};
