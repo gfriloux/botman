@@ -365,3 +365,29 @@ src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
 	azy_parser -H -p -o $(top_srcdir)/src/modules/gdb \
 	                    $(top_srcdir)/src/modules/gdb/gdb.azy
 endif
+
+
+if BUILD_WINDOWS
+mod_LTLIBRARIES += \
+   src/modules/network.la
+
+BUILT_SOURCES += .sources_network
+src_modules_network_la_SOURCES = \
+   src/modules/network/network.c \
+   src/modules/network/network.h \
+   src/modules/network/event.c \
+   src/modules/network/network_get_win32.c
+src_modules_network_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_network_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS) -Wl,-z,defs \
+   -liphlpapi -lws2_32
+src_modules_network_la_LIBADD = \
+   src/lib/libgotham.la
+src_modules_network_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_network: src/modules/network/network.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/network \
+	                    $(top_srcdir)/src/modules/network/network.azy
+endif

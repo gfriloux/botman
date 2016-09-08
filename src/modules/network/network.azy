@@ -1,0 +1,24 @@
+Azy_Namespace Network;
+
+struct Configuration_Adapter_Addresses
+{
+   string physical;
+   array<string> unicast;
+   array<string> dns_server;
+};
+
+struct Configuration_Adapter
+{
+   string name;
+   string name_friendly;
+   string description;
+   string dns_suffix;
+   int mtu;
+
+   Configuration_Adapter_Addresses addresses;
+};
+
+struct Configuration
+{
+   array<Configuration_Adapter> adapters;
+};
