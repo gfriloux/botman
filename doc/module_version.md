@@ -31,19 +31,22 @@ the `.version` command will list matching bots.
 {
    "default_cmd" : "pkg info %s | grep 'Version' | cut -d':' -f2 | tr -d ' '",
    "versions_list" : [
-      "botman",
       {
-         "kernel": "uname -r"
+         "name" : "botman",
+         "command" : ""
+      },
+      {
+         "name" : "kernel",
+         "command" : "uname -r"
       }
    ]
 }
 </pre>
 
 - `default_cmd` : Default command to use to fetch version of packages.
-- `versions_list` : Array of packages to list.\n If the array item is a string,
-  then the `default_cmd` will be used to find version number.\n If the array
-  item is an object, then it will use the given command.
-
+- `versions_list` : Array of packages to list.\n
+                    If the command object is an empty string, then the
+                    `default_cmd` will be used.
 
 \n\n
 

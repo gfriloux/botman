@@ -12,16 +12,16 @@ You need to write a configuration file for this module.\n
 Create the file `/etc/gotham/modules.conf.d/install.conf` that might look as follows :
 <pre>
 {
-   "install": [{
+   "install": {
       "pre": "",
       "cmd": "yes | pkg install %s",
       "post": ""
-   }],
-   "upgrade": [{
+   },
+   "upgrade": {
       "pre": "freebsd-update cron",
       "cmd": "freebsd-update install",
       "post": ""
-   }],
+   },
    "vars": [
    ]
 }
