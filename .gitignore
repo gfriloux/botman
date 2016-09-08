@@ -37,3 +37,5 @@ Module_Common.*
 Module_Common_Azy.*
 Gotham_Common.*
 Gotham_Common_Azy.*
+Httpd_Common*
+Httpd_Serve*
