@@ -107,7 +107,11 @@ src_modules_save_la_SOURCES = \
    src/modules/save/event.c \
    src/modules/save/save.c \
    src/modules/save/save.h \
-   src/modules/save/utils.c
+   src/modules/save/utils.c \
+   src/modules/save/Module_Common_Azy.c \
+   src/modules/save/Module_Common_Azy.h \
+   src/modules/save/Module_Common.c \
+   src/modules/save/Module_Common.h
 src_modules_save_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_save_la_LDFLAGS = \
