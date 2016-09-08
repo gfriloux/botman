@@ -43,4 +43,5 @@ Eina_Bool _gotham_event_iq(void *data, int type, void *ev);
 void _gotham_modules_load(Gotham *gotham);
 
 char * gotham_utils_elapsed_time(double timestamp);
+const char ** gotham_utils_json_array_stringify(cJSON *json_var);
 #endif

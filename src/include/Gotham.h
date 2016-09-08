@@ -200,11 +200,7 @@ GOTHAM_API void * gotham_modules_function_get(const char *module, const char *fu
 GOTHAM_API void * gotham_modules_data_get(const char *module);
 GOTHAM_API void gotham_modules_register(Gotham *gotham, Gotham_Module *module);
 
-GOTHAM_API cJSON *gotham_modules_conf_load(const char *file);
-GOTHAM_API Eina_Bool gotham_modules_conf_save(const char *file, cJSON *json);
-
 GOTHAM_API const char **gotham_utils_msgtocommand(const char *msg);
-GOTHAM_API const char **gotham_utils_json_array_stringify(cJSON *json_var);
 GOTHAM_API char * gotham_utils_file_data_read(const char *file, size_t *size);
 GOTHAM_API Eina_Bool gotham_utils_file_data_write(const char *file, const char *data, size_t size);
 

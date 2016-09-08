@@ -19,7 +19,6 @@ src_lib_libgotham_la_SOURCES =                                                 \
    src/lib/gotham/emoticons.c                                                  \
    src/lib/gotham/event.c                                                      \
    src/lib/gotham/modules.c                                                    \
-   src/lib/gotham/modules_conf.c                                               \
    src/lib/gotham/serialize.c                                                  \
    src/lib/gotham/utils.c                                                      \
    src/lib/gotham/Gotham_Common_Azy.c                                          \
