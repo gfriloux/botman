@@ -71,7 +71,7 @@ botman_access_sync(void *data,
                    Gotham_Citizen_Command *command)
 {
    Module_Access *access = data;
-   cJSON *json;
+   Module_Access_Conf *conf;
    const char *p;
 
    EINA_SAFETY_ON_NULL_RETURN(access);
@@ -87,25 +87,14 @@ botman_access_sync(void *data,
    p += (strlen(command->command[0]) + strlen(command->command[1]) + 2);
    DBG("Offsetted buffer :\n%s", p);
 
-   json = cJSON_Parse(p);
-   if (!json)
-     {
-        ERR("Invalid access conf from %s", command->citizen->jid);
-        return;
-     }
+   conf = gotham_serialize_string_to_struct(p, strlen(p), (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
+   EINA_SAFETY_ON_NULL_RETURN(conf);
 
-   if (!gotham_modules_conf_save(MODULE_ACCESS_CONF, json))
-     {
-        ERR("An error occured while saving conf file");
-        cJSON_Delete(json);
-        return;
-     }
+   Module_Access_Conf_free(access->conf);
+   access->conf = conf;
 
-   Array_Module_Access_Conf_Rule_free(access->conf->citizens);
-   Array_Module_Access_Conf_Rule_free(access->conf->commands);
-
+   gotham_serialize_struct_to_file(access->conf, MODULE_ACCESS_CONF, (Gotham_Serialization_Function)Module_Access_Conf_to_azy_value);
    botman_access_alfred_add(access);
-   access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
 }
 
 /**
