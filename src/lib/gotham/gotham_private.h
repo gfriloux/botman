@@ -12,6 +12,7 @@
 #endif
 #include <Eet.h>
 #include <Gotham.h>
+#include <cJSON.h>
 
 #include "Gotham_Common_Azy.h"
 

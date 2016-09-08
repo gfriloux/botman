@@ -4,7 +4,6 @@
 #include <Ecore.h>
 #include <Azy.h>
 #include <Shotgun.h>
-#include <cJSON.h>
 
 #ifdef GOTHAM_API
 # undef GOTHAM_API
