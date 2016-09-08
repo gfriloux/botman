@@ -1,0 +1,6 @@
+Azy_Namespace Module;
+
+struct Save_Conf
+{
+   int interval;
+};

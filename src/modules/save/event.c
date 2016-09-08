@@ -61,7 +61,7 @@ event_citizen_save_info(void *data,
                              "Last backup was on %s, for a size of %zu bytes. "
                              "Sincerly yours, %s.",
                              love,
-                             save->interval, date, file_size,
+                             save->conf->interval, date, file_size,
                              am_i_alfred ? "Alfred" : "Botman");
 
    gotham_command_send(command, eina_strbuf_string_get(buf));
@@ -85,8 +85,8 @@ event_citizen_save_set(void *data,
                          (!utils_isnumber(command->command[3][0])),
                          command, "Wrong command");
 
-   save->interval = atoi(command->command[3]);
-   conf_save(save);
+   save->conf->interval = atoi(command->command[3]);
+   gotham_serialize_struct_to_file(save->conf, MODULE_SAVE_CONF, (Gotham_Serialization_Function)Module_Save_Conf_to_azy_value);
 
    gotham_command_send(command, "Modification done.");
 }

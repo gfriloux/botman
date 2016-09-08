@@ -15,62 +15,6 @@
  */
 
 /**
- * @brief Load Module_Save conf into structure.
- * @param save Module_Save object
- */
-void
-conf_load(Module_Save *save)
-{
-   cJSON *json,
-         *json_interval;
-
-   /* Defaults interval to 240s */
-   save->interval = 240;
-
-   json = gotham_modules_conf_load(MODULE_SAVE_CONF);
-   if (!json)
-     return;
-
-   json_interval = cJSON_GetObjectItem(json, "interval");
-   if (json_interval->type != cJSON_Number)
-     {
-        ERR("Failed to parse configuration file!");
-        cJSON_Delete(json);
-        return;
-     }
-
-   save->interval = (unsigned int)json_interval->valueint;
-
-   cJSON_Delete(json);
-}
-
-/**
- * @brief Save Module_Save conf into file.
- * @param save Module_Save object
- */
-void
-conf_save(Module_Save *save)
-{
-   cJSON *json = NULL;
-
-   json = cJSON_CreateObject();
-   if (!json)
-     {
-        ERR("Failed to alloc json object");
-        return;
-     }
-
-   cJSON_AddItemToObject(json, "interval",
-                         cJSON_CreateNumber((double)save->interval));
-
-   if (!gotham_modules_conf_save(MODULE_SAVE_CONF, json))
-     {
-        ERR("An error occured while saving conf file");
-     }
-   cJSON_Delete(json);
-}
-
-/**
  * @brief Backup vars stored in memory into a JSON object.
  * @param json cJSON object to fill
  * @param list Eina_Hash list containing vars to backup.

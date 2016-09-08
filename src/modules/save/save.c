@@ -47,16 +47,17 @@ void *
 module_register(Gotham *gotham)
 {
    _obj = calloc(1, sizeof(Module_Save));
-   if (!_obj)
-     {
-        ERR("Failed to aloc");
-        return NULL;
-     }
+   EINA_SAFETY_ON_NULL_RETURN_VAL(_obj, NULL);
 
    _obj->gotham = gotham;
-   conf_load(_obj);
+   _obj->conf = gotham_serialize_file_to_struct(MODULE_SAVE_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Save_Conf);
+   if (!_obj->conf)
+     {
+        _obj->conf = Module_Save_Conf_new();
+        _obj->conf->interval = 60;
+     }
 
-   _obj->et_backup = ecore_timer_add(_obj->interval,
+   _obj->et_backup = ecore_timer_add(_obj->conf->interval,
                                      conf_backup, _obj);
 
    gotham_modules_command_add("save", ".save",

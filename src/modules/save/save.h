@@ -5,6 +5,7 @@
 #include <Gotham.h>
 #include <cJSON.h>
 
+#include "Module_Common_Azy.h"
 #include "../../lib/gotham/Gotham_Common.h"
 
 #define MODULE_SAVE_CONF SYSCONF_DIR"/gotham/modules.conf.d/save.conf"
@@ -15,7 +16,7 @@ int _module_save_log_dom;
 typedef struct _Module_Save
 {
    Gotham *gotham;
-   unsigned int interval;
+   Module_Save_Conf *conf;
    Ecore_Timer *et_backup;
 } Module_Save;
 
@@ -24,8 +25,6 @@ typedef struct _Module_Save
 #define NFO(...) EINA_LOG_DOM_INFO(_module_save_log_dom, __VA_ARGS__)
 #define ERR(...) EINA_LOG_DOM_ERR(_module_save_log_dom, __VA_ARGS__)
 
-void conf_load(Module_Save *save);
-void conf_save(Module_Save *save);
 Eina_Bool conf_backup(void *data);
 Eina_Bool conf_restore(Module_Save *save);
 
