@@ -377,14 +377,17 @@ src_modules_network_la_SOURCES = \
    src/modules/network/network.c \
    src/modules/network/network.h \
    src/modules/network/event.c \
-   src/modules/network/network_get_win32.c
+   src/modules/network/network_get_win32.c \
+   src/modules/network/Network_Common_Azy.c \
+   src/modules/network/Network_Common_Azy.h \
+   src/modules/network/Network_Common.c \
+   src/modules/network/Network_Common.h
 src_modules_network_la_CFLAGS = \
    $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_network_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
-   $(GOTHAM_LIBS) -Wl,-z,defs \
-   -liphlpapi -lws2_32
+   $(GOTHAM_LIBS) -liphlpapi -lws2_32
 src_modules_network_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_network_la_LIBTOOLFLAGS = --tag=disable-static
