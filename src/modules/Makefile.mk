@@ -1,5 +1,5 @@
 MAINTAINERCLEANFILES += \
-src/lib/modules/seen/*.gc{no,da}
+src/lib/modules/*/*.gc{no,da}
 
 moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
@@ -182,7 +182,44 @@ mod_LTLIBRARIES += \
    src/modules/sysinfo.la \
    src/modules/version.la \
    src/modules/ssh_tunnel.la \
-   src/modules/gdb.la
+   src/modules/gdb.la \
+   src/modules/httpd.la
+
+BUILT_SOURCES += .sources_httpd
+src_modules_httpd_la_SOURCES = \
+   src/modules/httpd/httpd.c \
+   src/modules/httpd/httpd.h \
+   src/modules/httpd/httpd_event.c \
+   src/modules/httpd/httpd_module.c \
+   src/modules/httpd/httpd_queue.c \
+   src/modules/httpd/httpd_spam.c \
+   src/modules/httpd/httpd_uri.c \
+   src/modules/httpd/httpd_uri_network.c \
+   src/modules/httpd/httpd_uri_seen.c \
+   src/modules/httpd/httpd_uri_service.c \
+   src/modules/httpd/httpd_uri_spam.c \
+   src/modules/httpd/httpd_uri_stats.c \
+   src/modules/httpd/httpd_uri_stats_command_list.c \
+   src/modules/httpd/httpd_uri_uptime.c \
+   src/modules/httpd/httpd_utils.c \
+   src/modules/httpd/Httpd_Common_Azy.c \
+   src/modules/httpd/Httpd_Common_Azy.h \
+   src/modules/httpd/Httpd_Common.c \
+   src/modules/httpd/Httpd_Common.h \
+   src/modules/httpd/Httpd_Serve.azy_server.c \
+   src/modules/httpd/Httpd_Serve.azy_server.h
+src_modules_httpd_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_httpd_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS)
+src_modules_httpd_la_LIBADD = \
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
+src_modules_httpd_la_LIBTOOLFLAGS = --tag=disable-static
+.sources_httpd: src/modules/httpd/httpd.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd{,/httpd.azy}
 
 BUILT_SOURCES += .sources_install   
 src_modules_install_la_SOURCES = \

@@ -1,0 +1,151 @@
+Azy_Namespace Httpd;
+
+struct Custom_Variable
+{
+   string                  variable;
+   string                  value;
+};
+
+struct Seen
+{
+   boolean                 online;
+   string                  jid;
+   string                  time;
+   array<Custom_Variable>  vars;
+};
+
+struct Stats_Memory
+{
+   double                  used;
+};
+
+struct Stats_Contact
+{
+   string                  jid;
+   string                  type;
+   boolean                 online;
+};
+
+struct Stats_Query
+{
+   string                  source;
+   string                  command;
+   string                  data;
+   int                     timestamp;
+};
+
+struct Stats
+{
+   double                  uptime;
+   Stats_Memory            memory;
+
+   array<Stats_Contact>    contacts;
+   array<Stats_Query>      queries;
+};
+
+struct Seen_Contact_Var
+{
+   string                  name;
+   string                  value;
+};
+
+struct Seen_Contact
+{
+   string                  jid;
+   string                  state;
+   array<Seen_Contact_Var> vars;
+};
+
+struct Seen_List
+{
+   array<Seen_Contact>     list;
+};
+
+Azy_Module Serve
+{
+<%
+   #include "httpd.h"
+   #include <unistd.h>
+%>
+
+   __init__
+<%
+   (void)module;
+%>
+
+   __shutdown__
+<%
+   (void)module;
+%>
+
+   __download__
+<%
+   const char *path;
+   char *filepath, 
+        *s,
+        *mimetype;
+   Eina_File *ef;
+   size_t size;
+   int r;
+   Module_Httpd_Module *mhm;
+
+   if (azy_net_type_get(net_) == AZY_NET_TYPE_OPTIONS) goto options;
+
+   path = azy_net_uri_get(net_);
+
+   mhm = httpd_uri_find(path);
+   if (mhm)
+     {
+        mhm->cb.func(mhm->cb.data, module, path, azy_server_module_recv_get(module));
+        httpd_uri_stats_query_add(module, path, azy_server_module_recv_get(module));
+        goto end;
+     }
+   filepath = httpd_utils_file_get(path, strlen(path));
+
+DBG("Serving file [%s]", filepath);
+
+   r = access(filepath, R_OK);
+   EINA_SAFETY_ON_TRUE_GOTO(r, not_found_free_filepath);
+
+   ef = eina_file_open(filepath, EINA_FALSE);
+   EINA_SAFETY_ON_NULL_GOTO(ef, internal_free_filepath);
+
+   size = eina_file_size_get(ef);
+
+   s = eina_file_map_all(ef, EINA_FILE_SEQUENTIAL);
+   EINA_SAFETY_ON_NULL_GOTO(s, internal_close_file);
+
+   mimetype = httpd_utils_content_type(filepath);
+   EINA_SAFETY_ON_NULL_GOTO(s, internal_free_s);
+
+   httpd_utils_send(module, net_, (unsigned char *)s, size, mimetype);
+
+   free(mimetype);
+   eina_file_map_free(ef, s);
+   eina_file_close(ef);
+   free(filepath);
+
+end:
+   return EINA_TRUE;
+
+options:
+   httpd_uri_options(module, net_);
+   return EINA_TRUE;
+
+internal_free_s:
+   eina_file_map_free(ef, s);
+internal_close_file:
+   eina_file_close(ef);
+internal_free_filepath:
+   free(filepath);
+   ERR("500 - %s", path);
+   httpd_uri_data(module, NULL, 0, 500);
+   return EINA_TRUE;
+
+not_found_free_filepath:
+   free(filepath);
+   ERR("404 - %s", path);
+   httpd_uri_data(module, NULL, 0, 404);
+   return EINA_TRUE;
+%>
+}

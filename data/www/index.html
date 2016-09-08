@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>gotham-module-httpd</title>
+      <link rel="stylesheet" href="data/css/bootstrap.min.css" media="screen">
+   </head>
+   <body>
+      <script type="text/javascript" src="data/js/deps.js"></script>
+      <script type="text/javascript" src="data/js/date.format.min.js"></script>
+      <script type="text/javascript" src="data/js/jquery.min.js"></script>
+      <script type="text/javascript" src="data/js/handlebars-v4.0.5.js"></script>
+      <script type="text/javascript">
+         Handlebars.registerHelper('date_humanize', function(date) {
+            var newdate = new Date(date*1000);
+            return newdate.format("r");
+         });
+
+         Handlebars.registerHelper('size_humanize', function(size) {
+            return humanFileSize(size, false);
+         });
+
+         Handlebars.registerHelper('seconds_humanize', function(seconds) {
+            return secondsToString(seconds);
+         });
+
+         setInterval(stats_update, 10000);
+         stats_update();
+
+         function stats_update() {
+            $.getJSON('/stats', function(data, textStatus, jqXHr) {
+               $.get('data/tpl/dash.tpl', function(template, textStatus, jqXhr) {
+                  var source = $(template).filter('#tpl_stats').html();
+                  var template = Handlebars.compile(source);
+                  $('#content_stats').html(template(data));
+               });
+            })
+            .done(function() { })
+            .fail(function(jqxhr, textStatus, error) {
+               var err = textStatus + ', ' + error;
+               console.log( "Request Failed: " + err);
+            });
+         }
+      </script>
+   <div class="container">
+      <nav class="navbar navbar-default">
+         <div class="container-fluid">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="#">Alfred's HTTPd module</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+               <ul class="nav navbar-nav">
+                  <li class="active"><a href="/">Dash <span class="sr-only">(current)</span></a></li>
+                  <li><a href="/api.html">API</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+
+      <div id="content_stats">
+
+      </div>
+   </div>
+   </body>
+</html>
+
+

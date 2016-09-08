@@ -26,6 +26,7 @@ rpmbuild/SPECS/@PACKAGE@.spec
 BUILT_SOURCES=
 
 include doc/Makefile.mk
+include data/Makefile.mk
 include src/bin/Makefile.mk
 
 if BUILD_GOTHAM
