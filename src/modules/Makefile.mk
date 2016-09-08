@@ -369,7 +369,8 @@ endif
 
 if BUILD_WINDOWS
 mod_LTLIBRARIES += \
-   src/modules/network.la
+   src/modules/network.la \
+   src/modules/shutdown.la
 
 BUILT_SOURCES += .sources_network
 src_modules_network_la_SOURCES = \
@@ -390,4 +391,20 @@ src_modules_network_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_network: src/modules/network/network.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/network \
 	                    $(top_srcdir)/src/modules/network/network.azy
+
+src_modules_shutdown_la_SOURCES = \
+   src/modules/shutdown/shutdown.c \
+   src/modules/shutdown/shutdown.h \
+   src/modules/shutdown/event.c
+src_modules_shutdown_la_CFLAGS = \
+   $(GOTHAM_CFLAGS) -DDATA_DIR=\"$(datadir)\" \
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_shutdown_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS)
+src_modules_shutdown_la_LIBADD = \
+   src/lib/libgotham.la \
+   src/lib/libcjson.la
+src_modules_shutdown_la_LIBTOOLFLAGS = --tag=disable-static
+
 endif
