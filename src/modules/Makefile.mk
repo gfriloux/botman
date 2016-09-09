@@ -43,10 +43,10 @@ src_modules_alert_la_SOURCES = \
    src/modules/alert/alert.c \
    src/modules/alert/alert.h \
    src/modules/alert/command.c \
-   src/modules/notification/Module_Common_Azy.c \
-   src/modules/notification/Module_Common_Azy.h \
-   src/modules/notification/Module_Common.c \
-   src/modules/notification/Module_Common.h
+   src/modules/alert/Module_Common_Azy.c \
+   src/modules/alert/Module_Common_Azy.h \
+   src/modules/alert/Module_Common.c \
+   src/modules/alert/Module_Common.h
 src_modules_alert_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_alert_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
