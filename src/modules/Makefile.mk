@@ -13,7 +13,30 @@ mod_LTLIBRARIES = \
    src/modules/spam.la \
    src/modules/info.la \
    src/modules/notification.la \
-   src/modules/alert.la
+   src/modules/alert.la \
+   src/modules/services.la
+
+BUILT_SOURCES += .sources_services
+src_modules_services_la_SOURCES = \
+   src/modules/services/services.c \
+   src/modules/services/services.h \
+   src/modules/services/command.c \
+   src/modules/services/command_win32.c \
+   src/modules/services/event.c \
+   src/modules/services/utils.c \
+   src/modules/services/Module_Common_Azy.c \
+   src/modules/services/Module_Common_Azy.h \
+   src/modules/services/Module_Common.c \
+   src/modules/services/Module_Common.h
+src_modules_services_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_services_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS)
+src_modules_services_la_LIBADD = \
+   src/lib/libgotham.la
+.sources_services: src/modules/services/services.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/services \
+	                    $(top_srcdir)/src/modules/services/services.azy
 
 BUILT_SOURCES += .sources_alert
 src_modules_alert_la_SOURCES = \

@@ -1,0 +1,13 @@
+Azy_Namespace Module;
+
+struct Services_Conf_Commands
+{
+   string start;
+   string stop;
+   string restart;
+};
+
+struct Services_Conf
+{
+   Services_Conf_Commands commands;
+};
