@@ -28,12 +28,10 @@ typedef struct _Module_Network
    do {                                                                        \
       if (_a->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
         module_json_answer(".network", _b, EINA_TRUE, _c,                      \
-                           _a->citizen->gotham, _a->citizen->jid);             \
+                           _a->citizen->gotham, _a->citizen, EINA_FALSE);      \
       else gotham_command_send(_a, _c);                                        \
    } while(0)
 /* "debug" */
-
-void module_json_answer(const char *cmd, const char *params, Eina_Bool status, const char *content, Gotham *gotham, const char *jid);
 
 #ifdef _WIN32
 void
