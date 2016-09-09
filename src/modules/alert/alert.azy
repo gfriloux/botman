@@ -1,0 +1,14 @@
+Azy_Namespace Module;
+
+struct Alert_Conf_Command
+{
+   string name;
+   int interval;
+   string command;
+   string group;
+};
+
+struct Alert_Conf
+{
+   array<Alert_Conf_Command> commands;
+};

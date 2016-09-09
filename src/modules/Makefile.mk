@@ -1,5 +1,7 @@
 MAINTAINERCLEANFILES += \
-src/lib/modules/*/*.gc{no,da}
+src/modules/*/*.gc{no,da} \
+src/modules/*/*_Common* \
+src/modules/*/*Serve.azy_*
 
 moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
@@ -10,7 +12,27 @@ mod_LTLIBRARIES = \
    src/modules/save.la \
    src/modules/spam.la \
    src/modules/info.la \
-   src/modules/notification.la
+   src/modules/notification.la \
+   src/modules/alert.la
+
+BUILT_SOURCES += .sources_alert
+src_modules_alert_la_SOURCES = \
+   src/modules/alert/alert.c \
+   src/modules/alert/alert.h \
+   src/modules/alert/command.c \
+   src/modules/notification/Module_Common_Azy.c \
+   src/modules/notification/Module_Common_Azy.h \
+   src/modules/notification/Module_Common.c \
+   src/modules/notification/Module_Common.h
+src_modules_alert_la_CFLAGS = $(GOTHAM_CFLAGS) -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_alert_la_LDFLAGS = \
+   -no-undefined -module -avoid-version \
+   $(GOTHAM_LIBS)
+src_modules_alert_la_LIBADD = \
+   src/lib/libgotham.la
+.sources_alert: src/modules/alert/alert.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/alert \
+	                    $(top_srcdir)/src/modules/alert/alert.azy
 
 BUILT_SOURCES += .sources_notification
 src_modules_notification_la_SOURCES = \
