@@ -61,6 +61,28 @@ struct Seen_List
    array<Seen_Contact>     list;
 };
 
+struct Spam_Answer_Message
+{
+   string jid;
+   string message;
+};
+
+struct Spam_Answer
+{
+   array<Spam_Answer_Message> messages;
+};
+
+struct Module
+{
+   string uri;
+   string description;
+};
+
+struct Module_List
+{
+   array<Module> modules;
+};
+
 Azy_Module Serve
 {
 <%
@@ -81,7 +103,7 @@ Azy_Module Serve
    __download__
 <%
    const char *path;
-   char *filepath, 
+   char *filepath,
         *s,
         *mimetype;
    Eina_File *ef;

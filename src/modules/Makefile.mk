@@ -260,8 +260,7 @@ src_modules_httpd_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_httpd_la_LIBADD = \
-   src/lib/libgotham.la \
-   src/lib/libcjson.la
+   src/lib/libgotham.la
 src_modules_httpd_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_httpd: src/modules/httpd/httpd.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd{,/httpd.azy}

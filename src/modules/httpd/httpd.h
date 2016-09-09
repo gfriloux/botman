@@ -10,8 +10,6 @@
 # include <Gotham.h>
 # include <Azy.h>
 
-# include <cJSON.h>
-
 # include "Httpd_Common_Azy.h"
 # include "Httpd_Common.h"
 # include "Httpd_Serve.azy_server.h"
@@ -100,7 +98,6 @@ void httpd_queue_free(Module_Httpd_Queue *mhq);
 void httpd_spam_init(void);
 Eina_Bool httpd_spam_new(const char *pattern, const char *command, const char *message, Httpd_Queue_Cb func, void *data);
 void httpd_spam(void *spam_data, Azy_Server_Module *module, const char *uri, Azy_Net_Data *data);
-const char * httpd_uri_spam_answer_to_json(Eina_List *answers);
 
 void httpd_uri_options(Azy_Server_Module *module, Azy_Net *net);
 void httpd_uri_data(Azy_Server_Module *module, char *data, size_t len, int http_code);

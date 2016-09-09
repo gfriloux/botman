@@ -12,27 +12,6 @@ httpd_uri_network_init(void)
                     "Documentation for /network");
 }
 
-const char *
-_httpd_uri_network_prepare(Eina_List *answers)
-{
-   cJSON *json;
-   Eina_List *l;
-   char *s;
-   Module_Httpd_Queue_Message *mhqm;
-   json = cJSON_CreateArray();
-   EINA_LIST_FOREACH(answers, l, mhqm)
-     {
-        cJSON *answer;
-        answer = cJSON_CreateObject();
-        cJSON_AddItemToObject(answer, "jid", cJSON_CreateString(mhqm->jid));
-        cJSON_AddItemToObject(answer, "message", cJSON_CreateString(mhqm->message ? mhqm->message : ""));
-        cJSON_AddItemToArray(json, answer);
-     }
-   s = cJSON_Print(json);
-   cJSON_Delete(json);
-   return s;
-}
-
 void
 httpd_uri_network_done(void *data,
                        Httpd_Queue_State state,
@@ -41,7 +20,7 @@ httpd_uri_network_done(void *data,
    Httpd_Uri_Network *hun = data;
    const char *s;
 
-   s = _httpd_uri_network_prepare(answers);
+   s = gotham_serialize_struct_to_string(answers, (Gotham_Serialization_Function)Array_Httpd_Spam_Answer_Message_to_azy_value);
    switch (state)
      {
         case QUEUE_NO_RESULTS:

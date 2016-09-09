@@ -8,31 +8,7 @@ typedef struct _Httpd_Uri_Uptime
 const char *
 _httpd_uri_uptime_prepare(Eina_List *answers)
 {
-   cJSON *json;
-   Eina_List *l;
-   char *s;
-   Module_Httpd_Queue_Message *mhqm;
-
-   json = cJSON_CreateArray();
-
-   EINA_LIST_FOREACH(answers, l, mhqm)
-     {
-        cJSON *answer;
-
-        answer = cJSON_CreateObject();
-
-        cJSON_AddItemToObject(answer, "jid", cJSON_CreateString(mhqm->jid));
-        cJSON_AddItemToObject(answer, "message", cJSON_CreateString(mhqm->message ? mhqm->message : ""));
-
-        DBG("Uptime from [%s] : [%s]", mhqm->jid, mhqm->message);
-
-        cJSON_AddItemToArray(json, answer);
-     }
-
-   s = cJSON_Print(json);
-   cJSON_Delete(json);
-
-   return s;
+   return gotham_serialize_struct_to_string(answers, (Gotham_Serialization_Function)Array_Httpd_Spam_Answer_Message_to_azy_value);
 }
 
 void

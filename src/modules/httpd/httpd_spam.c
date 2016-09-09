@@ -45,35 +45,6 @@ _httpd_spam_timeout(void *data)
    return EINA_FALSE;
 }
 
-const char *
-httpd_uri_spam_answer_to_json(Eina_List *answers)
-{
-   cJSON *json;
-   Eina_List *l;
-   char *s;
-   Module_Httpd_Queue_Message *mhqm;
-
-   json = cJSON_CreateArray();
-
-   EINA_LIST_FOREACH(answers, l, mhqm)
-     {
-        cJSON *answer;
-
-        answer = cJSON_CreateObject();
-
-        cJSON_AddItemToObject(answer, "jid", cJSON_CreateString(mhqm->jid));
-        cJSON_AddItemToObject(answer, "message",
-                              cJSON_CreateString(mhqm->message ? mhqm->message : ""));
-
-        cJSON_AddItemToArray(json, answer);
-     }
-
-   s = cJSON_Print(json);
-   cJSON_Delete(json);
-
-   return s;
-}
-
 Eina_Bool
 httpd_spam_new(const char *pattern,
                const char *command,
@@ -103,28 +74,22 @@ httpd_spam_new(const char *pattern,
 
    EINA_LIST_FOREACH(bots, l, citizen)
      {
-        Module_Httpd_Queue_Message *mhqm;
+        Httpd_Spam_Answer_Message *hsam;
 
-        if (citizen->status != GOTHAM_CITIZEN_STATUS_ONLINE)
-          continue;
+        if (citizen->status != GOTHAM_CITIZEN_STATUS_ONLINE) continue;
 
         DBG("We should add [%s] for command [%s]", citizen->jid, command);
 
-        mhqm = calloc(1, sizeof(Module_Httpd_Queue_Message));
-        EINA_SAFETY_ON_NULL_GOTO(mhqm, end);
+        hsam = Httpd_Spam_Answer_Message_new();
+        EINA_SAFETY_ON_NULL_GOTO(hsam, end);
 
-        mhqm->jid = strdup(citizen->jid);
-        EINA_SAFETY_ON_NULL_GOTO(mhqm->jid, free_mhqm);
+        eina_stringshare_replace(&hsam->jid, citizen->jid);
+        eina_stringshare_replace(&hsam->jid, "");
 
-        DBG("Adding [%s] to queue", mhqm->jid);
-
-        mhq->bots = eina_list_append(mhq->bots, mhqm);
-
+        DBG("Adding [%s] to queue", hsam->jid);
+        mhq->bots = eina_list_append(mhq->bots, hsam);
 end:
         continue;
-
-free_mhqm:
-        free(mhqm);
      }
 
    if (!mhq->bots)

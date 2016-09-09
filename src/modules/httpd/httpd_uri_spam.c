@@ -87,7 +87,7 @@ httpd_uri_spam_done(void *data,
    Httpd_Uri_Spam *hus = data;
    const char *s;
 
-   s = httpd_uri_spam_answer_to_json(answers);
+   s = gotham_serialize_struct_to_string(answers, (Gotham_Serialization_Function)Array_Httpd_Spam_Answer_Message_to_azy_value);
 
    switch (state)
      {

@@ -24,33 +24,30 @@ httpd_uri_stats_command_list(void *stats_data EINA_UNUSED,
                              const char *uri,
                              Azy_Net_Data *data EINA_UNUSED)
 {
-   cJSON *json,
-         *command;
    char *s;
-   Eina_List *l;
+   Eina_List *l,
+             *list = NULL;
    Module_Httpd_Module *mhm;
 
    DBG("uri[%s]", uri);
 
-   json = cJSON_CreateArray();
-   EINA_SAFETY_ON_NULL_GOTO(json, error);
-
    EINA_LIST_FOREACH(_httpd->modules, l, mhm)
      {
-        command = cJSON_CreateObject();
+        Httpd_Module *module;
 
-        cJSON_AddItemToObject(command, "uri", cJSON_CreateString(mhm->uri));
-        cJSON_AddItemToObject(command, "description", cJSON_CreateString(mhm->description));
+        module = Httpd_Module_new();
 
-        cJSON_AddItemToArray(json, command);
+        eina_stringshare_replace(&module->uri, mhm->uri);
+        eina_stringshare_replace(&module->description, mhm->description);
+
+        list = eina_list_append(list, module);
      }
 
-   s = cJSON_Print(json);
-
-   cJSON_Delete(json);
+   s = gotham_serialize_struct_to_string(list, (Gotham_Serialization_Function)Array_Httpd_Module_to_azy_value);
 
    httpd_uri_data(module, s, strlen(s), 200);
    free(s);
+   Array_Httpd_Module_free(list);
    return;
 
 error:
