@@ -10,30 +10,20 @@ module_register(Gotham *gotham)
    int r;
 #endif
 
-   if (gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN)
-     {
-        NFO("Cant load for this gotham type");
-        return NULL;
-     }
+   EINA_SAFETY_ON_TRUE_RETURN_VAL(gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN), NULL);
 
    network = calloc(1, sizeof(Module_Network));
-   if (!network)
-     {
-        ERR("Failed to allocate Module_Network structure");
-        return NULL;
-     }
+   EINA_SAFETY_ON_NULL_RETURN_VAL(network, NULL);
 
    network->gotham = gotham;
-
 #ifdef _WIN32
    r = WSAStartup(MAKEWORD(2, 2), &network->wsadata);
    EINA_SAFETY_ON_TRUE_GOTO(r, free_network);
 #endif
-
    gotham_modules_command_add("network", ".network",
                               "[.network] - "
                               "This command will return the actual network "
-                              "configuration.");
+                              "configuration.", NULL);
 
    return network;
 
