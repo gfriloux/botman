@@ -1,9 +1,20 @@
 <script id="tpl_stats" type="text/html">
 <h1>System informations</h2>
-   <ul>
-      <li>Uptime : {{seconds_humanize uptime}}</li>
-      <li>Memory used : {{size_humanize memory.used}}</li>
-   </ul>
+
+   <div class="row">
+   <div class="col-lg-4">
+      <div class="well text-center">
+         <h3>{{seconds_humanize uptime}}</h3>
+         Uptime
+      </div>
+   </div>
+   <div class="col-lg-3">
+      <div class="well text-center">
+         <h3>{{size_humanize memory.used}}</h3>
+         Memory
+      </div>
+   </div>
+   </div>
 
 <h1>Last 20 queries</h1>
 

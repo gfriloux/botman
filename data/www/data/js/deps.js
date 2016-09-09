@@ -27,5 +27,13 @@ function secondsToString(seconds)
    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-   return numyears + " years " +  numdays + " days " + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+   var result = "";
+
+   if (numyears > 0) result += numyears + " years ";
+   if (numdays > 0) result += numdays + " days ";
+   if (numhours > 0) result += numhours + " hours ";
+   if (numminutes > 0) result += numminutes + " minutes ";
+   result += numseconds + " seconds";
+
+   return result;
 }
