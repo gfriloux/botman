@@ -4,7 +4,6 @@
 
 #include <Eina.h>
 #include <Ecore.h>
-#include <cJSON.h>
 #include <ctype.h>
 
 #include "sysinfo.h"

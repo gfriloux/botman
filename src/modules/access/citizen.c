@@ -258,7 +258,7 @@ citizen_access_add(void *module_data,
 
 /**
  * @brief Sync access levels to botmans.
- * Load access rules in a cJSON structure,
+ * Load access rules in a JSON structure,
  * run through citizens and send access rules if citizen is a Botman.
  * @param module_data Module_Access
  * @param command Incoming message (splitted)

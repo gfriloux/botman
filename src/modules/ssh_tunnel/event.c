@@ -3,7 +3,6 @@
 #endif
 
 #include <Eina.h>
-#include <cJSON.h>
 #include <ctype.h>
 
 #include "ssh_tunnel.h"

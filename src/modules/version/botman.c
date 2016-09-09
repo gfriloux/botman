@@ -5,7 +5,6 @@
 #include "config.h"
 #endif
 
-#include <cJSON.h>
 #include <ctype.h>
 
 #include "version.h"

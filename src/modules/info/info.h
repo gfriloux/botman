@@ -8,7 +8,6 @@
 #include <Eina.h>
 #include <Ecore.h>
 #include <Gotham.h>
-#include <cJSON.h>
 
 #include "Module_Common_Azy.h"
 
