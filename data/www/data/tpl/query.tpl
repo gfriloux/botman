@@ -20,17 +20,16 @@
 </script>
 
 <script id="tpl_query_history" type="text/html">
+  <div class="panel-body">
 {{#.}}
-<a href="#" class="list-group-item">
-   <h4 class="list-group-item-heading">{{jid}}</h4>
-   <p class="list-group-item-text">
-   <pre>
-   {{message}}
-   </pre></p>
-</a>
+    <h4>{{jid}}</h4>
+   <pre>{{message}}</pre>
 {{/.}}
+  </div>
 </script>
 
 <script id="tpl_query_title" type="text/html">
-<a href="#" class="list-group-item active"><h4>{{title}}</h4></a>
+  <div class="panel-heading">
+    <h4 class="panel-title">{{title}}</h4>
+  </div>
 </script>

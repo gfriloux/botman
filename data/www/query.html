@@ -48,26 +48,32 @@
          function query_send(command)
          {
             var json = { title : command };
-            $.get('data/tpl/query.tpl', function(template) {
-               var source = $(template).filter('#tpl_query_title').html();
-               var template = Handlebars.compile(source);
-               $('#query_history').append(template(json));
-            });
+            var text_rendered;
+            var source;
 
             $.post("spam/"+actual_filter, command)
             .done(function(data) {
                $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
-                  var source = $(template).filter('#tpl_query_history').html();
+                  source = $(template).filter('#tpl_query_history').html();
                   var template = Handlebars.compile(source);
-                  $('#query_history').append(template(data));
+
+                  $.get('data/tpl/query.tpl', function(template2) {
+                     source = $(template2).filter('#tpl_query_title').html();
+                     var template2 = Handlebars.compile(source);
+
+                     text_rendered = "<div class=\"panel panel-primary\">";
+                     text_rendered += template2(json);
+                     text_rendered += template(data);
+                     text_rendered += "</div>";
+                     $('#query_history').append(text_rendered);
+                     $('#query_history').animate({ scrollTop: $('#query_history')[0].scrollHeight+9999 }, "slow");
+                  });
                });
             })
             .fail(function(jqxhr, textStatus, error) {
                var err = textStatus + ', ' + error;
                console.log( "Request Failed: " + err);
             });
-
-            $('#query_history').animate({ scrollTop: $('#query_history')[0].scrollHeight+9999 }, "slow");
          }
 
          filter_update("*");
@@ -100,7 +106,7 @@
 
          <div class="row">
             <div class="col-lg-9">
-               <div class="list-group" id="query_history">
+               <div id="query_history">
                </div>
                <div class="input-group">
                  <span class="input-group-addon">$</span>
