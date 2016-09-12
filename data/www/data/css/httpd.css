@@ -47,3 +47,11 @@
 {
   color: #800080;
 }
+
+#query_history
+{
+  height: 450px;
+  text-align: left;
+  border: 1px solid #ACD8F0;
+  overflow: auto;
+}
