@@ -18,6 +18,7 @@
          function seen_query(filter)
          {
             var uri = "seen/"+filter;
+            console.log("Querying seen uri "+uri);
             $.getJSON(uri, function(data, textStatus, jqXHr) {
                $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
                   var source = $(template).filter('#tpl_query_bot_list').html();
@@ -35,11 +36,10 @@
          function filter_update(filter_attr)
          {
             var json = { filter : filter_attr };
-            console.log("filter : "+json);
+            console.log("Updating filter to : "+filter_attr);
             $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
                var source = $(template).filter('#tpl_query_bot_filter').html();
                var template = Handlebars.compile(source);
-               console.log("filter : "+json);
                $('#query_bot_filter').html(template(json));
             });
             actual_filter = filter_attr;
@@ -47,11 +47,13 @@
 
          function query_send(command)
          {
+            var uri = "spam/"+actual_filter;
             var json = { title : command };
             var text_rendered;
             var source;
 
-            $.post("spam/"+actual_filter, command)
+            console.log("Querying spam uri "+uri);
+            $.post(uri, command)
             .done(function(data) {
                $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
                   source = $(template).filter('#tpl_query_history').html();

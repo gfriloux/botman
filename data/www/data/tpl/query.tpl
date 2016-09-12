@@ -30,6 +30,6 @@
 
 <script id="tpl_query_title" type="text/html">
   <div class="panel-heading">
-    <h4 class="panel-title">{{title}}</h4>
+    <h4 class="panel-title"><b>{{title}}</b></h4>
   </div>
 </script>
