@@ -84,7 +84,7 @@ httpd_spam_new(const char *pattern,
         EINA_SAFETY_ON_NULL_GOTO(hsam, end);
 
         eina_stringshare_replace(&hsam->jid, citizen->jid);
-        eina_stringshare_replace(&hsam->jid, "");
+        eina_stringshare_replace(&hsam->message, "");
 
         DBG("Adding [%s] to queue", hsam->jid);
         mhq->bots = eina_list_append(mhq->bots, hsam);

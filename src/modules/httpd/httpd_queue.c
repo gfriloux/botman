@@ -22,17 +22,9 @@ httpd_queue_add(Module_Httpd_Queue *mhq)
 }
 
 void
-_httpd_queue_message_free(Module_Httpd_Queue_Message *mhqm)
-{
-   free((char *)mhqm->jid);
-   free((char *)mhqm->message);
-   free(mhqm);
-}
-
-void
 httpd_queue_free(Module_Httpd_Queue *mhq)
 {
-   Module_Httpd_Queue_Message *mhqm;
+   Httpd_Spam_Answer_Message *hsam;
 
    free((char *)mhq->command);
 
@@ -41,8 +33,8 @@ httpd_queue_free(Module_Httpd_Queue *mhq)
         ecore_timer_del(mhq->timeout);
         mhq->timeout = NULL;
      }
-   EINA_LIST_FREE(mhq->bots, mhqm)
-     _httpd_queue_message_free(mhqm);
+   EINA_LIST_FREE(mhq->bots, hsam)
+     Httpd_Spam_Answer_Message_free(hsam);
 
    free((char *)mhq);
 }
@@ -50,11 +42,11 @@ httpd_queue_free(Module_Httpd_Queue *mhq)
 void
 _httpd_queue_complete(Module_Httpd_Queue *mhq)
 {
-   Module_Httpd_Queue_Message *mhqm;
+   Httpd_Spam_Answer_Message *hsam;
    Eina_List *l;
 
-   EINA_LIST_FOREACH(mhq->bots, l, mhqm)
-     if (!mhqm->message) return;
+   EINA_LIST_FOREACH(mhq->bots, l, hsam)
+     if (!hsam->message) return;
 
    DBG("Complete !");
    mhq->cb.func(mhq->cb.data, QUEUE_COMPLETE, mhq->bots);
@@ -63,11 +55,11 @@ _httpd_queue_complete(Module_Httpd_Queue *mhq)
    httpd_queue_free(mhq);
 }
 
-char *
+const char *
 _httpd_queue_perform_stringify(const char **lines)
 {
    Eina_Strbuf *buf;
-   char *s;
+   const char *s;
    unsigned int i = 0;
 
    buf = eina_strbuf_new();
@@ -81,7 +73,7 @@ next:
         eina_strbuf_append(buf, lines[i]);
      }
 
-   s = eina_strbuf_string_steal(buf);
+   s = eina_stringshare_add(eina_strbuf_string_steal(buf));
    eina_strbuf_free(buf);
    return s;
 }
@@ -90,10 +82,10 @@ void
 httpd_queue_perform(Gotham_Citizen_Command *command)
 {
    Module_Httpd_Queue *mhq;
-   Module_Httpd_Queue_Message *mhqm;
+   Httpd_Spam_Answer_Message *hsam;
    Eina_List *l,
              *l2;
-   char *s;
+   const char *s;
 
    DBG("command->name[%s]", command->name);
 
@@ -106,18 +98,18 @@ httpd_queue_perform(Gotham_Citizen_Command *command)
         if (strcmp(mhq->command, command->name))
           continue;
 
-        EINA_LIST_FOREACH(mhq->bots, l2, mhqm)
+        EINA_LIST_FOREACH(mhq->bots, l2, hsam)
            {
-              if (mhqm->message) continue;
+              if (hsam->message[0]) continue;
 
-              DBG("command->jid[%s] <-> mhqm->jid[%s]", command->jid, mhqm->jid);
+              DBG("command->jid[%s] <-> hsam->jid[%s]", command->jid, hsam->jid);
 
-              if (strncmp(command->jid, mhqm->jid, strlen(mhqm->jid))) continue;
+              if (strncmp(command->jid, hsam->jid, strlen(hsam->jid))) continue;
 
               s = _httpd_queue_perform_stringify(command->command);
 
               DBG("Adding message [%s]", s);
-              mhqm->message = s;
+              hsam->message = s;
               _httpd_queue_complete(mhq);
            }
      }
