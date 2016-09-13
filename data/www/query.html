@@ -148,19 +148,33 @@
       </nav>
 
       <div id="content_query">
-
          <div class="row">
             <div class="col-lg-9">
                <div id="query_history">
                </div>
-               <div class="input-group">
-                 <span class="input-group-addon">$</span>
-                 <input type="text" class="form-control" id="query_command">
-                 <span class="input-group-btn">
-                 <button class="btn btn-default" type="button" id="query_send">Send</button>
-                 <button class="btn btn-danger" type="button" id="query_clear">Clear</button>
-                 </span>
-               </div>
+
+               <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                        <ul class="nav navbar-nav">
+                          <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Command <span class="caret"></span></a>
+                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="#" id="query_command_uptime">Get uptime</a></li>
+                                <li><a href="#" id="query_command_process">List processes</a></li>
+                                <li><a href="#" id="query_command_coredumps">List coredumps</a></li>
+                                <li><a href="#" id="query_command_version">Get software versions</a></li>
+                             </ul>
+                          </li>
+                        </ul>
+                     <div class="navbar-form" role="search">
+                        <input type="text" class="form-control" placeholder="Command" id="query_command">
+                        <button class="btn btn-default" id="query_send">Submit</button>
+                        <button class="btn btn-danger" id="query_clear">Clear</button>
+                     </div>
+                     </div>
+                  </div>
+               </nav>
             </div>
             <div class="col-lg-3">
                <div id="query_bot_filter">
@@ -172,7 +186,7 @@
 
       </div>
    </div>
-      <script type="text/javascript">   
+      <script type="text/javascript">
          $("#query_send").click(function() {
             query_send($("#query_command").val());
          });
@@ -181,9 +195,20 @@
             $("#query_history").html('');
          });
 
-         $('#query_command').keyup(function(e){
-            if (e.keyCode == 13)
-              query_send($("#query_command").val());
+         $("#query_command_uptime").click(function() {
+            $('#query_command').val(".uptime");
+         });
+
+         $("#query_command_process").click(function() {
+            $('#query_command').val(".psax");
+         });
+
+         $("#query_command_coredumps").click(function() {
+            $('#query_command').val(".gdb list");
+         });
+
+         $("#query_command_version").click(function() {
+            $('#query_command').val(".version");
          });
       </script>
    </body>
