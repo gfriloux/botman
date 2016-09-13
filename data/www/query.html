@@ -47,12 +47,8 @@
                $('#filter_button').on('click', function (event) {
                   var len;
 
-                  event.preventDefault();
-                  console.log("CLICK CLICK");
-                  $('#filter_edit').addClass('active');
                   $('#filter_edit').show();
                   $('#filter_input').show();
-                  //$('#filter_button').hide();
                   $('#filter_button').css('z-index', -10);
                   $('#filter_input').css('z-index', 10);
                   $('#filter_input').focus();
@@ -66,6 +62,7 @@
                   $('#filter_button').show();
                   $('#filter_button').css('z-index', 10);
                   $('#filter_input').css('z-index', -10);
+                  $('#filter_input').val(actual_filter);
                });
 
                $('#filter_edit').keyup(function(e){
@@ -83,12 +80,6 @@
                });
 
                $("#query_filter_reset").click(function() {
-                  console.log("Reset click!");
-                  filter_update("*");
-                  seen_query("*");                  
-               });
-
-               $("#query_filter_set").click(function() {
                   console.log("Reset click!");
                   filter_update("*");
                   seen_query("*");                  
