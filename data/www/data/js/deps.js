@@ -44,3 +44,9 @@ Handlebars.registerHelper('if_eq', function(a, b, opts)
      return opts.fn(this);
    return opts.inverse(this);
 });
+
+Handlebars.registerHelper('jid_username', function(jid) {
+   var pos = jid.indexOf("@");
+   var str = jid.substr(0, pos);
+   return str;
+});

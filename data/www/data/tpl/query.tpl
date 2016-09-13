@@ -17,9 +17,9 @@
 <div class="list-group">
   {{#.}}
   {{#if_eq state "online"}}
-  <a href="#" class="list-group-item"><span class="text-success">{{jid}}</span></a>
+  <a href="#" class="list-group-item"><span class="text-success">{{jid_username jid}}</span></a>
   {{else}}
-  <a href="#" class="list-group-item"><span class="text-danger">{{jid}}</span></a>
+  <a href="#" class="list-group-item"><span class="text-danger">{{jid_username jid}}</span></a>
   {{/if_eq}}
   {{/.}}
 </div>
@@ -28,7 +28,7 @@
 <script id="tpl_query_history" type="text/html">
   <div class="panel-body">
 {{#.}}
-    <h4>{{jid}}</h4>
+    <h4>{{jid_username jid}}</h4>
    <pre>{{message}}</pre>
 {{/.}}
   </div>
