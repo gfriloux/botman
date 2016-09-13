@@ -188,7 +188,17 @@
    </div>
       <script type="text/javascript">
          $("#query_send").click(function() {
+            var str = $("#query_command").val();
+            if (!str || str === "") return;
+            query_send(str);
+            $("#query_command").val("");
+         });
+
+         $('#query_command').keyup(function(e){
+            if (e.keyCode != 13) return;
+
             query_send($("#query_command").val());
+            $("#query_command").val("");
          });
 
          $("#query_clear").click(function() {
