@@ -7,11 +7,11 @@
       <link rel="stylesheet" href="data/css/httpd.css" media="screen">
    </head>
    <body>
-      <script type="text/javascript" src="data/js/deps.js"></script>
       <script type="text/javascript" src="data/js/date.format.min.js"></script>
       <script type="text/javascript" src="data/js/jquery.min.js"></script>
       <script type="text/javascript" src="data/js/handlebars-v4.0.5.js"></script>
       <script type="text/javascript" src="data/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="data/js/deps.js"></script>
       <script type="text/javascript">
          var actual_filter;
 
@@ -26,7 +26,7 @@
                   $('#query_bot_list').html(template(data));
                });
             })
-            .done(function() { })
+            .done(function() {})
             .fail(function(jqxhr, textStatus, error) {
                var err = textStatus + ', ' + error;
                console.log( "Request Failed: " + err);
@@ -41,6 +41,58 @@
                var source = $(template).filter('#tpl_query_bot_filter').html();
                var template = Handlebars.compile(source);
                $('#query_bot_filter').html(template(json));
+
+               $('#filter_edit').hide();
+
+               $('#filter_button').on('click', function (event) {
+                  var len;
+
+                  event.preventDefault();
+                  console.log("CLICK CLICK");
+                  $('#filter_edit').addClass('active');
+                  $('#filter_edit').show();
+                  $('#filter_input').show();
+                  //$('#filter_button').hide();
+                  $('#filter_button').css('z-index', -10);
+                  $('#filter_input').css('z-index', 10);
+                  $('#filter_input').focus();
+
+                  len = $('#filter_input').length * 2;
+                  $('#filter_input')[0].setSelectionRange(len, len);
+               });
+
+               $('#filter_input').focusout(function() {
+                  $('#filter_edit').hide();
+                  $('#filter_button').show();
+                  $('#filter_button').css('z-index', 10);
+                  $('#filter_input').css('z-index', -10);
+               });
+
+               $('#filter_edit').keyup(function(e){
+                  if (e.keyCode != 13) return;
+
+                  $('#filter_edit').hide();
+                  $('#filter_button').show();
+                  seen_query($("#filter_input").val());
+                  filter_update($("#filter_input").val());
+               });
+
+               $("#query_filter_refresh").click(function() {
+                  console.log("Refresh click!");
+                  seen_query(filter_attr);                  
+               });
+
+               $("#query_filter_reset").click(function() {
+                  console.log("Reset click!");
+                  filter_update("*");
+                  seen_query("*");                  
+               });
+
+               $("#query_filter_set").click(function() {
+                  console.log("Reset click!");
+                  filter_update("*");
+                  seen_query("*");                  
+               });
             });
             actual_filter = filter_attr;
          }

@@ -55,3 +55,23 @@
 //  border: 1px solid #ACD8F0;
   overflow: auto;
 }
+
+#filter
+{
+  position: relative;
+}
+
+#filter_edit
+{
+  position: absolute;
+  top:0;
+  left:-100;
+  width:100%;
+  overflow:hidden;
+  transition:all 1s ease-in;
+//  visibility: hidden;
+}
+
+#filter_edit.active {
+  left: 0;
+}

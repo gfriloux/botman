@@ -1,12 +1,14 @@
 <script id="tpl_query_bot_filter" type="text/html">
-  <div class="btn-group">
-    <a href="#" class="btn btn-danger">Filter : {{filter}}</a>
+  <div class="btn-group" id="filter">
+    <a href="#" class="btn btn-danger" id="filter_button">Filter : {{filter}}</a>
+    <div id="filter_edit">
+       <input type="text" value="{{filter}}" id="filter_input"/>
+    </div>
     <a href="#" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-      <li><a href="#">Set</a></li>
-      <li><a href="#">Refresh</a></li>
+      <li><a href="#" id="query_filter_refresh">Refresh</a></li>
       <li class="divider"></li>
-      <li><a href="#">Reset</a></li>
+      <li><a href="#" id="query_filter_reset">Reset</a></li>
     </ul>
   </div>
 </script>
@@ -14,7 +16,11 @@
 <script id="tpl_query_bot_list" type="text/html">
 <div class="list-group">
   {{#.}}
-  <a href="#" class="list-group-item">{{jid}}</a>
+  {{#if_eq state "online"}}
+  <a href="#" class="list-group-item"><span class="text-success">{{jid}}</span></a>
+  {{else}}
+  <a href="#" class="list-group-item"><span class="text-danger">{{jid}}</span></a>
+  {{/if_eq}}
   {{/.}}
 </div>
 </script>
