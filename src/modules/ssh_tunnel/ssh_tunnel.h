@@ -17,14 +17,6 @@ typedef struct _Module_Ssh_Tunnel
    Gotham *gotham;
    Module_Ssh_Tunnel_Conf *conf;
 
-   struct
-   {
-      const char *host,
-                 *login,
-                 *key;
-      unsigned int port;
-   } infos;
-
    struct {
       unsigned int port;
       pid_t pid;

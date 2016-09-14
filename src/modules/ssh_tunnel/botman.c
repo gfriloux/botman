@@ -260,8 +260,8 @@ ssh_tunnel_on(void *data,
                              "ssh -p %u -i \"%s\" "
                              "-N -R0:localhost:22 "
                              "-l \"%s\" \"%s\" 2>&1",
-                             obj->infos.port, obj->infos.key,
-                             obj->infos.login, obj->infos.host);
+                             obj->conf->port, obj->conf->key,
+                             obj->conf->login, obj->conf->host);
    DBG("Issueing command : %s", eina_strbuf_string_get(buf));
    obj->tunnel.exe = ecore_exe_pipe_run(eina_strbuf_string_get(buf),
                                         ECORE_EXE_PIPE_READ_LINE_BUFFERED |
@@ -324,6 +324,8 @@ ssh_tunnel_get(void *data,
 {
    Module_Ssh_Tunnel *obj = data;
    Eina_Strbuf *buf;
+
+   if (command->command[1]) return;
 
    buf = eina_strbuf_new();
 
