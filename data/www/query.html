@@ -164,6 +164,10 @@
                                 <li><a href="#" id="query_command_process">List processes</a></li>
                                 <li><a href="#" id="query_command_coredumps">List coredumps</a></li>
                                 <li><a href="#" id="query_command_version">Get software versions</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" id="query_command_ssh">Show SSH tunnel informations</a></li>
+                                <li><a href="#" id="query_command_ssh_on">Open SSH tunnel</a></li>
+                                <li><a href="#" id="query_command_ssh_off">Close SSH tunnel</a></li>
                              </ul>
                           </li>
                         </ul>
@@ -219,6 +223,18 @@
 
          $("#query_command_version").click(function() {
             $('#query_command').val(".version");
+         });
+
+         $("#query_command_ssh").click(function() {
+            $('#query_command').val(".ssh");
+         });
+
+         $("#query_command_ssh_on").click(function() {
+            $('#query_command').val(".ssh on");
+         });
+
+         $("#query_command_ssh_off").click(function() {
+            $('#query_command').val(".ssh off");
          });
       </script>
    </body>
