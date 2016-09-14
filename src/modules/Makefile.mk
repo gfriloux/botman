@@ -263,7 +263,7 @@ src_modules_httpd_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_httpd_la_LIBTOOLFLAGS = --tag=disable-static
 .sources_httpd: src/modules/httpd/httpd.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd{,/httpd.azy}
+	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd $(top_srcdir)/src/modules/httpd/httpd.azy
 
 BUILT_SOURCES += .sources_install   
 src_modules_install_la_SOURCES = \
