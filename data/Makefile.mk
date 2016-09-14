@@ -10,6 +10,7 @@ EXTRA_DIST += \
    data/www/data/img/Unidentified.png \
    data/www/data/js/date.format.min.js \
    data/www/data/js/deps.js \
+   data/www/data/js/query.js \
    data/www/data/js/jquery.min.js \
    data/www/data/js/handlebars-v4.0.5.js \
    data/www/data/js/bootstrap.min.js \
@@ -39,6 +40,7 @@ jsdir = $(datarootdir)/gotham/modules.d/httpd/www/data/js
 js_DATA = \
    data/www/data/js/date.format.min.js \
    data/www/data/js/deps.js \
+   data/www/data/js/query.js \
    data/www/data/js/jquery.min.js \
    data/www/data/js/handlebars-v4.0.5.js \
    data/www/data/js/bootstrap.min.js

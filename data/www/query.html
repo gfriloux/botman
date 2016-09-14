@@ -12,118 +12,7 @@
       <script type="text/javascript" src="data/js/handlebars-v4.0.5.js"></script>
       <script type="text/javascript" src="data/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="data/js/deps.js"></script>
-      <script type="text/javascript">
-         var actual_filter;
-
-         function seen_query(filter)
-         {
-            var uri = "seen/"+filter;
-            console.log("Querying seen uri "+uri);
-            $.getJSON(uri, function(data, textStatus, jqXHr) {
-               $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
-                  var source = $(template).filter('#tpl_query_bot_list').html();
-                  var template = Handlebars.compile(source);
-                  $('#query_bot_list').html(template(data));
-               });
-            })
-            .done(function() {})
-            .fail(function(jqxhr, textStatus, error) {
-               var err = textStatus + ', ' + error;
-               console.log( "Request Failed: " + err);
-            });
-         }
-
-         function filter_update(filter_attr)
-         {
-            var json = { filter : filter_attr };
-            console.log("Updating filter to : "+filter_attr);
-            $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
-               var source = $(template).filter('#tpl_query_bot_filter').html();
-               var template = Handlebars.compile(source);
-               $('#query_bot_filter').html(template(json));
-
-               $('#filter_edit').hide();
-
-               $('#filter_button').on('click', function (event) {
-                  var len;
-
-                  $('#filter_edit').show();
-                  $('#filter_input').show();
-                  $('#filter_button').css('z-index', -10);
-                  $('#filter_input').css('z-index', 10);
-                  $('#filter_input').focus();
-
-                  len = $('#filter_input').length * 2;
-                  $('#filter_input')[0].setSelectionRange(len, len);
-               });
-
-               $('#filter_input').focusout(function() {
-                  $('#filter_edit').hide();
-                  $('#filter_button').show();
-                  $('#filter_button').css('z-index', 10);
-                  $('#filter_input').css('z-index', -10);
-                  $('#filter_input').val(actual_filter);
-               });
-
-               $('#filter_edit').keyup(function(e){
-                  if (e.keyCode != 13) return;
-
-                  $('#filter_edit').hide();
-                  $('#filter_button').show();
-                  seen_query($("#filter_input").val());
-                  filter_update($("#filter_input").val());
-               });
-
-               $("#query_filter_refresh").click(function() {
-                  console.log("Refresh click!");
-                  seen_query(filter_attr);                  
-               });
-
-               $("#query_filter_reset").click(function() {
-                  console.log("Reset click!");
-                  filter_update("*");
-                  seen_query("*");                  
-               });
-            });
-            actual_filter = filter_attr;
-         }
-
-         function query_send(command)
-         {
-            var uri = "spam/"+actual_filter;
-            var json = { title : command };
-            var text_rendered;
-            var source;
-
-            console.log("Querying spam uri "+uri);
-            $.post(uri, command)
-            .done(function(data) {
-               $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
-                  source = $(template).filter('#tpl_query_history').html();
-                  var template = Handlebars.compile(source);
-
-                  $.get('data/tpl/query.tpl', function(template2) {
-                     source = $(template2).filter('#tpl_query_title').html();
-                     var template2 = Handlebars.compile(source);
-
-                     text_rendered = "<div class=\"panel panel-primary\">";
-                     text_rendered += template2(json);
-                     text_rendered += template(data);
-                     text_rendered += "</div>";
-                     $('#query_history').append(text_rendered);
-                     $('#query_history').animate({ scrollTop: $('#query_history')[0].scrollHeight+9999 }, "slow");
-                  });
-               });
-            })
-            .fail(function(jqxhr, textStatus, error) {
-               var err = textStatus + ', ' + error;
-               console.log( "Request Failed: " + err);
-            });
-         }
-
-         filter_update("*");
-         seen_query("*");
-      </script>
+      <script type="text/javascript" src="data/js/query.js"></script>
    <div class="container">
       <nav class="navbar navbar-default">
          <div class="container-fluid">
@@ -159,23 +48,7 @@
                         <ul class="nav navbar-nav">
                           <li class="dropdown">
                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Command <span class="caret"></span></a>
-                             <ul class="dropdown-menu" role="menu">
-                                <li>System informations</li>
-                                <li><a href="#" id="query_command_uptime">Get uptime</a></li>
-                                <li><a href="#" id="query_command_process">List processes</a></li>
-                                <li><a href="#" id="query_command_version">Get software versions</a></li>
-                                <li class="divider"></li>
-                                <li>Debugging commands</li>
-                                <li><a href="#" id="query_command_gdb_list">List coredumps</a></li>
-                                <li><a href="#" id="query_command_gdb_fetch">Retrieve Backtrace from coredump</a></li>
-                                <li><a href="#" id="query_command_gdb_delete">Delete coredump</a></li>
-                                <li class="divider"></li>
-                                <li>Maintenance commands</li>
-                                <li><a href="#" id="query_command_ssh">Show SSH tunnel informations</a></li>
-                                <li><a href="#" id="query_command_ssh_on">Open SSH tunnel</a></li>
-                                <li><a href="#" id="query_command_ssh_off">Close SSH tunnel</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#" id="query_command_reboot">Reboot</a></li>
+                             <ul class="dropdown-menu" role="menu" id="commands">
                              </ul>
                           </li>
                         </ul>
@@ -199,63 +72,9 @@
       </div>
    </div>
       <script type="text/javascript">
-         $("#query_send").click(function() {
-            var str = $("#query_command").val();
-            if (!str || str === "") return;
-            query_send(str);
-            $("#query_command").val("");
-         });
-
-         $('#query_command').keyup(function(e){
-            if (e.keyCode != 13) return;
-
-            query_send($("#query_command").val());
-            $("#query_command").val("");
-         });
-
-         $("#query_clear").click(function() {
-            $("#query_history").html('');
-         });
-
-         $("#query_command_uptime").click(function() {
-            $('#query_command').val(".uptime");
-         });
-
-         $("#query_command_process").click(function() {
-            $('#query_command').val(".psax");
-         });
-
-         $("#query_command_gdb_list").click(function() {
-            $('#query_command').val(".gdb list");
-         });
-
-         $("#query_command_gdb_fetch").click(function() {
-            $('#query_command').val(".gdb fetch coredump_filename");
-         });
-
-         $("#query_command_gdb_delete").click(function() {
-            $('#query_command').val(".gdb delete coredump_filename");
-         });
-
-         $("#query_command_version").click(function() {
-            $('#query_command').val(".version");
-         });
-
-         $("#query_command_ssh").click(function() {
-            $('#query_command').val(".ssh");
-         });
-
-         $("#query_command_ssh_on").click(function() {
-            $('#query_command').val(".ssh on");
-         });
-
-         $("#query_command_ssh_off").click(function() {
-            $('#query_command').val(".ssh off");
-         });
-
-         $("#query_command_reboot").click(function() {
-            $('#query_command').val(".reboot");
-         });
+         register_events();
+         filter_update("*");
+         seen_query("*");
       </script>
    </body>
 </html>
