@@ -160,14 +160,22 @@
                           <li class="dropdown">
                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Command <span class="caret"></span></a>
                              <ul class="dropdown-menu" role="menu">
+                                <li>System informations</li>
                                 <li><a href="#" id="query_command_uptime">Get uptime</a></li>
                                 <li><a href="#" id="query_command_process">List processes</a></li>
-                                <li><a href="#" id="query_command_coredumps">List coredumps</a></li>
                                 <li><a href="#" id="query_command_version">Get software versions</a></li>
                                 <li class="divider"></li>
+                                <li>Debugging commands</li>
+                                <li><a href="#" id="query_command_gdb_list">List coredumps</a></li>
+                                <li><a href="#" id="query_command_gdb_fetch">Retrieve Backtrace from coredump</a></li>
+                                <li><a href="#" id="query_command_gdb_delete">Delete coredump</a></li>
+                                <li class="divider"></li>
+                                <li>Maintenance commands</li>
                                 <li><a href="#" id="query_command_ssh">Show SSH tunnel informations</a></li>
                                 <li><a href="#" id="query_command_ssh_on">Open SSH tunnel</a></li>
                                 <li><a href="#" id="query_command_ssh_off">Close SSH tunnel</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" id="query_command_reboot">Reboot</a></li>
                              </ul>
                           </li>
                         </ul>
@@ -217,8 +225,16 @@
             $('#query_command').val(".psax");
          });
 
-         $("#query_command_coredumps").click(function() {
+         $("#query_command_gdb_list").click(function() {
             $('#query_command').val(".gdb list");
+         });
+
+         $("#query_command_gdb_fetch").click(function() {
+            $('#query_command').val(".gdb fetch coredump_filename");
+         });
+
+         $("#query_command_gdb_delete").click(function() {
+            $('#query_command').val(".gdb delete coredump_filename");
          });
 
          $("#query_command_version").click(function() {
@@ -235,6 +251,10 @@
 
          $("#query_command_ssh_off").click(function() {
             $('#query_command').val(".ssh off");
+         });
+
+         $("#query_command_reboot").click(function() {
+            $('#query_command').val(".reboot");
          });
       </script>
    </body>
