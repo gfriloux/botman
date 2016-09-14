@@ -87,6 +87,28 @@ function seen_query(filter)
    });
 }
 
+function filter_input_show()
+{
+   var len;
+
+   $('#filter_edit').show();
+   $('#filter_input').show();
+   $('#filter_button').css('z-index', -10);
+   $('#filter_input').css('z-index', 10);
+   $('#filter_input').focus();
+
+   len = $('#filter_input').length * 2;
+   $('#filter_input')[0].setSelectionRange(len, len);
+}
+
+function filter_input_hide()
+{
+   $('#filter_edit').hide();
+   $('#filter_button').show();
+   $('#filter_button').css('z-index', 10);
+   $('#filter_input').css('z-index', -10);
+}
+
 function filter_update(filter_attr)
 {
    var json = { filter : filter_attr };
@@ -99,31 +121,17 @@ function filter_update(filter_attr)
       $('#filter_edit').hide();
 
       $('#filter_button').on('click', function (event) {
-         var len;
-
-         $('#filter_edit').show();
-         $('#filter_input').show();
-         $('#filter_button').css('z-index', -10);
-         $('#filter_input').css('z-index', 10);
-         $('#filter_input').focus();
-
-         len = $('#filter_input').length * 2;
-         $('#filter_input')[0].setSelectionRange(len, len);
+         filter_input_show();
       });
 
       $('#filter_input').focusout(function() {
-         $('#filter_edit').hide();
-         $('#filter_button').show();
-         $('#filter_button').css('z-index', 10);
-         $('#filter_input').css('z-index', -10);
-         $('#filter_input').val(actual_filter);
+         filter_input_hide();
       });
 
       $('#filter_edit').keyup(function(e){
          if (e.keyCode != 13) return;
 
-         $('#filter_edit').hide();
-         $('#filter_button').show();
+         filter_input_hide();
          seen_query($("#filter_input").val());
          filter_update($("#filter_input").val());
       });
@@ -160,7 +168,7 @@ function query_send(command)
             source = $(template2).filter('#tpl_query_title').html();
             var template2 = Handlebars.compile(source);
 
-            text_rendered = "<div class=\"panel panel-primary\">";
+            text_rendered  = "<div class=\"panel panel-primary\">";
             text_rendered += template2(json);
             text_rendered += template(data);
             text_rendered += "</div>";
