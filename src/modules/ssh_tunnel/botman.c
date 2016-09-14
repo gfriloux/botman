@@ -169,7 +169,7 @@ ssh_tunnel_cb_data(void *data,
      }
 
    eina_strbuf_free(data_buf);
-   gotham_command_json_answer(".ssh", cmd->command[1], ok, buf,
+   gotham_command_json_answer(".ssh", cmd->command[1] ? cmd->command[1] : "", ok, buf,
                               obj->gotham, cmd->citizen, EINA_TRUE);
    eina_strbuf_free(buf);
 
