@@ -185,6 +185,10 @@ function query_send(command)
         query_send_default(data, command, '#tpl_query_uptime');
       else if (command.startsWith(".version") == true)
         query_send_default(data, command, '#tpl_query_version');
+      else if (command.startsWith(".ssh") == true)
+        query_send_default(data, command, '#tpl_query_ssh');
+      else if (command.startsWith(".gdb list") == true)
+        query_send_default(data, command, '#tpl_query_gdb_list');
       else query_send_default(data, command, '#tpl_query_history');
    })
    .fail(function(jqxhr, textStatus, error) {
@@ -260,6 +264,38 @@ function parse_version(version)
   return version_json;
 }
 
+function parse_gdb_list(list)
+{
+  var gdb_list = [];
+  var gdb_array = list.split("\n\t");
+  var len = gdb_array.length;
+
+  for (i=1; i<len; i++)
+  {
+    var filename;
+    var size;
+    var date;
+    var tmp = gdb_array[i];
+    var l;
+
+    l = tmp.indexOf(" ");
+    filename = tmp.substr(0, l);
+    tmp = tmp.replace(filename, "");
+    tmp = tmp.ltrim();
+
+    l = tmp.indexOf(" ");
+    size = tmp.substr(0, l);
+    tmp = tmp.replace(size, "");
+    tmp = tmp.ltrim();
+
+    date = tmp;
+    gdb_list.push({filename : filename, size : size, date : date});
+  }
+
+  //console.log(JSON.stringify(gdb_list, null, 4));
+  return gdb_list;
+}
+
 Handlebars.registerHelper('query_uptime', function(message) {
    var json = parse_uptime(message);
    var text;
@@ -284,6 +320,24 @@ Handlebars.registerHelper('query_version', function(message) {
    {
       version = json[i];
       text += "<tr><td>"+version.name+"</td><td>"+version.version+"</td></tr>";
+   }
+   text += "</table>";
+   return text;
+});
+
+Handlebars.registerHelper('query_gdb_list', function(message) {
+   var json = parse_gdb_list(message);
+   var text = "";
+   var coredump;
+   var i;
+   var l = json.length;
+
+   text += "<table class=\"table table-striped table-hover\">";
+   text += "<thead><tr><th>Filename</th><th>Size</th><th>Date</th></tr></thead>";
+   for (i=0; i < l; i++)
+   {
+      coredump = json[i];
+      text += "<tr><td>"+coredump.filename.replace("/var/dumps/", "")+"</td><td>"+humanFileSize(coredump.size,1024)+"</td><td>"+coredump.date+"</td></tr>";
    }
    text += "</table>";
    return text;

@@ -4,6 +4,10 @@ if (!String.prototype.trim) {
   };
 }
 
+String.prototype.ltrim = function() {
+   return this.replace(/^\s+/,"");
+}
+
 function humanFileSize(bytes, si) {
     var thresh = si ? 1000 : 1024;
     if(Math.abs(bytes) < thresh) {
