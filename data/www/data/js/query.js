@@ -183,6 +183,8 @@ function query_send(command)
    .done(function(data) {
       if (command.startsWith(".uptime") == true)
         query_send_default(data, command, '#tpl_query_uptime');
+      else if (command.startsWith(".version") == true)
+        query_send_default(data, command, '#tpl_query_version');
       else query_send_default(data, command, '#tpl_query_history');
    })
    .fail(function(jqxhr, textStatus, error) {
@@ -239,6 +241,25 @@ function parse_uptime(uptime)
   return uptime_json;
 }
 
+function parse_version(version)
+{
+  var version_json = [];
+  var version_array = version.split("\n");
+  var len = version_array.length;
+ 
+  for (i = 0; i < len; i++)
+  {
+    var soft = version_array[i].split(":");
+    var str_name = soft[0].trim();
+    var str_version = soft[1].trim();
+    
+    version_json.push({ name : str_name, version : str_version});
+  }
+
+  //console.log(JSON.stringify(version_json, null, 4));
+  return version_json;
+}
+
 Handlebars.registerHelper('query_uptime', function(message) {
    var json = parse_uptime(message);
    var text;
@@ -247,5 +268,22 @@ Handlebars.registerHelper('query_uptime', function(message) {
    text += '<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> ' + json.days + ' ' + json.hours + '<br />';
    text += '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' + json.users + '<br />';
    text += '<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> ' + json.load + '<br />';
+   return text;
+});
+
+Handlebars.registerHelper('query_version', function(message) {
+   var json = parse_version(message);
+   var text = "";
+   var version;
+   var i;
+   var l = json.length;
+
+   text += "<table class=\"table table-striped table-hover\">";
+   for (i=0; i < l; i++)
+   {
+      version = json[i];
+      text += "<tr><td>"+version.name+"</td><td>"+version.version+"</td></tr>";
+   }
+   text += "</table>";
    return text;
 });
