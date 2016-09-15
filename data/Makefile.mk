@@ -16,7 +16,8 @@ EXTRA_DIST += \
    data/www/data/js/bootstrap.min.js \
    data/www/data/tpl/api.tpl \
    data/www/data/tpl/dash.tpl \
-   data/www/data/tpl/query.tpl
+   data/www/data/tpl/query.tpl \
+   data/www/data/fonts/glyphicons-halflings-regular.ttf
 
 wwwdir = $(datarootdir)/gotham/modules.d/httpd/www/
 www_DATA = \
@@ -50,3 +51,7 @@ tpl_DATA = \
    data/www/data/tpl/api.tpl \
    data/www/data/tpl/dash.tpl \
    data/www/data/tpl/query.tpl
+
+fontsdir = $(datarootdir)/gotham/modules.d/httpd/www/data/fonts
+fonts_DATA = \
+   data/www/data/fonts/glyphicons-halflings-regular.ttf

@@ -150,35 +150,102 @@ function filter_update(filter_attr)
    actual_filter = filter_attr;
 }
 
+function query_send_default(data, command, tpl_filter)
+{
+   var json = { title : command };
+   var text_rendered;
+   var source
+
+   $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
+      source = $(template).filter(tpl_filter).html();
+      var template = Handlebars.compile(source);
+
+      $.get('data/tpl/query.tpl', function(template2) {
+         source = $(template2).filter('#tpl_query_title').html();
+         var template2 = Handlebars.compile(source);
+
+         text_rendered  = "<div class=\"panel panel-primary\">";
+         text_rendered += template2(json);
+         text_rendered += template(data);
+         text_rendered += "</div>";
+         $('#query_history').append(text_rendered);
+         $('#query_history').animate({ scrollTop: $('#query_history')[0].scrollHeight+9999 }, "slow");
+      });
+   });
+}
+
 function query_send(command)
 {
    var uri = "spam/"+actual_filter;
-   var json = { title : command };
-   var text_rendered;
-   var source;
 
    console.log("Querying spam uri "+uri);
    $.post(uri, command)
    .done(function(data) {
-      $.get('data/tpl/query.tpl', function(template, textStatus, jqXhr) {
-         source = $(template).filter('#tpl_query_history').html();
-         var template = Handlebars.compile(source);
-
-         $.get('data/tpl/query.tpl', function(template2) {
-            source = $(template2).filter('#tpl_query_title').html();
-            var template2 = Handlebars.compile(source);
-
-            text_rendered  = "<div class=\"panel panel-primary\">";
-            text_rendered += template2(json);
-            text_rendered += template(data);
-            text_rendered += "</div>";
-            $('#query_history').append(text_rendered);
-            $('#query_history').animate({ scrollTop: $('#query_history')[0].scrollHeight+9999 }, "slow");
-         });
-      });
+      if (command.startsWith(".uptime") == true)
+        query_send_default(data, command, '#tpl_query_uptime');
+      else query_send_default(data, command, '#tpl_query_history');
    })
    .fail(function(jqxhr, textStatus, error) {
       var err = textStatus + ', ' + error;
       console.log( "Request Failed: " + err);
    });
 }
+
+function parse_uptime(uptime)
+{
+  var tmp;
+  var len_up;
+  var len_days;
+  var len_hours;
+  var len_users;
+  var len_load;
+  var uptime_json = {
+    time  : "",
+    days  : "",
+    hours : "",
+    users : "",
+    load  : ""
+  };
+
+  len_up = uptime.indexOf("up");
+  uptime_json.time = uptime.substr(0, len_up);
+  uptime_json.time = uptime_json.time.trim();
+  
+  len_days = uptime.indexOf(",");
+  tmp = uptime.substr(len_up+2, len_days - len_up-2);
+  if (tmp.includes("day") == true)
+    {
+       uptime_json.days = tmp;
+       len_hours = uptime.indexOf(",", len_days + 1);
+       uptime_json.hours = uptime.substr(len_days + 1, len_hours - len_days - 1);
+    }
+  else
+    {
+       uptime_json.hours = tmp;
+       len_hours = len_days;
+    }
+  uptime_json.days = uptime_json.days.trim();
+  uptime_json.hours = uptime_json.hours.trim();
+  
+  len_users = uptime.indexOf(",", len_hours + 1);
+  uptime_json.users = uptime.substr(len_hours + 1, len_users - len_hours - 1);
+  uptime_json.users = uptime_json.users.trim();
+  
+  len_load = uptime.indexOf(":", len_users + 1);
+  uptime_json.load = uptime.substr(len_load + 1);
+  uptime_json.load = uptime_json.load.trim();
+  
+  //console.log(JSON.stringify(uptime_json, null, 4));
+  return uptime_json;
+}
+
+Handlebars.registerHelper('query_uptime', function(message) {
+   var json = parse_uptime(message);
+   var text;
+
+   text  = '<span class="glyphicon glyphicon-time" aria-hidden="true"></span> ' + json.time + '<br />';
+   text += '<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> ' + json.days + ' ' + json.hours + '<br />';
+   text += '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' + json.users + '<br />';
+   text += '<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> ' + json.load + '<br />';
+   return text;
+});

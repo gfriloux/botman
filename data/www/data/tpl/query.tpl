@@ -34,6 +34,15 @@
   </div>
 </script>
 
+<script id="tpl_query_uptime" type="text/html">
+   <div class="panel-body">
+{{#.}}
+    <h4>{{jid_username jid}}</h4>
+    <ul>{{{query_uptime message}}}</ul>
+{{/.}}
+   </div>
+</script>
+
 <script id="tpl_query_title" type="text/html">
   <div class="panel-heading">
     <h4 class="panel-title"><b>{{title}}</b></h4>
