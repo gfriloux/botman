@@ -279,6 +279,7 @@ Handlebars.registerHelper('query_version', function(message) {
    var l = json.length;
 
    text += "<table class=\"table table-striped table-hover\">";
+   text += "<thead><tr><th>Software</th><th>Version</th></tr></thead>";
    for (i=0; i < l; i++)
    {
       version = json[i];
