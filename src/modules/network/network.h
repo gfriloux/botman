@@ -27,7 +27,7 @@ typedef struct _Module_Network
 #define _MSG(_a, _b, _c)                                                       \
    do {                                                                        \
       if (_a->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
-        module_json_answer(".network", _b, EINA_TRUE, _c,                      \
+        gotham_command_json_answer(".network", _b, EINA_TRUE, _c,              \
                            _a->citizen->gotham, _a->citizen, EINA_FALSE);      \
       else gotham_command_send(_a, _c);                                        \
    } while(0)
