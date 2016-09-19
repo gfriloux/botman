@@ -21,6 +21,7 @@
 void
 ssh_tunnel_check(Module_Ssh_Tunnel *obj)
 {
+#ifndef _WIN32
    Gotham_Citizen *citizen;
    struct stat st_tunnel;
    const char *file = NULL;
@@ -56,6 +57,7 @@ func_end:
         VARSET("tunnel_pid", "%d", 0);
         VARSET("tunnel_port", "%d", 0);
      }
+#endif
 }
 
 /**
