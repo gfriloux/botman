@@ -109,7 +109,7 @@ botman_answer_get(Module_Ssh_Tunnel *obj,
                   Gotham_Citizen_Command *command)
 {
    Gotham_Citizen *citizen = command->citizen;
-   const char **msg;
+   char **msg;
    unsigned int tunnel_port = 0;
 
    EINA_SAFETY_ON_NULL_RETURN(obj);
@@ -126,7 +126,7 @@ botman_answer_get(Module_Ssh_Tunnel *obj,
    DBG("Botman's message : %s", command->command[0]);
 
    /* Split message into array */
-   msg = gotham_utils_msgtocommand(command->command[0]);
+   msg = eina_str_split(command->command[0], " ", 128);
 
    /* If answer is "No tunnel found" => set port to 0 */
    if ((msg[0]) && (!strncmp(msg[0], "No", 2)))
@@ -157,7 +157,7 @@ botman_answer_get(Module_Ssh_Tunnel *obj,
 func_end:
    DBG("Setting tunnel_port to %d", tunnel_port);
    VARSET("tunnel_port", "%d", tunnel_port);
-   free((char *)msg[0]);
+   free(msg[0]);
    free(msg);
    return;
 }
