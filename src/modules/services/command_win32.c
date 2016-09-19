@@ -93,8 +93,13 @@ error:
       if (!(_a))                                                               \
         break;                                                                 \
       if (_b->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
-        gotham_command_json_answer(".service", _d, EINA_FALSE, _c,             \
+        {                                                                      \
+           Eina_Strbuf *buf = eina_strbuf_new();                               \
+           eina_strbuf_append(buf, _c);                                        \
+           gotham_command_json_answer(".service", _d, EINA_FALSE, buf,         \
                            _b->citizen->gotham, _b->citizen->jid, EINA_FALSE); \
+           eina_strbuf_free(buf);                                              \
+        }                                                                      \
       else gotham_command_send(_b, _c);                                        \
       goto close_service;                                                      \
    } while (0)
