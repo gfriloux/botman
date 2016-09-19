@@ -50,13 +50,6 @@ module_register(Gotham *gotham)
 
    DBG("gotham[%p]", gotham);
 
-   if ((gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN) &&
-       (gotham->me->type != GOTHAM_CITIZEN_TYPE_ALFRED))
-     {
-        NFO("Cant load for this gotham type");
-        return NULL;
-     }
-
    obj = calloc(1, sizeof(Module_Ssh_Tunnel));
    if (!obj)
      {
