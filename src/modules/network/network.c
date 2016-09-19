@@ -10,7 +10,7 @@ module_register(Gotham *gotham)
    int r;
 #endif
 
-   EINA_SAFETY_ON_TRUE_RETURN_VAL(gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN), NULL);
+   EINA_SAFETY_ON_TRUE_RETURN_VAL(gotham->me->type != GOTHAM_CITIZEN_TYPE_BOTMAN, NULL);
 
    network = calloc(1, sizeof(Module_Network));
    EINA_SAFETY_ON_NULL_RETURN_VAL(network, NULL);
