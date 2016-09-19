@@ -5,6 +5,24 @@ src/modules/*/*Serve.azy_*
 
 BUILT_SOURCES += .sources_azy
 
+EXTRA_DIST += \
+   src/modules/ssh_tunnel/ssh_tunnel.azy \
+   src/modules/services/services.azy \
+   src/modules/alert/alert.azy \
+   src/modules/notification/notification.azy \
+   src/modules/access/access.azy \
+   src/modules/seen/seen.azy \
+   src/modules/save/save.azy \
+   src/modules/spam/spam.azy \
+   src/modules/info/info.azy \
+   src/modules/httpd/httpd.azy \
+   src/modules/install/install.azy \
+   src/modules/rewrite/rewrite.azy \
+   src/modules/sysinfo/sysinfo.azy \
+   src/modules/version/version.azy \
+   src/modules/gdb/gdb.azy \
+   src/modules/network/network.azy
+
 .sources_azy: src/modules/ssh_tunnel/ssh_tunnel.azy src/modules/services/services.azy src/modules/alert/alert.azy src/modules/notification/notification.azy src/modules/access/access.azy src/modules/seen/seen.azy src/modules/save/save.azy src/modules/spam/spam.azy src/modules/info/info.azy src/modules/httpd/httpd.azy src/modules/install/install.azy src/modules/rewrite/rewrite.azy src/modules/sysinfo/sysinfo.azy src/modules/version/version.azy src/modules/gdb/gdb.azy src/modules/network/network.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/ssh_tunnel $(top_srcdir)/src/modules/ssh_tunnel/ssh_tunnel.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/services $(top_srcdir)/src/modules/services/services.azy

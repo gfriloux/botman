@@ -4,6 +4,8 @@ src/lib/gotham/*.gc{no,da}
 if BUILD_GOTHAM
 include_HEADERS = src/include/Gotham.h
 
+EXTRA_DIST += src/lib/gotham/gotham.azy
+
 noinst_LTLIBRARIES =                                                           \
 src/lib/libcjson.la
 
