@@ -93,8 +93,8 @@ error:
       if (!(_a))                                                               \
         break;                                                                 \
       if (_b->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
-        module_json_answer(".service", _d, EINA_FALSE, _c, _b->citizen->gotham,\
-                           _b->citizen->jid);                                  \
+        gotham_command_json_answer(".service", _d, EINA_FALSE, _c,             \
+                           _b->citizen->gotham, _b->citizen->jid, EINA_FALSE); \
       else gotham_command_send(_b, _c);                                        \
       goto close_service;                                                      \
    } while (0)
@@ -174,7 +174,7 @@ close_service:
 #define _MSG(_a, _b, _c)                                                       \
    do {                                                                        \
       if (_a->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
-        module_json_answer(".service", _b, EINA_TRUE, _c,                      \
+        gotham_command_json_answer(".service", _b, EINA_TRUE, _c,              \
                            _a->citizen->gotham, _a->citizen->jid);             \
       else gotham_command_send(_a, _b);                                        \
    } while(0)
