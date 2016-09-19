@@ -56,10 +56,13 @@ module_register(Gotham *gotham)
         ERR("Faild to alloc");
         return NULL;
      }
+   DBG("obj[%p]");
    obj->gotham = gotham;
 
    obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,
                                                (Gotham_Deserialization_Function)azy_value_to_Module_Ssh_Tunnel_Conf);
+   DBG("obj->conf[%p]", obj->conf);
+   DBG("gotham->me[%p]", gotham->me);
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
@@ -96,7 +99,7 @@ module_register(Gotham *gotham)
                               "This command will shut down the tunnel "
                               "if it's opened.",
                               ssh_tunnel_off);
-
+   DBG("Returning obj[%p]", obj);
    return obj;
 }
 
