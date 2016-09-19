@@ -70,7 +70,7 @@ src_modules_ssh_tunnel_la_CFLAGS = \
    -DSYSCONF_DIR=\"$(sysconfdir)\"
 src_modules_ssh_tunnel_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
-   $(GOTHAM_LIBS) -Wl,-z,defs   
+   $(GOTHAM_LIBS)
 src_modules_ssh_tunnel_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
@@ -427,5 +427,4 @@ src_modules_shutdown_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_shutdown_la_LIBTOOLFLAGS = --tag=disable-static
-
 endif
