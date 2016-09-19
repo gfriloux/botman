@@ -186,7 +186,7 @@ _command_error(void *data,
            Eina_Strbuf *buf = eina_strbuf_new();                               \
            eina_strbuf_append(buf, _c);                                        \
            gotham_command_json_answer(".service", _b, EINA_TRUE, _c,           \
-                           _a->citizen->gotham, _a->citizen);                  \
+                           _a->citizen->gotham, _a->citizen, EINA_FALSE);      \
         }                                                                      \
       else gotham_command_send(_a, _b);                                        \
    } while(0)
