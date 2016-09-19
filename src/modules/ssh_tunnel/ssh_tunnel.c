@@ -56,7 +56,7 @@ module_register(Gotham *gotham)
         ERR("Faild to alloc");
         return NULL;
      }
-   DBG("obj[%p]");
+   DBG("obj[%p]", obj);
    obj->gotham = gotham;
 
    obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,
