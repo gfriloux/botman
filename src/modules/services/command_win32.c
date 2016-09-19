@@ -175,7 +175,7 @@ close_service:
    do {                                                                        \
       if (_a->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
         gotham_command_json_answer(".service", _b, EINA_TRUE, _c,              \
-                           _a->citizen->gotham, _a->citizen->jid);             \
+                           _a->citizen->gotham, _a->citizen->jid, EINA_FALSE); \
       else gotham_command_send(_a, _b);                                        \
    } while(0)
 /* "debug" */
