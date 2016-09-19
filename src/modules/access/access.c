@@ -59,6 +59,7 @@ module_register(Gotham *gotham)
    access->gotham = gotham;
 
    access->conf = gotham_serialize_file_to_struct(MODULE_ACCESS_CONF, (Gotham_Deserialization_Function)azy_value_to_Module_Access_Conf);
+   if (!access->conf) access->conf = Module_Access_Conf_new();
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      alfred_commands_register();
