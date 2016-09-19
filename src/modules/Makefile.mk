@@ -3,6 +3,26 @@ src/modules/*/*.gc{no,da} \
 src/modules/*/*_Common* \
 src/modules/*/*Serve.azy_*
 
+BUILT_SOURCES += .sources_azy
+
+.sources_azy: src/modules/ssh_tunnel/ssh_tunnel.azy src/modules/services/services.azy src/modules/alert/alert.azy src/modules/notification/notification.azy src/modules/access/access.azy src/modules/seen/seen.azy src/modules/save/save.azy src/modules/spam/spam.azy src/modules/info/info.azy src/modules/httpd/httpd.azy src/modules/install/install.azy src/modules/rewrite/rewrite.azy src/modules/sysinfo/sysinfo.azy src/modules/version/version.azy src/modules/gdb/gdb.azy src/modules/network/network.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/ssh_tunnel $(top_srcdir)/src/modules/ssh_tunnel/ssh_tunnel.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/services $(top_srcdir)/src/modules/services/services.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/alert $(top_srcdir)/src/modules/alert/alert.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/notification $(top_srcdir)/src/modules/notification/notification.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/access $(top_srcdir)/src/modules/access/access.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/seen $(top_srcdir)/src/modules/seen/seen.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/save $(top_srcdir)/src/modules/save/save.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/spam $(top_srcdir)/src/modules/spam/spam.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/info $(top_srcdir)/src/modules/info/info.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd $(top_srcdir)/src/modules/httpd/httpd.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/install $(top_srcdir)/src/modules/install/install.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/rewrite $(top_srcdir)/src/modules/rewrite/rewrite.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/sysinfo $(top_srcdir)/src/modules/sysinfo/sysinfo.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/version $(top_srcdir)/src/modules/version/version.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/gdb $(top_srcdir)/src/modules/gdb/gdb.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/network $(top_srcdir)/src/modules/network/network.azy
+
 moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
    src/modules/access.la \
@@ -17,7 +37,6 @@ mod_LTLIBRARIES = \
    src/modules/ssh_tunnel.la \
    src/modules/services.la
 
-BUILT_SOURCES += .sources_sshtunnel
 src_modules_ssh_tunnel_la_SOURCES = \
    src/modules/ssh_tunnel/alfred.c \
    src/modules/ssh_tunnel/ssh_tunnel.c \
@@ -37,11 +56,7 @@ src_modules_ssh_tunnel_la_LDFLAGS = \
 src_modules_ssh_tunnel_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_sshtunnel: src/modules/ssh_tunnel/ssh_tunnel.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/ssh_tunnel \
-	                    $(top_srcdir)/src/modules/ssh_tunnel/ssh_tunnel.azy
 
-BUILT_SOURCES += .sources_services
 src_modules_services_la_SOURCES = \
    src/modules/services/services.c \
    src/modules/services/services.h \
@@ -59,11 +74,7 @@ src_modules_services_la_LDFLAGS = \
    $(GOTHAM_LIBS)
 src_modules_services_la_LIBADD = \
    src/lib/libgotham.la
-.sources_services: src/modules/services/services.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/services \
-	                    $(top_srcdir)/src/modules/services/services.azy
 
-BUILT_SOURCES += .sources_alert
 src_modules_alert_la_SOURCES = \
    src/modules/alert/alert.c \
    src/modules/alert/alert.h \
@@ -78,11 +89,7 @@ src_modules_alert_la_LDFLAGS = \
    $(GOTHAM_LIBS)
 src_modules_alert_la_LIBADD = \
    src/lib/libgotham.la
-.sources_alert: src/modules/alert/alert.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/alert \
-	                    $(top_srcdir)/src/modules/alert/alert.azy
 
-BUILT_SOURCES += .sources_notification
 src_modules_notification_la_SOURCES = \
    src/modules/notification/main.c \
    src/modules/notification/main.h \
@@ -98,11 +105,7 @@ src_modules_notification_la_LDFLAGS = \
    $(GOTHAM_LIBS)
 src_modules_notification_la_LIBADD = \
    src/lib/libgotham.la
-.sources_notification: src/modules/notification/notification.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/notification \
-	                    $(top_srcdir)/src/modules/notification/notification.azy
 
-BUILT_SOURCES += .sources_access
 src_modules_access_la_SOURCES = \
    src/modules/access/access.c \
    src/modules/access/access.h \
@@ -122,9 +125,6 @@ src_modules_access_la_LDFLAGS = \
 src_modules_access_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_access_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_access: src/modules/access/access.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/access \
-	                    $(top_srcdir)/src/modules/access/access.azy
 
 src_modules_help_la_SOURCES = \
    src/modules/help/event.c \
@@ -150,7 +150,6 @@ src_modules_module_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_module_la_LIBTOOLFLAGS = --tag=disable-static
 
-BUILT_SOURCES += .sources_seen
 src_modules_seen_la_SOURCES = \
    src/modules/seen/seen.c \
    src/modules/seen/event.c \
@@ -167,11 +166,7 @@ src_modules_seen_la_LDFLAGS = \
 src_modules_seen_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_seen_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_seen: src/modules/seen/seen.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/seen \
-	                    $(top_srcdir)/src/modules/seen/seen.azy
 
-BUILT_SOURCES += .sources_save
 src_modules_save_la_SOURCES = \
    src/modules/save/conf.c \
    src/modules/save/event.c \
@@ -191,11 +186,7 @@ src_modules_save_la_LIBADD = \
    src/lib/libgotham.la \
    src/lib/libcjson.la
 src_modules_save_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_save: src/modules/save/save.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/save \
-	                    $(top_srcdir)/src/modules/save/save.azy
 
-BUILT_SOURCES += .sources_spam
 src_modules_spam_la_SOURCES = \
    src/modules/spam/event.c \
    src/modules/spam/queue.c \
@@ -215,12 +206,7 @@ src_modules_spam_la_LDFLAGS = \
 src_modules_spam_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_spam_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_spam: src/modules/spam/spam.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/spam \
-	                    $(top_srcdir)/src/modules/spam/spam.azy
 
-
-BUILT_SOURCES += .sources_info
 src_modules_info_la_SOURCES = \
    src/modules/info/alfred.c \
    src/modules/info/alfred_sort.c \
@@ -241,9 +227,6 @@ src_modules_info_la_LDFLAGS = \
 src_modules_info_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_info_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_info: src/modules/info/info.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/info \
-	                    $(top_srcdir)/src/modules/info/info.azy
    
 if BUILD_UNIX
 mod_LTLIBRARIES += \
@@ -254,7 +237,6 @@ mod_LTLIBRARIES += \
    src/modules/gdb.la \
    src/modules/httpd.la
 
-BUILT_SOURCES += .sources_httpd
 src_modules_httpd_la_SOURCES = \
    src/modules/httpd/httpd.c \
    src/modules/httpd/httpd.h \
@@ -286,10 +268,7 @@ src_modules_httpd_la_LDFLAGS = \
 src_modules_httpd_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_httpd_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_httpd: src/modules/httpd/httpd.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/httpd $(top_srcdir)/src/modules/httpd/httpd.azy
 
-BUILT_SOURCES += .sources_install   
 src_modules_install_la_SOURCES = \
    src/modules/install/botman.c \
    src/modules/install/jobs.c \
@@ -306,11 +285,7 @@ src_modules_install_la_LDFLAGS = \
 src_modules_install_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_install_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_install:  src/modules/install/install.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/install \
-	                    $(top_srcdir)/src/modules/install/install.azy
 
-BUILT_SOURCES += .sources_rewrite
 src_modules_rewrite_la_SOURCES = \
    src/modules/rewrite/event.c \
    src/modules/rewrite/rewrite.c \
@@ -328,11 +303,7 @@ src_modules_rewrite_la_LDFLAGS = \
 src_modules_rewrite_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_rewrite_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_rewrite: src/modules/rewrite/rewrite.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/rewrite \
-	                    $(top_srcdir)/src/modules/rewrite/rewrite.azy
 
-BUILT_SOURCES += .sources_sysinfo
 src_modules_sysinfo_la_SOURCES = \
    src/modules/sysinfo/alfred.c \
    src/modules/sysinfo/botman.c \
@@ -352,11 +323,7 @@ src_modules_sysinfo_la_LDFLAGS = \
 src_modules_sysinfo_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_sysinfo_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_sysinfo: src/modules/sysinfo/sysinfo.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/sysinfo \
-	                    $(top_srcdir)/src/modules/sysinfo/sysinfo.azy
 
-BUILT_SOURCES += .sources_version
 src_modules_version_la_SOURCES = \
    src/modules/version/alfred.c \
    src/modules/version/botman.c \
@@ -377,11 +344,7 @@ src_modules_version_la_LDFLAGS = \
 src_modules_version_la_LIBADD = \
    src/lib/libgotham.la
    src_modules_version_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_version: src/modules/version/version.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/version \
-	                    $(top_srcdir)/src/modules/version/version.azy
 
-BUILT_SOURCES += .sources_gdb
 src_modules_gdb_la_SOURCES = \
    src/modules/gdb/backtrace.c \
    src/modules/gdb/botman.c \
@@ -405,9 +368,6 @@ src_modules_gdb_la_LDFLAGS = \
 src_modules_gdb_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_gdb_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_gdb: src/modules/gdb/gdb.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/gdb \
-	                    $(top_srcdir)/src/modules/gdb/gdb.azy
 endif
 
 
@@ -416,7 +376,6 @@ mod_LTLIBRARIES += \
    src/modules/network.la \
    src/modules/shutdown.la
 
-BUILT_SOURCES += .sources_network
 src_modules_network_la_SOURCES = \
    src/modules/network/network.c \
    src/modules/network/network.h \
@@ -435,9 +394,6 @@ src_modules_network_la_LDFLAGS = \
 src_modules_network_la_LIBADD = \
    src/lib/libgotham.la
 src_modules_network_la_LIBTOOLFLAGS = --tag=disable-static
-.sources_network: src/modules/network/network.azy
-	azy_parser -H -p -o $(top_srcdir)/src/modules/network \
-	                    $(top_srcdir)/src/modules/network/network.azy
 
 src_modules_shutdown_la_SOURCES = \
    src/modules/shutdown/shutdown.c \
