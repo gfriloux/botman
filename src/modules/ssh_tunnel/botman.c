@@ -173,7 +173,7 @@ _botman_ssh_tunnel_wait(void *data)
    DWORD l;
 
    /* Read MODULE_SSH_LOG */
-   h = CreateFile(MODULE_SSH_LOG, GENERIC_READ, FILE_SHARE_READ, NULL,
+   h = CreateFile(obj->tunnel.logfile, GENERIC_READ, FILE_SHARE_READ, NULL,
                   OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
    EINA_SAFETY_ON_TRUE_GOTO(h == INVALID_HANDLE_VALUE, error);
 
