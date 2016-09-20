@@ -311,7 +311,7 @@ ssh_tunnel_on(void *data,
    /* We start a new ssh tunnel */
    eina_strbuf_append_printf(buf,
                              "ssh -p %u -i \"%s\" -N -R0:localhost:3389 "
-                             "-l \"%s\" \"%s\" >%s 2>&1",
+                             "-l \"%s\" \"%s\" >\"%s\" 2>&1",
                              obj->conf->port, obj->conf->key,
                              obj->conf->login, obj->conf->host,
                              obj->tunnel.logfile);
