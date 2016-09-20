@@ -192,6 +192,8 @@ _botman_ssh_tunnel_wait(void *data)
 close_handle:
    CloseHandle(h);
 error:
+   DBG("GetLastError : %d", GetLastError());
+
    if (tunnel->error++ >= 10)
      {
         ERR("Failed to access log file");
