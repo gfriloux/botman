@@ -75,9 +75,15 @@ module_register(Gotham *gotham)
         return obj;
      }
 
+/*
+ * For an obscure reason, it doesnt work with ssh.exe on windows.
+ * Maybe it is the fact of printing to stderr that doesnt work.
+ */
+#ifndef _WIN32
    obj->tunnel.eh_data = ecore_event_handler_add(ECORE_EXE_EVENT_DATA,
                                                  ssh_tunnel_cb_data,
                                                  obj);
+#endif
 
    obj->tunnel.eh_end = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
                                                 ssh_tunnel_cb_end,

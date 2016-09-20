@@ -8,6 +8,34 @@
 
 #include "ssh_tunnel.h"
 
+typedef struct _Tunnel
+{
+   Module_Ssh_Tunnel *tunnel;
+   Gotham_Citizen_Command *cmd;
+
+   unsigned int error;
+} Tunnel;
+
+Tunnel *
+_botman_ssh_tunnel_new(Module_Ssh_Tunnel *obj,
+                       Gotham_Citizen_Command *cmd)
+{
+   Tunnel *tunnel;
+   tunnel = calloc(1, sizeof(Tunnel));
+   EINA_SAFETY_ON_NULL_RETURN_VAL(tunnel, NULL);
+   tunnel->tunnel = obj;
+   tunnel->cmd = cmd;
+   return tunnel;
+}
+
+void
+_botman_ssh_tunnel_free(Tunnel *tunnel)
+{
+   gotham_citizen_free(tunnel->cmd->citizen);
+   gotham_command_free(tunnel->cmd);
+   free(tunnel);
+}
+
 /**
  * @addtogroup Gotham_Module_Ssh_Tunnel
  * @{
@@ -92,6 +120,82 @@ _tunnel_closed_send(Module_Ssh_Tunnel *obj,
    return;
 }
 
+#ifdef _WIN32
+Eina_Bool
+_botman_ssh_tunnel_wait(void *data)
+{
+   Tunnel *tunnel = data;
+   HANDLE h;
+   Eina_Bool r;
+   LARGE_INTEGER s;
+   char buf[1024] = {0};
+   DWORD l;
+
+   /* Read MODULE_SSH_LOG */
+   h = CreateFile(MODULE_SSH_LOG, GENERIC_READ, FILE_SHARE_READ, NULL,
+                  OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+   EINA_SAFETY_ON_TRUE_GOTO(h == INVALID_HANDLE_VALUE, error);
+
+   r = (Eina_Bool)GetFileSizeEx(h, &s);
+   EINA_SAFETY_ON_TRUE_GOTO(!r, close_handle);
+   EINA_SAFETY_ON_TRUE_GOTO(!s.QuadPart, close_handle);
+
+   r = (Eina_Bool)ReadFile(h, buf, sizeof(buf)-1, &l, NULL);
+   EINA_SAFETY_ON_TRUE_GOTO(!r, close_handle);
+
+   _botman_ssh_tunnel_analyze(tunnel, buf);
+
+   return EINA_FALSE;
+
+close_handle:
+   CloseHandle(h);
+error:
+   tunnel->error++;
+   return EINA_TRUE;
+}
+#endif
+
+void
+_botman_ssh_tunnel_analyze(Module_Ssh_Tunnel *obj,
+                           Gotham_Citizen_Command *cmd,
+                           const char *s)
+{
+   Eina_Strbuf *buf;
+   unsigned int nb_params;
+   char **params;
+   Eina_Bool ok = EINA_FALSE;
+   Gotham_Citizen *citizen = obj->gotham->me;
+
+   buf = eina_strbuf_new();
+
+   if (strncmp(s, "Allocated port",  strlen("Allocated port")))
+     {
+default_buf:
+        eina_strbuf_append(buf, s);
+        eina_strbuf_replace_all(buf, "\r", "");
+        eina_strbuf_replace_all(buf, "\n", "");
+        goto send_buf;
+     }
+
+   params = eina_str_split_full(s, " ", 50, &nb_params);
+
+   if (nb_params < 3) goto default_buf;
+
+   obj->tunnel.port = atoi(params[2]);
+   free(params[0]);
+   free(params);
+
+   eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
+                             obj->tunnel.port, obj->tunnel.pid);
+   VARSET("tunnel_pid", "%d", obj->tunnel.pid);
+   VARSET("tunnel_port", "%d", obj->tunnel.port);
+   ok = EINA_TRUE;
+   obj->save_conf();
+
+send_buf:
+   gotham_command_json_answer(".ssh", "on", ok, buf, obj->gotham, cmd->citizen, EINA_TRUE);
+   eina_strbuf_free(buf);
+}
 
 /**
  * @brief Callback for ecore_exe_pipe_run when receiving data.
@@ -113,68 +217,18 @@ ssh_tunnel_cb_data(void *data,
                    void *event)
 {
    Module_Ssh_Tunnel *obj = data;
-   Eina_Strbuf *buf,
-               *data_buf;
-   Eina_Bool ok = EINA_FALSE;
-
+   Eina_Strbuf *buf;
    Ecore_Exe_Event_Data *datafromprocess = (Ecore_Exe_Event_Data *)event;
-   Gotham_Citizen_Command *cmd = ecore_exe_data_get(datafromprocess->exe);
-   Gotham_Citizen *citizen = obj->gotham->me;
+   Tunnel *tunnel = ecore_exe_data_get(datafromprocess->exe);
 
-   if (obj->tunnel.exe != datafromprocess->exe)
-     return ECORE_CALLBACK_PASS_ON;
+   if (obj != tunnel->tunnel) return ECORE_CALLBACK_PASS_ON;
 
    DBG("obj=%p", obj);
 
    buf = eina_strbuf_new();
-   data_buf = eina_strbuf_new();
-
-   eina_strbuf_append_n(data_buf,
-                        datafromprocess->data,
-                        datafromprocess->size);
-   eina_strbuf_append(data_buf, "");
-
-   if (!strncmp(eina_strbuf_string_get(data_buf),
-                "Allocated port",
-                strlen("Allocated port")))
-     {
-        unsigned int nb_params = 0;
-        char **params = eina_str_split_full(eina_strbuf_string_get(data_buf),
-                                            " ", 50, &nb_params);
-
-        if (nb_params < 3)
-           {
-              eina_strbuf_free(data_buf);
-              free(params[0]);
-              free(params);
-              return EINA_TRUE;
-           }
-
-        obj->tunnel.port = atoi(params[2]);
-        free(params[0]);
-        free(params);
-
-        eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
-                                       obj->tunnel.port, obj->tunnel.pid);
-        VARSET("tunnel_pid", "%d", obj->tunnel.pid);
-        VARSET("tunnel_port", "%d", obj->tunnel.port);
-
-        obj->save_conf();
-
-        ok = EINA_TRUE;
-     }
-   else
-     {
-        eina_strbuf_replace_all(data_buf, "\r", "");
-        eina_strbuf_replace_all(data_buf, "\n", "");
-        eina_strbuf_append(buf, eina_strbuf_string_get(data_buf));
-     }
-
-   eina_strbuf_free(data_buf);
-   gotham_command_json_answer(".ssh", cmd->command[1] ? cmd->command[1] : "", ok, buf,
-                              obj->gotham, cmd->citizen, EINA_TRUE);
+   eina_strbuf_append_n(buf, datafromprocess->data, datafromprocess->size);
+   _botman_ssh_tunnel_analyze(tunnel->tunnel, tunnel->cmd, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
-
    return EINA_TRUE;
 }
 
@@ -197,23 +251,15 @@ ssh_tunnel_cb_end(void *data,
 {
    Module_Ssh_Tunnel *obj = data;
    Ecore_Exe_Event_Del *datafromprocess = (Ecore_Exe_Event_Del *)event;
-   Gotham_Citizen_Command *cmd;
+   Tunnel *tunnel;
 
-   DBG("datafromprocess[%p] datafromprocess->exe[%p]",
-       datafromprocess, datafromprocess->exe);
-
+   DBG("datafromprocess[%p] datafromprocess->exe[%p]", datafromprocess, datafromprocess->exe);
    if (!datafromprocess->exe) return EINA_TRUE;
 
-   cmd = ecore_exe_data_get(datafromprocess->exe);
-
-   if (obj->tunnel.exe != datafromprocess->exe)
-     return ECORE_CALLBACK_PASS_ON;
-
-   _tunnel_closed_send(obj, cmd);
-
-   gotham_citizen_free(cmd->citizen);
-   gotham_command_free(cmd);
-
+   tunnel = ecore_exe_data_get(datafromprocess->exe);
+   if (obj != tunnel->tunnel) return ECORE_CALLBACK_PASS_ON;
+   _tunnel_closed_send(tunnel->tunnel, tunnel->cmd);
+   _botman_ssh_tunnel_free(tunnel);
    return EINA_TRUE;
 }
 
@@ -235,6 +281,7 @@ ssh_tunnel_on(void *data,
    Eina_Strbuf *buf;
    Gotham_Citizen *ctz;
    Gotham_Citizen_Command *cmd;
+   Tunnel *tunnel;
 
    DBG("obj[%p] command[%p]", obj, command);
 
@@ -257,19 +304,40 @@ ssh_tunnel_on(void *data,
    ctz = gotham_citizen_new(obj->gotham, command->citizen->jid);
    cmd = gotham_command_new(ctz, ".ssh on", command->jid);
 
+#ifdef _WIN32
+# define _PORT "3389"
+# define _REDIR ">"MODULE_SSH_LOG" 2>&1"
+#else
+# define _PORT "22"
+# define _REDIR "2>&1"
+#endif
+
    /* We start a new ssh tunnel */
    eina_strbuf_append_printf(buf,
-                             "ssh -p %u -i \"%s\" "
-                             "-N -R0:localhost:22 "
-                             "-l \"%s\" \"%s\" 2>&1",
+                             "ssh -vv -p %u -i \"%s\" -N -R0:localhost:"_PORT" "
+                             "-l \"%s\" \"%s\" "_REDIR,
                              obj->conf->port, obj->conf->key,
                              obj->conf->login, obj->conf->host);
    DBG("Issueing command : %s", eina_strbuf_string_get(buf));
+
+#undef _PORT
+#undef _REDIR
+
+   tunnel = _botman_ssh_tunnel_new(obj, cmd);
+
    obj->tunnel.exe = ecore_exe_pipe_run(eina_strbuf_string_get(buf),
                                         ECORE_EXE_PIPE_READ_LINE_BUFFERED |
-                                        ECORE_EXE_PIPE_READ,
+                                        ECORE_EXE_PIPE_READ               |
+                                        ECORE_EXE_PIPE_ERROR_LINE_BUFFERED,
                                         cmd);
+   DBG("obj->tunnel.exe[%p]", obj->tunnel.exe);
    eina_strbuf_free(buf);
+
+   ecore_exe_data_set(obj->tunnel.exe, tunnel);
+
+#ifdef _WIN32
+   ecore_timer_add(0.1, _botman_ssh_tunnel_wait, tunnel);
+#endif
 
    obj->tunnel.pid = ecore_exe_pid_get(obj->tunnel.exe);
 
