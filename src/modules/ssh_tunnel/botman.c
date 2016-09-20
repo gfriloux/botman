@@ -120,6 +120,47 @@ _tunnel_closed_send(Module_Ssh_Tunnel *obj,
    return;
 }
 
+void
+_botman_ssh_tunnel_analyze(Tunnel *tunnel,
+                           const char *s)
+{
+   Eina_Strbuf *buf;
+   unsigned int nb_params;
+   char **params;
+   Eina_Bool ok = EINA_FALSE;
+   Gotham_Citizen *citizen = tunnel->tunnel->gotham->me;
+
+   buf = eina_strbuf_new();
+
+   if (strncmp(s, "Allocated port",  strlen("Allocated port")))
+     {
+default_buf:
+        eina_strbuf_append(buf, s);
+        eina_strbuf_replace_all(buf, "\r", "");
+        eina_strbuf_replace_all(buf, "\n", "");
+        goto send_buf;
+     }
+
+   params = eina_str_split_full(s, " ", 50, &nb_params);
+
+   if (nb_params < 3) goto default_buf;
+
+   tunnel->tunnel->tunnel.port = atoi(params[2]);
+   free(params[0]);
+   free(params);
+
+   eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
+                             tunnel->tunnel->tunnel.port, tunnel->tunnel->tunnel.pid);
+   VARSET("tunnel_pid", "%d", tunnel->tunnel->tunnel.pid);
+   VARSET("tunnel_port", "%d", tunnel->tunnel->tunnel.port);
+   ok = EINA_TRUE;
+   tunnel->tunnel->save_conf();
+
+send_buf:
+   gotham_command_json_answer(".ssh", "on", ok, buf, tunnel->tunnel->gotham, tunnel->cmd->citizen, EINA_TRUE);
+   eina_strbuf_free(buf);
+}
+
 #ifdef _WIN32
 Eina_Bool
 _botman_ssh_tunnel_wait(void *data)
@@ -159,47 +200,6 @@ error:
 }
 #endif
 
-void
-_botman_ssh_tunnel_analyze(Tunnel *tunnel,
-                           const char *s)
-{
-   Eina_Strbuf *buf;
-   unsigned int nb_params;
-   char **params;
-   Eina_Bool ok = EINA_FALSE;
-   Gotham_Citizen *citizen = obj->gotham->me;
-
-   buf = eina_strbuf_new();
-
-   if (strncmp(s, "Allocated port",  strlen("Allocated port")))
-     {
-default_buf:
-        eina_strbuf_append(buf, s);
-        eina_strbuf_replace_all(buf, "\r", "");
-        eina_strbuf_replace_all(buf, "\n", "");
-        goto send_buf;
-     }
-
-   params = eina_str_split_full(s, " ", 50, &nb_params);
-
-   if (nb_params < 3) goto default_buf;
-
-   tunnel->tunnel->tunnel.port = atoi(params[2]);
-   free(params[0]);
-   free(params);
-
-   eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
-                             tunnel->tunnel->tunnel.port, tunnel->tunnel->tunnel.pid);
-   VARSET("tunnel_pid", "%d", tunnel->tunnel->tunnel.pid);
-   VARSET("tunnel_port", "%d", tunnel->tunnel->tunnel.port);
-   ok = EINA_TRUE;
-   obj->save_conf();
-
-send_buf:
-   gotham_command_json_answer(".ssh", "on", ok, buf, obj->gotham, cmd->citizen, EINA_TRUE);
-   eina_strbuf_free(buf);
-}
-
 /**
  * @brief Callback for ecore_exe_pipe_run when receiving data.
  * This function gets called by ecore_main_loop everytime
@@ -230,7 +230,7 @@ ssh_tunnel_cb_data(void *data,
 
    buf = eina_strbuf_new();
    eina_strbuf_append_n(buf, datafromprocess->data, datafromprocess->size);
-   _botman_ssh_tunnel_analyze(tunnel->tunnel, tunnel->cmd, eina_strbuf_string_get(buf));
+   _botman_ssh_tunnel_analyze(tunnel, eina_strbuf_string_get(buf));
    eina_strbuf_free(buf);
    return EINA_TRUE;
 }
