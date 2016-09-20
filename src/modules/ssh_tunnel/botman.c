@@ -150,14 +150,17 @@ _botman_ssh_tunnel_wait(void *data)
 close_handle:
    CloseHandle(h);
 error:
-   tunnel->error++;
+   if (tunnel->error++ >= 10)
+     {
+        ERR("Failed to access log file");
+        return EINA_FALSE;
+     }
    return EINA_TRUE;
 }
 #endif
 
 void
-_botman_ssh_tunnel_analyze(Module_Ssh_Tunnel *obj,
-                           Gotham_Citizen_Command *cmd,
+_botman_ssh_tunnel_analyze(Tunnel *tunnel,
                            const char *s)
 {
    Eina_Strbuf *buf;
@@ -181,14 +184,14 @@ default_buf:
 
    if (nb_params < 3) goto default_buf;
 
-   obj->tunnel.port = atoi(params[2]);
+   tunnel->tunnel->tunnel.port = atoi(params[2]);
    free(params[0]);
    free(params);
 
    eina_strbuf_append_printf(buf, "Tunnel opened on port %d, pid %d",
-                             obj->tunnel.port, obj->tunnel.pid);
-   VARSET("tunnel_pid", "%d", obj->tunnel.pid);
-   VARSET("tunnel_port", "%d", obj->tunnel.port);
+                             tunnel->tunnel->tunnel.port, tunnel->tunnel->tunnel.pid);
+   VARSET("tunnel_pid", "%d", tunnel->tunnel->tunnel.pid);
+   VARSET("tunnel_port", "%d", tunnel->tunnel->tunnel.port);
    ok = EINA_TRUE;
    obj->save_conf();
 
@@ -336,7 +339,7 @@ ssh_tunnel_on(void *data,
    ecore_exe_data_set(obj->tunnel.exe, tunnel);
 
 #ifdef _WIN32
-   ecore_timer_add(0.1, _botman_ssh_tunnel_wait, tunnel);
+   ecore_timer_add(0.5, _botman_ssh_tunnel_wait, tunnel);
 #endif
 
    obj->tunnel.pid = ecore_exe_pid_get(obj->tunnel.exe);
