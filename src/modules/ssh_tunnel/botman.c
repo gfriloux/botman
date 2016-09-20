@@ -308,23 +308,21 @@ ssh_tunnel_on(void *data,
    cmd = gotham_command_new(ctz, ".ssh on", command->jid);
 
 #ifdef _WIN32
-# define _PORT "3389"
-# define _REDIR ">"MODULE_SSH_LOG" 2>&1"
-#else
-# define _PORT "22"
-# define _REDIR "2>&1"
-#endif
-
    /* We start a new ssh tunnel */
    eina_strbuf_append_printf(buf,
-                             "ssh -vv -p %u -i \"%s\" -N -R0:localhost:"_PORT" "
-                             "-l \"%s\" \"%s\" "_REDIR,
+                             "ssh -p %u -i \"%s\" -N -R0:localhost:3389 "
+                             "-l \"%s\" \"%s\" >%s 2>&1",
+                             obj->conf->port, obj->conf->key,
+                             obj->conf->login, obj->conf->host,
+                             obj->tunnel.logfile);
+#else
+   eina_strbuf_append_printf(buf,
+                             "ssh -p %u -i \"%s\" -N -R0:localhost:22 "
+                             "-l \"%s\" \"%s\" 2>&1",
                              obj->conf->port, obj->conf->key,
                              obj->conf->login, obj->conf->host);
+#endif
    DBG("Issueing command : %s", eina_strbuf_string_get(buf));
-
-#undef _PORT
-#undef _REDIR
 
    tunnel = _botman_ssh_tunnel_new(obj, cmd);
 

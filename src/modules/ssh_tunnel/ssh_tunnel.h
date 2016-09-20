@@ -24,6 +24,7 @@ typedef struct _Module_Ssh_Tunnel
       Ecore_Event_Handler *eh_data,
                           *eh_end;
       Ecore_Exe *exe;
+      char *logfile;
    } tunnel;
    void (*save_conf)(void);
 } Module_Ssh_Tunnel;

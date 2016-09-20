@@ -83,6 +83,18 @@ module_register(Gotham *gotham)
    obj->tunnel.eh_data = ecore_event_handler_add(ECORE_EXE_EVENT_DATA,
                                                  ssh_tunnel_cb_data,
                                                  obj);
+#else
+   {
+      char path[1024],
+           conf[1024],
+           *p;
+
+      GetModuleFileName(NULL, path, sizeof(path));
+
+      p = strrchr(path, '\\');
+      sprintf(conf, "%.*s"MODULE_SSH_LOG, p-path, path);
+      obj->tunnel.logfile = strdup(conf);
+   }
 #endif
 
    obj->tunnel.eh_end = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
@@ -127,6 +139,9 @@ module_unregister(void *data)
 
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      {
+#ifdef _WIN32
+        free(obj->tunnel.logfile);
+#endif
         ecore_event_handler_del(obj->tunnel.eh_data);
         ecore_event_handler_del(obj->tunnel.eh_end);
         gotham_modules_command_del("ssh_tunnel", ".ssh");
