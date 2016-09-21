@@ -7,10 +7,11 @@ include_HEADERS = src/include/Gotham.h
 EXTRA_DIST += src/lib/gotham/gotham.azy
 
 noinst_LTLIBRARIES =                                                           \
-src/lib/libcjson.la
+   src/lib/libcjson.la                                                         \
+   src/lib/libescarg.la
 
 lib_LTLIBRARIES =                                                              \
-src/lib/libgotham.la
+   src/lib/libgotham.la
 
 BUILT_SOURCES += .sources_gotham
 src_lib_libgotham_la_SOURCES =                                                 \
@@ -43,4 +44,16 @@ src_lib_libgotham_la_LIBADD =                                                  \
 src_lib_libcjson_la_SOURCES =                                                  \
    src/lib/extras/cJSON.c                                                      \
    src/include/cJSON.h
+
+src_lib_libescarg_la_SOURCES =                                                 \
+   src/lib/extras/escarg/escarg_main.c                                         \
+   src/lib/extras/escarg/escarg_bash.c                                         \
+   src/lib/extras/escarg/escarg_posix.c                                        \
+   src/lib/extras/escarg/escarg_windows.c                                      \
+   src/lib/extras/escarg/escarg_utils.c                                        \
+   src/lib/extras/escarg/escarg_private.h                                      \
+   src/include/Escarg.h
+src_lib_libescarg_la_CFLAGS = $(GOTHAM_CFLAGS)
+src_lib_libescarg_la_CPPFLAGS = $(AM_CPPFLAGS)
+src_lib_libescarg_la_LDFLAGS = $(GOTHAM_LIBS)
 endif
