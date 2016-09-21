@@ -30,7 +30,7 @@ module_init(void)
    ecore_init();
    _module_log_dom = eina_log_domain_register("module_ssh_tunnel",
                                               EINA_COLOR_CYAN);
-
+   escarg_init();
    DBG("void");
 
    return name;
@@ -59,11 +59,26 @@ module_register(Gotham *gotham)
    DBG("obj[%p]", obj);
    obj->gotham = gotham;
 
+
+#ifdef _WIN32
+   {
+      char path[1024],
+           conf[1024],
+           *p;
+
+      GetModuleFileName(NULL, path, sizeof(path));
+
+      p = strrchr(path, '\\');
+      sprintf(conf, "%.*s"MODULE_CONF, p-path, path);
+      obj->conffile = strdup(conf);
+
+      obj->conf = gotham_serialize_file_to_struct(obj->conffile,
+                                                 (Gotham_Deserialization_Function)azy_value_to_Module_Ssh_Tunnel_Conf);
+   }
+#else
    obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,
                                                (Gotham_Deserialization_Function)azy_value_to_Module_Ssh_Tunnel_Conf);
-   DBG("obj->conf[%p]", obj->conf);
-   DBG("gotham->me[%p]", gotham->me);
-
+#endif
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
         gotham_modules_command_add("ssh_tunnel", ".ssh",
@@ -75,31 +90,11 @@ module_register(Gotham *gotham)
         return obj;
      }
 
-/*
- * For an obscure reason, it doesnt work with ssh.exe on windows.
- * Maybe it is the fact of printing to stderr that doesnt work.
- */
-#ifndef _WIN32
    obj->tunnel.eh_data = ecore_event_handler_add(ECORE_EXE_EVENT_DATA,
-                                                 ssh_tunnel_cb_data,
-                                                 obj);
-#else
-   {
-      char path[1024],
-           conf[1024],
-           *p;
-
-      GetModuleFileName(NULL, path, sizeof(path));
-
-      p = strrchr(path, '\\');
-      sprintf(conf, "%.*s"MODULE_SSH_LOG, p-path, path);
-      obj->tunnel.logfile = strdup(conf);
-   }
-#endif
+                                                 ssh_tunnel_cb_data, obj);
 
    obj->tunnel.eh_end = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
-                                                ssh_tunnel_cb_end,
-                                                obj);
+                                                ssh_tunnel_cb_end, obj);
 
    gotham_modules_command_add("ssh_tunnel", ".ssh",
                               "[.ssh] - "
@@ -137,11 +132,12 @@ module_unregister(void *data)
 
    DBG("obj[%p]", obj);
 
+#ifdef _WIN32
+   free((char *)obj->conffile);
+#endif
+
    if (obj->gotham->me->type == GOTHAM_CITIZEN_TYPE_BOTMAN)
      {
-#ifdef _WIN32
-        free(obj->tunnel.logfile);
-#endif
         ecore_event_handler_del(obj->tunnel.eh_data);
         ecore_event_handler_del(obj->tunnel.eh_end);
         gotham_modules_command_del("ssh_tunnel", ".ssh");
@@ -167,6 +163,7 @@ void
 module_shutdown(void)
 {
    DBG("void");
+   escarg_shutdown();
    eina_log_domain_unregister(_module_log_dom);
    ecore_shutdown();
    eina_shutdown();

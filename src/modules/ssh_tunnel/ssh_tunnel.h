@@ -4,6 +4,8 @@
 #include <Ecore.h>
 #include <Gotham.h>
 
+#include <Escarg.h>
+
 #include "Module_Common_Azy.h"
 
 #define VARGET(_a) gotham_citizen_var_get(citizen, _a)
@@ -17,6 +19,7 @@ typedef struct _Module_Ssh_Tunnel
 {
    Gotham *gotham;
    Module_Ssh_Tunnel_Conf *conf;
+   const char *conffile;
 
    struct {
       unsigned int port;
@@ -24,7 +27,6 @@ typedef struct _Module_Ssh_Tunnel
       Ecore_Event_Handler *eh_data,
                           *eh_end;
       Ecore_Exe *exe;
-      char *logfile;
    } tunnel;
    void (*save_conf)(void);
 } Module_Ssh_Tunnel;
@@ -45,4 +47,5 @@ Eina_Bool ssh_tunnel_cb_end(void *data, int type, void *event);
 void alfred_command_tunnels_show(void *data, Gotham_Citizen_Command *command);
 void botman_answer_get(Module_Ssh_Tunnel *obj,
                        Gotham_Citizen_Command *command);
+char * ssh_tunnel_utils_ssh_command(Module_Ssh_Tunnel *obj);
 #endif
