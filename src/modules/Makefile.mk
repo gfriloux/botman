@@ -61,6 +61,7 @@ src_modules_ssh_tunnel_la_SOURCES = \
    src/modules/ssh_tunnel/ssh_tunnel.h \
    src/modules/ssh_tunnel/botman.c \
    src/modules/ssh_tunnel/event.c \
+   src/modules/ssh_tunnel/utils.c \
    src/modules/ssh_tunnel/Module_Common_Azy.c \
    src/modules/ssh_tunnel/Module_Common_Azy.h \
    src/modules/ssh_tunnel/Module_Common.c \
@@ -72,7 +73,8 @@ src_modules_ssh_tunnel_la_LDFLAGS = \
    -no-undefined -module -avoid-version \
    $(GOTHAM_LIBS)
 src_modules_ssh_tunnel_la_LIBADD = \
-   src/lib/libgotham.la
+   src/lib/libgotham.la \
+   src/lib/libescarg.la
 src_modules_ssh_tunnel_la_LIBTOOLFLAGS = --tag=disable-static
 
 src_modules_services_la_SOURCES = \
