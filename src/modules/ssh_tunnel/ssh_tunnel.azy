@@ -6,5 +6,6 @@ struct Ssh_Tunnel_Conf
    string login;
    string key;
    int port;
+   int forwarded_port;
    array<string> vars;
 };

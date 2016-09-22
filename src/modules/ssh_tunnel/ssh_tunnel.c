@@ -79,6 +79,9 @@ module_register(Gotham *gotham)
    obj->conf = gotham_serialize_file_to_struct(MODULE_CONF,
                                                (Gotham_Deserialization_Function)azy_value_to_Module_Ssh_Tunnel_Conf);
 #endif
+
+   if (!obj->conf->forwarded_port) obj->conf->forwarded_port = 22;
+
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
      {
         gotham_modules_command_add("ssh_tunnel", ".ssh",
