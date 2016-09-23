@@ -135,11 +135,26 @@ else
    build_botman=no
 fi
 
+build_log=
+want_log=
+AC_ARG_ENABLE([log],
+   [AC_HELP_STRING([--disable-log],
+                   [disable building the log module.
+                   @<:@default=detect@:>@])],
+   [want_log=$enableval], [])
+if test "x$want_log" != "xno" ; then
+   LOG_REQUIRES="$GOTHAM_REQUIRES esskyuehl"
+   PKG_CHECK_MODULES(LOG, [$LOG_REQUIRES], [build_log=yes], [build_log=no])
+else
+   build_log=no
+fi
+
 AM_CONDITIONAL(BUILD_GOTHAM, [test "x${build_gotham}" = "xyes"])
 AM_CONDITIONAL(BUILD_ALFRED, [test "x${build_alfred}" = "xyes"])
 AM_CONDITIONAL(BUILD_BOTMAN, [test "x${build_botman}" = "xyes"])
 AM_CONDITIONAL(BUILD_WINDOWS, [test "x${build_windows}" = "xyes"])
 AM_CONDITIONAL(BUILD_UNIX, [test "x${build_unix}" = "xyes"])
+AM_CONDITIONAL(BUILD_LOG, [test "x${build_log}" = "xyes"])
 
 AC_SUBST(GOTHAM_REQUIRES)
 

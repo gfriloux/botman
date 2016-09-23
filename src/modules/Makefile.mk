@@ -255,7 +255,24 @@ mod_LTLIBRARIES += \
    src/modules/sysinfo.la \
    src/modules/version.la \
    src/modules/gdb.la \
-   src/modules/httpd.la
+   src/modules/httpd.la \
+   src/modules/log.la
+
+if BUILD_LOG
+src_modules_log_la_SOURCES = \
+   src/modules/log/log.c \
+   src/modules/log/log.h \
+   src/modules/log/esql.c \
+   src/modules/log/event.c
+src_modules_log_la_CFLAGS = \
+   $(LOG_CFLAGS) -DDATA_DIR=\"$(datadir)\" \ 
+   -DSYSCONF_DIR=\"$(sysconfdir)\"
+src_modules_log_la_LDFLAGS = \
+   -no-undefined -module -avoid-version $(LOG_LIBS)
+src_modules_log_la_LIBADD = \
+   src/lib/libgotham.la
+src_modules_log_la_LIBTOOLFLAGS = --tag=disable-static
+endif
 
 src_modules_httpd_la_SOURCES = \
    src/modules/httpd/httpd.c \
