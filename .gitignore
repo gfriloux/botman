@@ -2,6 +2,7 @@ libtool.m4
 ltoptions.m4
 ltversion.m4
 *.tar.xz
+*.tar.bz2
 *.o
 *.lo
 *.la
