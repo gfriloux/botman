@@ -40,6 +40,12 @@ module_register(Gotham *gotham)
    r = esql_connect(log->bdd.e, MODULE_LOG_DB, NULL, NULL);
    EINA_SAFETY_ON_TRUE_GOTO(!r, free_disconnect);
 
+   gotham_modules_command_add("log", ".log last",
+                              "[.log last #] - "
+                              "Returns the # last logs from the DB",
+                              event_log_last);
+
+
    return log;
 
 free_disconnect:

@@ -1,0 +1,15 @@
+Azy_Namespace Module;
+
+struct Log_Entry
+{
+   int id;
+   string date;
+   int type;
+   string source;
+   string data;
+};
+
+struct Log_Entry_List
+{
+   array<Log_Entry> list;
+};

@@ -23,7 +23,7 @@ EXTRA_DIST += \
    src/modules/gdb/gdb.azy \
    src/modules/network/network.azy
 
-.sources_azy: src/modules/ssh_tunnel/ssh_tunnel.azy src/modules/services/services.azy src/modules/alert/alert.azy src/modules/notification/notification.azy src/modules/access/access.azy src/modules/seen/seen.azy src/modules/save/save.azy src/modules/spam/spam.azy src/modules/info/info.azy src/modules/httpd/httpd.azy src/modules/install/install.azy src/modules/rewrite/rewrite.azy src/modules/sysinfo/sysinfo.azy src/modules/version/version.azy src/modules/gdb/gdb.azy src/modules/network/network.azy
+.sources_azy: src/modules/ssh_tunnel/ssh_tunnel.azy src/modules/services/services.azy src/modules/alert/alert.azy src/modules/notification/notification.azy src/modules/access/access.azy src/modules/seen/seen.azy src/modules/save/save.azy src/modules/spam/spam.azy src/modules/info/info.azy src/modules/httpd/httpd.azy src/modules/install/install.azy src/modules/rewrite/rewrite.azy src/modules/sysinfo/sysinfo.azy src/modules/version/version.azy src/modules/gdb/gdb.azy src/modules/network/network.azy src/modules/log/log.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/ssh_tunnel $(top_srcdir)/src/modules/ssh_tunnel/ssh_tunnel.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/services $(top_srcdir)/src/modules/services/services.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/alert $(top_srcdir)/src/modules/alert/alert.azy
@@ -40,6 +40,7 @@ EXTRA_DIST += \
 	azy_parser -H -p -o $(top_srcdir)/src/modules/version $(top_srcdir)/src/modules/version/version.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/gdb $(top_srcdir)/src/modules/gdb/gdb.azy
 	azy_parser -H -p -o $(top_srcdir)/src/modules/network $(top_srcdir)/src/modules/network/network.azy
+	azy_parser -H -p -o $(top_srcdir)/src/modules/log $(top_srcdir)/src/modules/log/log.azy
 
 moddir = $(libdir)/gotham/$(MODULE_ARCH)
 mod_LTLIBRARIES = \
@@ -263,7 +264,11 @@ src_modules_log_la_SOURCES = \
    src/modules/log/log.c \
    src/modules/log/log.h \
    src/modules/log/esql.c \
-   src/modules/log/event.c
+   src/modules/log/event.c \
+   src/modules/log/Module_Common_Azy.c \
+   src/modules/log/Module_Common_Azy.h \
+   src/modules/log/Module_Common.c \
+   src/modules/log/Module_Common.h
 src_modules_log_la_CFLAGS = \
    $(LOG_CFLAGS) -DDATA_DIR=\"$(datadir)\" \ 
    -DSYSCONF_DIR=\"$(sysconfdir)\"
