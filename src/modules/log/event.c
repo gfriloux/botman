@@ -155,6 +155,7 @@ event_log_last(void *data,
    id = esql_query_args(log->bdd.e, ell,
                         "SELECT id, date, type, source, data "
                         "FROM log "
+                        "ORDER BY id DESC "
                         "LIMIT 0, %d", limit);
    EINA_SAFETY_ON_TRUE_RETURN(!id);
 
