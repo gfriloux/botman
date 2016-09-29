@@ -9,7 +9,9 @@ struct Log_Entry
    string data;
 };
 
-struct Log_Entry_List
+struct Log_Query
 {
-   array<Log_Entry> list;
+   int total_results;
+   array<string> filters;
+   array<Log_Entry> results;
 };

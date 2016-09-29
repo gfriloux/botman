@@ -41,8 +41,9 @@ module_register(Gotham *gotham)
    EINA_SAFETY_ON_TRUE_GOTO(!r, free_disconnect);
 
    gotham_modules_command_add("log", ".log last",
-                              "[.log last #] - "
-                              "Returns the # last logs from the DB",
+                              "[.log last #results (#page)] - "
+                              "Returns the #results last logs from the DB. "
+                              "An optional page number can be specified.",
                               event_log_last);
 
 
