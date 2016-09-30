@@ -295,6 +295,7 @@ src_modules_httpd_la_SOURCES = \
    src/modules/httpd/httpd_uri_stats.c \
    src/modules/httpd/httpd_uri_stats_command_list.c \
    src/modules/httpd/httpd_uri_uptime.c \
+   src/modules/httpd/httpd_uri_log.c \
    src/modules/httpd/httpd_utils.c \
    src/modules/httpd/Httpd_Common_Azy.c \
    src/modules/httpd/Httpd_Common_Azy.h \

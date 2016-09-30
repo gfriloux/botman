@@ -125,6 +125,8 @@ void httpd_uri_stats_query_add(Azy_Server_Module *module, const char *path, Azy_
 void httpd_uri_network_init(void);
 void httpd_uri_network(void *service_data, Azy_Server_Module *module, const char *uri, Azy_Net_Data *data);
 
+void httpd_uri_log_init(void);
+
 char * httpd_utils_file_get(const char *file, size_t len);
 char * httpd_utils_content_type(const char *file);
 void httpd_utils_send(Azy_Server_Module *module, Azy_Net *net, unsigned char *s, size_t len, const char *mimetype);

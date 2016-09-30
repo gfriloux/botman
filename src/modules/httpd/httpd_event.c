@@ -16,6 +16,7 @@ event_modules_ready(void *data,
    httpd_uri_uptime_init();
    httpd_uri_service_init();
    httpd_uri_network_init();
+   httpd_uri_log_init();
 
    httpd_uri_stats_init();
 
