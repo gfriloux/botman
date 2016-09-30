@@ -12,6 +12,8 @@ struct Log_Entry
 struct Log_Query
 {
    int total_results;
+   int page;
+   int limit;
    array<string> filters;
    array<Log_Entry> results;
 };

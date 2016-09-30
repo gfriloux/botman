@@ -22,8 +22,6 @@ typedef struct _Event_Log_Last
 {
    Log *log;
    Gotham_Citizen *citizen;
-
-   Module_Log_Query *mlq;
 } Event_Log_Last;
 
 Event_Log_Last *
@@ -44,7 +42,6 @@ void
 _event_log_last_free(Event_Log_Last *ell)
 {
    gotham_citizen_free(ell->citizen);
-   Module_Log_Query_free(ell->mlq);
    free(ell);
 }
 
@@ -107,69 +104,25 @@ event_citizen_command(void *data,
 }
 
 void
-event_log_total_count_cb(Esql_Res *res,
-                         void *data)
+event_log_last_done(void *data,
+                    const char *result)
 {
    Event_Log_Last *ell = data;
-   Eina_Iterator *it;
-   const Esql_Row *row;
-   const char *s;
+   DBG("Query result : %s", result);
 
-   s = esql_res_error_get(res);
-   IF_TRUE_ERR_SEND_RETURN(!s, ell->citizen, "Failed to fetch last logs : %s", s);
-
-   it = esql_res_row_iterator_new(res);
-   EINA_ITERATOR_FOREACH(it, row)
-     {
-        _SETN_FROM_ROW(row, 0, ell->mlq->total_results);
-     }
-
-   s = gotham_serialize_struct_to_string(ell->mlq, (Gotham_Serialization_Function)Module_Log_Query_to_azy_value);
-   IF_TRUE_ERR_SEND_RETURN(s, ell->citizen, "Failed to convert esql result to JSON");
-   gotham_citizen_send(ell->citizen, s);
+   gotham_citizen_send(ell->citizen, result);
    _event_log_last_free(ell);
 }
 
 void
-event_log_last_cb(Esql_Res *res,
-                  void *data)
+event_log_last_error(void *data,
+                     const char *error)
 {
    Event_Log_Last *ell = data;
-   Eina_Iterator *it;
-   const Esql_Row *row;
-   const char *s;
-   Esql_Query_Id id;
+   ERR("Query failed : %s", error);
 
-   s = esql_res_error_get(res);
-   IF_TRUE_ERR_SEND_RETURN(!s, ell->citizen, "Failed to fetch last logs : %s", s);
-
-   ell->mlq = Module_Log_Query_new();
-   IF_TRUE_ERR_SEND_RETURN(ell->mlq, ell->citizen, "Failed to allocate Module_Log_Query structure");
-
-   it = esql_res_row_iterator_new(res);
-   EINA_ITERATOR_FOREACH(it, row)
-     {
-        const Eina_Value *ev;
-        Module_Log_Entry *mle;
-
-        ev = esql_row_value_struct_get(row);
-        mle = Module_Log_Entry_new();
-
-        _SETN(ev, "id", mle->id);
-        _SETS(ev, "date", mle->date);
-        _SETN(ev, "type", mle->type);
-        _SETS(ev, "source", mle->source);
-        _SETS(ev, "data", mle->data);
-
-        ell->mlq->results = eina_list_append(ell->mlq->results, mle);
-     }
-
-   id = esql_query_args(ell->log->bdd.e, ell,
-                        "SELECT count(*) FROM log "
-                        "ORDER BY id DESC;");
-   EINA_SAFETY_ON_TRUE_RETURN(!id);
-   esql_query_callback_set(id, event_log_total_count_cb);
-   return;
+   gotham_citizen_send(ell->citizen, error);
+   _event_log_last_free(ell);
 }
 
 void
@@ -180,7 +133,7 @@ event_log_last(void *data,
    Event_Log_Last *ell;
    unsigned int limit,
                 page = 0;
-   Esql_Query_Id id;
+   Eina_Bool r;
 
    if (!command->command[2])
      {
@@ -191,18 +144,15 @@ event_log_last(void *data,
    limit = atoi(command->command[2]);
 
    if (command->command[3]) page = atoi(command->command[3]);
-   if (page) page--;
 
    ell = _event_log_last_new(log, command->citizen->jid);
    EINA_SAFETY_ON_NULL_RETURN(ell);
 
-   id = esql_query_args(log->bdd.e, ell,
-                        "SELECT id, date, type, source, data "
-                        "FROM log "
-                        "ORDER BY id DESC "
-                        "LIMIT %d, %d", limit * page, limit);
-   EINA_SAFETY_ON_TRUE_RETURN(!id);
-   esql_query_callback_set(id, event_log_last_cb);
+   r = event_log_query(log, NULL, page, limit,
+                       event_log_last_done,
+                       event_log_last_error,
+                       ell);
+   EINA_SAFETY_ON_TRUE_RETURN(!r);
    return;
 }
 

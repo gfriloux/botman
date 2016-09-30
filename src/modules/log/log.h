@@ -50,7 +50,12 @@ typedef struct _Log
       return;                                                                  \
    } while (0)
 
+typedef void (*Event_Log_Query_Cb)(void *data, const char *result);
+typedef void (*Event_Log_Query_Error_Cb)(void *data, const char *error);
+
 void event_log_last(void *data, Gotham_Citizen_Command *command);
+
+Eina_Bool event_log_query(Log *log, Eina_List *filters, unsigned int page, unsigned int limit, Event_Log_Query_Cb done_cb, Event_Log_Query_Error_Cb error_cb, void *data);
 
 Eina_Bool log_esql_connect(void *data, int type, void *ev);
 Eina_Bool log_esql_disconnect(void *data, int type, void *ev);

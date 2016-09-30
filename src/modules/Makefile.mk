@@ -265,6 +265,7 @@ src_modules_log_la_SOURCES = \
    src/modules/log/log.h \
    src/modules/log/esql.c \
    src/modules/log/event.c \
+   src/modules/log/event_log_query.c \
    src/modules/log/Module_Common_Azy.c \
    src/modules/log/Module_Common_Azy.h \
    src/modules/log/Module_Common.c \
