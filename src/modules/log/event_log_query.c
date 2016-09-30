@@ -160,20 +160,21 @@ event_log_query(Log *log,
 
    buf = eina_strbuf_new();
 
+   eina_strbuf_append(buf, "SELECT id, date, type, source, data "
+                           "FROM log ");
+
    if (filters) eina_strbuf_append(buf, "WHERE ");
    EINA_LIST_FOREACH(filters, l, s)
      {
         if (i++ > 0) eina_strbuf_append(buf, "AND ");
         eina_strbuf_append_printf(buf, "%s ", s);
      }
-   id = esql_query_args(log->bdd.e, elq,
-                        "SELECT id, date, type, source, data "
-                        "FROM log "
-                        "%s"
-                        "ORDER BY id DESC "
-                        "LIMIT %d, %d",
-                        eina_strbuf_string_get(buf),
-                        limit * (page-1), limit);
+
+   eina_strbuf_append_printf(buf, "ORDER BY id DESC LIMIT %d, %d",
+                             limit * (page-1), limit);
+   DBG("query[%s]", eina_strbuf_string_get(buf));
+   id = esql_query(log->bdd.e, elq, eina_strbuf_string_get(buf));
+
    eina_strbuf_free(buf);
    EINA_SAFETY_ON_TRUE_RETURN_VAL(!id, EINA_FALSE);
    esql_query_callback_set(id, event_log_query_cb);

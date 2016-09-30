@@ -52,6 +52,7 @@ httpd_uri_log(void *log_data,
                 nb;
    char **params;
    Eina_Bool r;
+   Eina_List *filters = NULL;
 
    params = eina_str_split_full(uri, "/", 5, &nb);
    EINA_SAFETY_ON_NULL_GOTO(params, error);
@@ -67,7 +68,10 @@ httpd_uri_log(void *log_data,
    hulq->hul = hul;
    hulq->module = module;
 
-   r = hul->func(hul->data, NULL, page, limit, _httpd_uri_log_done,
+   if (data->size)
+     filters = gotham_serialize_string_to_struct((const char *)data->data, data->size, (Gotham_Deserialization_Function)azy_value_to_Array_string);
+
+   r = hul->func(hul->data, filters, page, limit, _httpd_uri_log_done,
                  _httpd_uri_log_error, hulq);
    EINA_SAFETY_ON_TRUE_GOTO(!r, error);
 
@@ -114,7 +118,17 @@ httpd_uri_log_init(void)
                     "    <span class=yellow><b>curl</b></span> <span class=white>http://127.0.0.1:5128</span><span class=cyan>/log/last/</span><span class=green>5</span><span class=cyan>/</span><span class=purple>2</span>"
                     "  </div>"
                     "</div>"
-                    "<br />");
+                    "<br />"
+                    "<div class=\"panel panel-primary\">"
+                    "  <div class=\"panel-heading\">"
+                    "     <h3 class=\"panel-title\">Ask for the <span class=green>5</span> last command from a <span class=purple>user</span>.</h3>"
+                    "  </div>"
+                    "  <div class=\"panel-body blackback\">"
+                    "    <span class=yellow><b>curl</b></span> <span class=red>-d</span> <span class=green>'[ \"source = \\\"<span class=purple>JID@domain</span>\\\"\", \"data != \\\"\\\"\" ]'</span> <span class=white>http://127.0.0.1:5128</span><span class=cyan>/log/last/</span><span class=green>5</span>"
+                    "  </div>"
+                    "</div>"
+                    "<br />"
+);
    return;
 
 free_hul:

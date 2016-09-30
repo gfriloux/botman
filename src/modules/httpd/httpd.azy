@@ -83,6 +83,11 @@ struct Module_List
    array<Module> modules;
 };
 
+struct Log_Filters
+{
+   array<string> filters;
+};
+
 Azy_Module Serve
 {
 <%
