@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>gotham-module-httpd</title>
+      <link rel="stylesheet" href="data/css/bootstrap.min.css" media="screen">
+      <link rel="stylesheet" href="data/css/httpd.css" media="screen">
+   </head>
+   <body>
+      <script type="text/javascript" src="data/js/jquery.min.js"></script>
+      <script type="text/javascript" src="data/js/handlebars-v4.0.5.js"></script>
+      <script type="text/javascript" src="data/js/deps.js"></script>
+      <script type="text/javascript" src="data/js/log.js"></script>
+   <div class="container">
+
+      <nav class="navbar navbar-default">
+         <div class="container-fluid">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="#">Alfred's HTTPd module</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+               <ul class="nav navbar-nav">
+                  <li><a href="/">Dash</a></li>
+                  <li><a href="/query.html">Query</a></li>
+                  <li class="active"><a href="/logs.html">Logs<span class="sr-only">(current)</span></a></li>
+                  <li><a href="/api.html">API</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+
+      <div id="content_query">
+         <div class="row">
+            <div class="col-lg-9">
+               <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                        <div class="navbar-form" role="search">
+                           <form class="navbar-form navbar-left" role="search">
+                           <input type="text" class="form-control" id="log_page">
+                           <span id="log_page_total" class="white"></span>
+                           </form>
+                           <ul class="nav navbar-nav navbar-right">
+                              <button class="btn btn-success" id="query_send">Goto</button>
+                              <button class="btn btn-warning" id="query_refresh">Refresh</button>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </nav>
+               <div id="query_history">
+               </div>
+            </div>
+            <div class="col-lg-3">
+               <ul class="nav navbar-nav navbar-right">
+                  <h4>Filter logs</h4>
+                  <div class="input-group">
+                     <input type="text" class="form-control" id="filter_input">
+                     <span class="input-group-btn">
+                        <button class="btn btn-success" type="button" id="filter_add">+</button>
+                        <button class="btn btn-danger" type="button" id="filter_clear">x</button>
+                     </span>
+                  </div>
+                  <div id="filter_list">
+                  </div>
+               </ul>
+            </div>
+         </div>
+      </div>
+
+   </div>
+   <script type="text/javascript">
+      $('#query_refresh').click(function() {
+         log_last_fetch(actual_filters, actual_limit, actual_page);
+      });
+
+      $('#query_send').click(function() {
+         log_last_fetch(actual_filters, actual_limit, $('#log_page').val());
+      });
+
+      $('#filter_add').click(function() {
+         actual_filters.push($('#filter_input').val());
+         log_last_fetch(actual_filters, actual_limit, $('#log_page').val());
+         filters_draw(actual_filters);
+         $('#filter_input').val('');
+      });
+
+      $('#filter_clear').click(function() {
+         actual_filters = [];
+         log_last_fetch(actual_filters, actual_limit, $('#log_page').val());
+         filters_draw(actual_filters);
+      });
+
+      $('#log_page').val(actual_page);
+      log_last_fetch(actual_filters, actual_limit, actual_page);
+   </script>
+   </body>
+</html>
