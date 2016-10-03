@@ -56,7 +56,7 @@
    <div class="panel-body">
 {{#.}}
     <h4>{{jid_username jid}}</h4>
-    <ul>{{message}}</ul>
+    <ul>{{{message}}}</ul>
 {{/.}}
    </div>
 </script>
