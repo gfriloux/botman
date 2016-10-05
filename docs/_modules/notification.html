@@ -1,0 +1,82 @@
+---
+layout: default
+title: Notification
+---
+
+<h1>Notification Module</h1>
+<p><span class="label label-success">Alfred</span></p>
+
+<h2>Description</h2>
+This module makes it easier to send messages to groups of users (they
+can be botmans or ordinary contacts).<br />
+By doing so you can override the use of spam, which is limited to
+botmans, and patterns to match botmans.<br />
+The downside of this module is that it doesnt wait for replys.
+You send any message you want, but you are not going to get
+any result.<br />
+One of the most common usage for this module is from other modules.<br />
+For example, the <a href="{{ site.github.url }}/modules/gdb.html">GDB module</a>
+will use the notification module to notify devs for the creation of a new
+coredump.
+
+<h2>Configuration</h2>
+
+<pre><code class="json">
+{
+   "vars":  ["licence"],
+   "groups":   [{
+         "name":  "dev",
+         "users": ["guillaume.friloux@botnet.master.com"]
+      }]
+}</code></pre>
+The <code>vars</code> object stands for <code>Custom variables</code> and will be used to print extra informations from the sender, by printing values of those <code>Custom 
+variables</code>.<br /> The <code>groups</code> object defines every existing groups, and the associated users. In this example, this means that if you send a notification to the 
+<code>dev</code> group, a message will be sent <code>from alfred</code> to <code>guillaume.friloux@botnet.master.com</code>.
+
+<h2>Example use</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#groupadd" data-toggle="tab" aria-expanded="true">Add group</a></li>
+  <li class=""><a href="#groupdel" data-toggle="tab" aria-expanded="false">Delete group</a></li>
+  <li class=""><a href="#useradd" data-toggle="tab" aria-expanded="false">Add user</a></li>
+  <li class=""><a href="#userdel" data-toggle="tab" aria-expanded="false">Delete user</a></li>
+  <li class=""><a href="#list" data-toggle="tab" aria-expanded="false">List groups</a></li>
+  <li class=""><a href="#send" data-toggle="tab" aria-expanded="false">Send notification</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="groupadd">
+    <pre>
+<span style="color:blue">(11:50:12) guillaume.friloux@botman.master.com:</span> .notification groupadd dev
+<span style="color:red">(11:50:12) Alfred Pennyworth:</span>
+New group created</pre>
+  </div>
+  <div class="tab-pane fade in" id="groupdel">
+    <pre>
+<span style="color:blue">(11:50:25) guillaume.friloux@botman.master.com:</span> .notification groupdel dev
+<span style="color:red">(11:50:25) Alfred Pennyworth:</span>
+Group deleted</pre>
+  </div>
+  <div class="tab-pane fade in" id="useradd">
+    <pre>
+<span style="color:blue">(11:51:02) guillaume.friloux@botman.master.com:</span> .notification useradd dev guillaume.friloux@botman.master.com
+<span style="color:red">(11:51:02) Alfred Pennyworth:</span>
+User added to group.</pre>
+  </div>
+  <div class="tab-pane fade in" id="userdel">
+    <pre>
+<span style="color:blue">(11:51:08) guillaume.friloux@botman.master.com:</span> .notification userdel dev guillaume.friloux@botman.master.com
+<span style="color:red">(11:51:08) Alfred Pennyworth:</span>
+User deleted from group.</pre>
+  </div>
+  <div class="tab-pane fade in" id="list">
+    <pre>
+<span style="color:blue">(11:52:20) guillaume.friloux@botman.master.com:</span> .notification
+<span style="color:red">(11:52:20) Alfred Pennyworth:</span>
+Group dev :
+        guillaume.friloux@xmpp-test.asp64.lan</pre>
+  </div>
+  <div class="tab-pane fade in" id="send">
+    <pre>
+<span style="color:blue">(11:52:35) guillaume.friloux@botman.master.com:</span> .notification send dev Test message
+<span style="color:red">(11:52:35) Alfred Pennyworth:</span> Notification from guillaume.friloux@botman.master.com  : Test message</pre>
+  </div>
+</div>
