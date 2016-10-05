@@ -31,6 +31,32 @@ Create the file <code>/usr/local/share/gotham/modules.d/gdb/command</code> and p
 <pre><code class="shell">thread apply all backtrace full</code></pre>
 <br /><br />
 
+<h2>Query botmans through Alfred</h2>
+It is possible to make alfred able to query botmans for you by  
+combining the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
+and <a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
+You can add the following JSON object as a new rule of the
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>'s  
+configuration file :
+<pre><code class="json">
+{
+   "name" : ".gdb list",
+   "filter" : ".gdb list *",
+   "rule" : "sed -r 's/^.gdb list (.*)/.spam \\1 .gdb list/'",
+   "description" : ".gdb list <pattern>"
+}, {
+   "name" : ".gdb delete",
+   "filter" : ".gdb delete *",
+   "rule" : "sed -r 's/^.gdb delete *([^ ]*) (.*)/.spam \\1 .gdb delete \\2/'",
+   "description" : ".gdb delete <licence_pattern> <coredump_pattern>"
+}, {
+   "name" : ".gdb fetch",
+   "filter" : ".gdb fetch *",
+   "rule" : "sed -r 's/^.gdb fetch *([^ ]*) (.*)/.spam \\1 .gdb fetch \\2/'",
+   "description" : ".gdb fetch <licence_pattern> <coredump>"
+}</code></pre>
+<br /><br />
+
 <h2>Example use</h2>
 
 <ul class="nav nav-tabs">

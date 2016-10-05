@@ -21,7 +21,7 @@ Create the file <code>/etc/gotham/modules.conf.d/install.conf</code> that might 
       "post": ""
    }],
    "upgrade": [{
-      "pre": "freebsd-update cron",
+      "pre": "",
       "cmd": "freebsd-update install",
       "post": ""
    }],
@@ -32,9 +32,40 @@ You have to specify the commands you need to execute for installation of upgrade
 This allows the module to adapt itself to various distros.
 <br /><br />
 
-<h3>Example use</h3>
+<h2>Query botmans through Alfred</h2>
+It is possible to make alfred able to query botmans for you by  
+combining the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
+and <a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
+You can add the following JSON object as a new rule of the
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>'s  
+configuration file :
+<pre><code class="json">
+{
+   "name" : ".install",
+   "filter" : ".install*",
+   "rule" : "sed -r 's/^.install *([^ ]*) (.*)/.spam \\1 .install \\2/'",
+   "description" : ".install <pattern> <softwarelist>"
+}, {
+   "name" : ".upgrade",
+   "filter" : ".upgrade*",
+   "rule" : "sed -r 's/^.upgrade (.*)/.spam \\1 .upgrade/'",
+   "description" : ".upgrade <pattern>"
+}, {
+   "name" : ".jobs",
+   "filter" : ".jobs*",
+   "rule" : "sed -r 's/^.jobs (.*)/.spam \\1 .jobs/'",
+   "description" : ".jobs <pattern>"
+}, {
+   "name" : ".kill",
+   "filter" : ".kill * *",
+   "rule" : "sed -r 's/^.kill *([^ ]*) (.*)/.spam \\1 .kill \\2/'",
+   "description" : ".kill <pattern> <job_id>"
+}</code></pre>
+<br /><br />
 
-<h4>Install a package</h4>
+<h2>Example use</h2>
+
+<h3>Install a package</h3>
 <pre>
 <span style="color:blue">(31/07/2015 08:45:26) guillaume.friloux@botnet.master.com:</span> .install htop
 <span style="color:red">(08:45:26) botman-xxxx:</span> {
