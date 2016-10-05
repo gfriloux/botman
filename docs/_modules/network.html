@@ -1,0 +1,74 @@
+---
+layout: default
+title: Network
+---
+
+<h1>Network Module</h1>
+<p><span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module returns the network configuration.
+<div class="alert alert-dismissible alert-info">
+  This module only works on Windows at the moment.
+</div>
+<br /><br />
+
+<h2>Configuration</h2>
+This module does not need any configuration file.
+<br /><br />
+
+<h2>Query botmans through Alfred</h2>
+It is possible to make alfred able to query botmans for you, but
+editing the configuration file from the
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>.<br />
+You can add the following JSON object as a new rule of the rewrite module :
+<pre><code class="json">
+{
+   "name" : ".network",
+   "filter" : ".network*",
+   "rule" : "sed -r 's/^.network (.*)/.spam \\1 .network/'",
+   "description" : ".network <pattern>"
+}
+</code></pre>
+<br /><br />
+
+<h2>Example use</h2>
+<h3>Fetch network configuration</h3>
+<pre>
+<span style="color:blue">(14:56:10) guillaume.friloux@botman.master.com:</span> .access
+<span style="color:red">(14:56:10) botman-xxxx:</span>
+[{
+   "name": "{8ECC48CB-13D8-4566-A88A-99BD8D41F071}",
+   "name_friendly":        "Connexion au réseau local",
+   "description":  "Realtek RTL8139C+ carte réseau Fast Ethernet",
+   "dns_suffix":   "botman.master.com",
+   "mtu":  1500,
+   "addresses":    {
+      "physical":     "52:54:00:2C:01:8C",
+      "unicast":      ["fe80::d5b:19ce:eccb:ea9e%10", "192.168.4.113"],
+      "dns_server":   ["192.168.4.1"]
+   }
+}, {
+   "name": "{846EE342-7039-11DE-9D20-806E6F6E6963}",
+   "name_friendly":        "Loopback Pseudo-Interface 1",
+   "description":  "Software Loopback Interface 1",
+   "dns_suffix":   "",
+   "mtu":  -1,
+   "addresses":    {
+      "physical":     "",
+      "unicast":      ["::1", "::1"],
+      "dns_server":   ["::1", "fec0:0:0:ffff::2%1", "fec0:0:0:ffff::3%1"]
+   }
+}, {
+   "name": "{507059DE-5A6E-4792-A30F-88A67D200A5E}",
+   "name_friendly":        "isatap.botman.master.com",
+   "description":  "Carte Microsoft ISATAP",
+   "dns_suffix":   "botman.master.com",
+   "mtu":  1280,
+   "addresses":    {
+      "physical":     "00:00:00:00:00:00:00:E0",
+      "unicast":      ["fe80::5efe:192.168.4.113%11"],
+      "dns_server":   ["192.168.4.1"]
+   }
+}]
+</pre>
