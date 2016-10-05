@@ -1,0 +1,44 @@
+---
+layout: default
+title: Alert
+---
+
+<h1>Alert Module</h1>
+<p><span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module will run commands at given intervals, and store their output into
+<code>custom variables</code>.<br />
+If the alert module detects a change since last command run, it will then
+send a notification to <code>Alfred</code> so you can get warned about it.<br />
+Example use cases :
+<ul>
+  <li>Monitor raid health.</li>
+  <li>Monitor smartctl reports.</li>
+  <li>Trigger alert on number of processes.</li>
+  <li>Anything that can be summarized into a few values (good/bad etc).</li>
+</ul>
+<br /><br />
+
+<h2>Configuration</h2>
+Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/alert.conf</code> :
+<pre><code class="json">
+[
+   {
+      "name" : "zpool_status",
+      "interval" : 300,
+      "command" : "/usr/local/share/gotham/modules.d/alert/zpool_status.sh"
+   }
+]</code></pre>
+In this example, we only run one script : <code>zpool_status.sh</code>.
+<pre><code class="bash">
+#!/usr/local/bin/bash
+
+zpool status | grep "state:" | awk '{print $2}'
+exit 0</code></pre>
+This script will output <code>ONLINE</code> if your zpool is healthy, otherwise it would
+change value to (<code>DEGRADED</code>|<code>FAULTED</code>|<code>OFFLINE</code>|<code>UNAVAIL</code>|<code>REMOVED</code>).<br />
+<br />
+Every change in the output of commands will be sent to the <a href="{{ site.github.url }}/modules/notification.html">notification module</a>.
+<br /><br />
+
