@@ -20,7 +20,7 @@ section: index
    <h1 class="page-heading">Modules</h1>
    <ul>
    {% for module in site.modules %}
-      <li><a href="{{ module.url | prepend: site.baseurl }}" class="post-link">{{module.title}}</a></li>
+      <li><a href="{{ module.url | prepend: site.github.url }}" class="post-link">{{module.title}}</a></li>
    {% endfor %}
    </ul>
 </div>
