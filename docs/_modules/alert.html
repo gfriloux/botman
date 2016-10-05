@@ -27,7 +27,8 @@ Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/alert.co
    {
       "name" : "zpool_status",
       "interval" : 300,
-      "command" : "/usr/local/share/gotham/modules.d/alert/zpool_status.sh"
+      "command" : "/usr/local/share/gotham/modules.d/alert/zpool_status.sh",
+      "group" : "Support"
    }
 ]</code></pre>
 In this example, we only run one script : <code>zpool_status.sh</code>.
@@ -39,6 +40,7 @@ exit 0</code></pre>
 This script will output <code>ONLINE</code> if your zpool is healthy, otherwise it would
 change value to (<code>DEGRADED</code>|<code>FAULTED</code>|<code>OFFLINE</code>|<code>UNAVAIL</code>|<code>REMOVED</code>).<br />
 <br />
-Every change in the output of commands will be sent to the <a href="{{ site.github.url }}/modules/notification.html">notification module</a>.
+Every change in the output of commands will be sent to the <code>Support</code> group from the
+<a href="{{ site.github.url }}/modules/notification.html">notification module</a>.
 <br /><br />
 
