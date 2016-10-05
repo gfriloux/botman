@@ -10,11 +10,11 @@ title: Rewrite
 This module allows you to declare some commands that will be rewritten internally into new commands.<br />
 <br />
 This is similar to what you can do with web servers.<br />
-It's primary use is with the <a href="{% link _modules/spam.html %}">spam module</a>.
+It's primary use is with the <a href="{{ site.github.url }}/modules/spam.html">spam module</a>.
 This will help writing commands sent to a variety of bots, without noticing you are using the spam module.<br />
 <br />
 Any rewrite rule will be added to the list of commands registered.<br />
-This means they will automatically appear with .help command (see <a href="{% link _modules/help.html %}">help module</a>).<br />
+This means they will automatically appear with .help command (see <a href="{{ site.github.url }}/modules/help.html">help module</a>).<br />
 <br />
 This module also exports its own command : <code>.rewrite</code>.<br />
 This command will give more detailed informations about registered rewrite rules.<br />
