@@ -1,0 +1,93 @@
+---
+layout: default
+title: Log
+---
+
+<h1>Log module</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module will log every received messages and contacts (dis)connection into
+an SQLite database.<br />
+Even through it is possible to run the log module on <code>Botmans</code>,
+its use seems to be useless as <code>Alfred</code> is in the center of
+everything, and thus, a better place for logs.
+
+<div class="alert alert-dismissible alert-info">
+  Even through the internal code supports the use of filters on queries,
+  you can only set them using the <a href="{{ site.github.url }}/modules/httpd.html">HTTPd module</a>.
+</div>
+<br />
+
+<h2>Configuration</h2>
+This module does not need any configuration file.
+<br /><br />
+
+<h3>Example use</h3>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#last5" data-toggle="tab" aria-expanded="true">Last 5</a></li>
+  <li class=""><a href="#last1" data-toggle="tab" aria-expanded="false">Last 1, 2nd page</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="last5">
+    <pre>
+<span style="color:blue">(11:26:00) guillaume.friloux@botnet.master.com:</span> .log last 5
+<span style="color:red">(11:26:00) Alfred Pennyworth:</span>
+{
+   "total_results":        13868,
+   "page": 0,
+   "limit":        5,
+   "filters":      [],
+   "results":      [{
+      "id":   13867,
+      "date": "2016-10-05 11:25:56",
+      "type": 2,
+      "source":       "botman-bull@xmpp-test.asp64.lan",
+      "data": "{\n\t\"command\":\t\".version\",\n\t\"parameters\":\t\"\",\n\t\"status\":\t\"ok\",\n\t\"content\":\t[\"botman : 1.2.16_2\", \"necto : 4.0.7_2\", \"kernel : 10.1-RELEASE-p31\", \"eina : 1.7.12\", \"eet : 1.7.12\", \"ecore : 1.7.12\", \"eio : 1.7.12\", \"maelstrom : 1.0.1\"]\n}"
+   }, {
+      "id":   13866,
+      "date": "2016-10-05 11:25:56",
+      "type": 2,
+      "source":       "botman-bull@xmpp-test.asp64.lan",
+      "data": "{\n\t\"command\":\t\".info\",\n\t\"parameters\":\t\"\",\n\t\"status\":\t\"ok\",\n\t\"content\":\t[\"version_ecore : 1.7.12\", \"version_kernel : 10.1-RELEASE-p31\", \"version_necto : 4.0.7_2\", \"tunnel_port : 0\", \"version_eet : 1.7.12\", \"zpool_status : ONLINE\", \"version_eio : 1.7.12\", \"prosave_backup_server : 85.31.146.190\", \"tunnel_pid : 0\", \"version_botman : 1.2.16_2\", \"sysinfo_serial_number : 928PR4J\", \"prosave_backup_status : prosave_backup_good\", \"prosave_backup_volume_total : 10737418240\", \"prosave_backup_volume_used : 421414912\", \"sysinfo_manufacturer : Dell Inc.\", \"prosave_backup_contract_end : 2030/12/31 01:00:00\", \"date : mar  6 sep 2016 10:32:21 CEST\", \"prosave_backup_licence : ps00003002\", \"sysinfo_product_name : OptiPlex 780\", \"version_maelstrom : 1.0.1\", \"version_eina : 1.7.12\"]\n}"
+   }, {
+      "id":   13865,
+      "date": "2016-10-05 11:25:40",
+      "type": 2,
+      "source":       "guillaume.friloux@xmpp-test.asp64.lan",
+      "data": ".help"
+   }, {
+      "id":   13864,
+      "date": "2016-10-05 11:24:56",
+      "type": 2,
+      "source":       "botman-bull@xmpp-test.asp64.lan",
+      "data": "{\n\t\"command\":\t\".version\",\n\t\"parameters\":\t\"\",\n\t\"status\":\t\"ok\",\n\t\"content\":\t[\"botman : 1.2.16_2\", \"necto : 4.0.7_2\", \"kernel : 10.1-RELEASE-p31\", \"eina : 1.7.12\", \"eet : 1.7.12\", \"ecore : 1.7.12\", \"eio : 1.7.12\", \"maelstrom : 1.0.1\"]\n}"
+   }, {
+      "id":   13863,
+      "date": "2016-10-05 11:24:56",
+      "type": 2,
+      "source":       "botman-bull@xmpp-test.asp64.lan",
+      "data": "{\n\t\"command\":\t\".info\",\n\t\"parameters\":\t\"\",\n\t\"status\":\t\"ok\",\n\t\"content\":\t[\"version_ecore : 1.7.12\", \"version_kernel : 10.1-RELEASE-p31\", \"version_necto : 4.0.7_2\", \"tunnel_port : 0\", \"version_eet : 1.7.12\", \"zpool_status : ONLINE\", \"version_eio : 1.7.12\", \"prosave_backup_server : 85.31.146.190\", \"tunnel_pid : 0\", \"version_botman : 1.2.16_2\", \"sysinfo_serial_number : 928PR4J\", \"prosave_backup_status : prosave_backup_good\", \"prosave_backup_volume_total : 10737418240\", \"prosave_backup_volume_used : 421414912\", \"sysinfo_manufacturer : Dell Inc.\", \"prosave_backup_contract_end : 2030/12/31 01:00:00\", \"date : mar  6 sep 2016 10:32:21 CEST\", \"prosave_backup_licence : ps00003002\", \"sysinfo_product_name : OptiPlex 780\", \"version_maelstrom : 1.0.1\", \"version_eina : 1.7.12\"]\n}"
+   }]
+}</pre>
+  </div>
+  <div class="tab-pane fade in" id="last1">
+    <pre>
+<span style="color:blue">(11:35:00) guillaume.friloux@botnet.master.com:</span> .log last 1 2
+<span style="color:red">(11:35:00) Alfred Pennyworth:</span>
+{
+   "total_results":        13889,
+   "page": 2,
+   "limit":        1,
+   "filters":      [],
+   "results":      [{
+      "id":   13887,
+      "date": "2016-10-05 11:34:56",
+      "type": 2,
+      "source":       "botman-bull@xmpp-test.asp64.lan",
+      "data": "{\n\t\"command\":\t\".info\",\n\t\"parameters\":\t\"\",\n\t\"status\":\t\"ok\",\n\t\"content\":\t[\"version_ecore : 1.7.12\", \"version_kernel : 10.1-RELEASE-p31\", \"version_necto : 4.0.7_2\", \"tunnel_port : 0\", \"version_eet : 1.7.12\", \"zpool_status : ONLINE\", \"version_eio : 1.7.12\", \"prosave_backup_server : 85.31.146.190\", \"tunnel_pid : 0\", \"version_botman : 1.2.16_2\", \"sysinfo_serial_number : 928PR4J\", \"prosave_backup_status : prosave_backup_good\", \"prosave_backup_volume_total : 10737418240\", \"prosave_backup_volume_used : 421414912\", \"sysinfo_manufacturer : Dell Inc.\", \"prosave_backup_contract_end : 2030/12/31 01:00:00\", \"date : mar  6 sep 2016 10:32:21 CEST\", \"prosave_backup_licence : ps00003002\", \"sysinfo_product_name : OptiPlex 780\", \"version_maelstrom : 1.0.1\", \"version_eina : 1.7.12\"]\n}"
+   }]
+}</pre>
+  </div>
+</div>
