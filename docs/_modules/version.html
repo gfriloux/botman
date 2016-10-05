@@ -1,0 +1,90 @@
+---
+layout: default
+title: Version
+---
+
+<h1>Version Module</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module will fetch version information of various packages (could also be other stuff).<br />
+Informations are put under cache by alfred, allowing you to retrieve latest recieved versions even if bot is offline.
+
+<h2>Configuration</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#alfred" data-toggle="tab" aria-expanded="true">Alfred</a></li>
+  <li class=""><a href="#botman" data-toggle="tab" aria-expanded="false">Botman</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="alfred">
+    <pre><code class="json">
+{
+   "vars": [
+      "raid_status",
+      "disk_full"
+   ]
+}</code></pre>
+    The vars array contains the list of custom variables to be shown when the .version command will list matching bots.
+  </div>
+  <div class="tab-pane fade in" id="botman">
+    <pre><code class="json">
+{
+   "default_cmd" : "pkg info %s | grep 'Version' | cut -d':' -f2 | tr -d ' '",
+   "versions_list" : [
+      "botman",
+      {
+         "kernel": "uname -r"
+      }
+   ]
+}</code></pre>
+    <ul>
+      <li><code>default_cmd</code> : Default command to use to fetch version of packages.</li>
+      <li><code>versions_list</code> : Array of packages to list.<br />
+          If the array item is a string, then the <code>default_cmd</code> will be used to find version number.<br />
+          If the array item is an object, then it will use the given command.
+      </li>
+    </ul>
+  </div>
+</div>
+<br /><br />
+
+<h2>Example use</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List</a></li>
+  <li class=""><a href="#find" data-toggle="tab" aria-expanded="false">Find</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="list">
+    <p><span class="label label-success">Alfred</span></p>
+    <pre>
+<span style="color:blue">(24/11/2015 08:52:29) guillaume.friloux@botnet.master.com:</span> .version xxx
+<span style="color:red">(08:52:29) Alfred Pennyworth:</span>
+Contacts that matched :
+   online botman-xxx@botnet.master.com 
+
+online botman-xxx@botnet.master.com :
+   kernel : 10.1-RELEASE
+   botman : 1.2.13_5</pre>
+  </div>
+  <div class="tab-pane fade in" id="find">
+    <p><span class="label label-success">Alfred</span></p>
+    This function allows to search over the version cache to find bots matching given package version.
+    Supported conditions for package version matching are : &lt;, &lt;=, =, >=, >, !=
+    <pre>
+<span style="color:blue">(08:59:47) guillaume.friloux@botnet.master.com:</span> .version find botman > 1.2.10
+<span style="color:red">(08:59:47) Alfred Pennyworth:</span>
+Contacts that matched “botman>1.2.10” :
+
+botman : 1.2.13_1
+   online botman-aaa@botnet.master.com
+   offline botman-bbb@botnet.master.com
+
+botman : 1.2.13_5
+   online botman-ccc8@xmpp-test.asp64.lan
+   online botman-xxx@xmpp-test.asp64.lan
+
+botman : 1.2.15_1
+   offline botman-ddd@botnet.master.com
+   online botman-eee@botnet.master.com</pre>
+  </div>
+</div>

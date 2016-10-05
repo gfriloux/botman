@@ -1,0 +1,67 @@
+---
+layout: default
+title: Info
+---
+
+<h1>Info Module</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module plays with registered custom variables.<br />
+When run by botman, this module will periodically collect the list of custom variables, and send them to alfred so he can register them for each botman. This allows other modules running on Alfred to have them synced and reuse them.<br />
+<br />
+For example, a module might collect system inforations, and register them as custom variables.<br />
+Custom variables being sent to alfred, it would be possible to search for them using alfred.
+<br /><br />
+
+<h2>Configuration</h2>
+
+<h3>Alfred</h3>
+You can add <code>custom variables</code> to be searchable as <code>&lt;pattern></code>.<br />
+These variables must be referenced inside the configuration file (<code>/usr/local/etc/gotham/modules.conf.d/info.conf</code>) :
+<pre>
+<code class="json">
+{
+   "search_vars" : [
+      "variable_name"
+   ]
+}</code></pre>
+<br />
+
+<h3>Example use</h3>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List</a></li>
+  <li class=""><a href="#get" data-toggle="tab" aria-expanded="false">Get</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="list">
+    <pre>                   
+<span style="color:blue">(11:35:51) guillaume.friloux@botnet.master.com:</span> .info
+<span style="color:red">(11:35:51) botman-xxxx:</span> {
+   "command":  ".info",
+   "parameters":  "",
+   "status":   "ok",
+   "content":  [
+      "version_ecore : 1.7.11_3",
+      "version_kernel : 10.1-RELEASE",
+      "tunnel_port : 0",
+      "version_eet : 1.7.11_1",
+      "zpool_status : DEGRADED",
+      "version_eio : 1.7.11_3",
+      "tunnel_pid : 0",
+      "version_botman : 1.2.10_3",
+      "sysinfo_serial_number : 928PR4J",
+      "sysinfo_manufacturer : Dell Inc.",
+      "sysinfo_product_name : OptiPlex 780",
+      "version_maelstrom : 0.0.99_6",
+      "version_eina : 1.7.11_1"
+   ]
+}</pre>
+  </div>
+  <div class="tab-pane fade in" id="get">
+  <pre>
+<span style="color:blue">(11:31:31) guillaume.friloux@botnet.master.com:</span> .info get zpool_status
+<span style="color:red">(11:31:31) botman-xxxx:</span> zpool_status : DEGRADED</pre>
+  </div>
+</div>

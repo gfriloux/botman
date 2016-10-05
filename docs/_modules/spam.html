@@ -1,0 +1,56 @@
+---
+layout: default
+title: Spam
+---
+
+<h1>Spam Module</h1>
+<p><span class="label label-success">Alfred</span></p>
+
+<h2>Description</h2>
+This module ease the life of anyone trying to send messages to multiple botmans at once.
+It accepts patterns to match botmans, based on <code>JID</code> or defined <code>custom variables</code>. 
+<br /><br />
+
+<h2>Configuration</h2>
+You need to create a configuration file (<code>/usr/local/etc/gotham/modules.conf.d/spam.conf</code>) :
+<pre>
+<code class="json">
+{
+   "vars": [
+   ]
+}</code></pre>
+Put any <code>custom variable</code> into the <code>vars</code> array and it will be matched when sending spams. 
+<br /><br />
+
+<h2>Example use</h2>
+<pre>
+<span style="color:blue">(15:51:03) guillaume.friloux@botnet.master.com:</span> .spam svr2 .gdb list
+<span style="color:red">(15:51:03) Alfred Pennyworth:</span>
+Contacts that matched :
+   online botman-x@botnet.master.com backup_licence[x] backup_server[svr2]
+   online botman-y@botnet.master.com backup_licence[y] backup_server[svr2]
+
+<span style="color:red">(15:51:03) Alfred Pennyworth:</span>
+Answer from botman-x@botnet.master.com :
+
+List of coredumps :
+<table bordel=0 width=80%>
+<tr><td>&nbsp;</td><td>/var/dumps/gdb.60479.core</td><td>34308096</td><td>2015/10/21 10:39:45</td></tr>
+<tr><td></td><td>/var/dumps/bash.45189.core</td><td>18755584</td><td>2015/11/10 14:54:44</td></tr>
+</table>
+
+
+<span style="color:red">(15:51:03) Alfred Pennyworth:</span>
+Answer from botman-y@botnet.master.com :
+
+List of coredumps :
+<table bordel=0 width=80%>
+<tr><td>&nbsp;</td><td>/var/dumps/getty.735.core</td><td>14475264</td><td>2015/10/28 18:58:38</td></tr>
+<tr><td></td><td>/var/dumps/getty.707.core</td><td>22949888</td><td>2015/10/29 11:24:21</td></tr>
+<tr><td></td><td>/var/dumps/gdb.39656.core</td><td>18751488</td><td>2015/10/30 20:55:00</td></tr>
+<tr><td></td><td>/var/dumps/botman.39679.core</td><td>22949888</td><td>2015/10/30 20:55:00</td></tr>
+</table></pre>
+So as you can see, when invoking the .spam command, the module will give you the list of matching bots, and it will tell you the answer of each bot.<br />
+<br />
+This is a least 1 XMPP message for the list of matched bots, and 1 message per answer.<br />
+A timeout is set for bots not answering. It will tell you bots timing out on the command.

@@ -1,0 +1,59 @@
+---
+layout: default
+title: Sysinfo
+---
+
+<h1>Sysinfo Module </h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module fetch various system informations, and stores them on alfred. 
+<br /><br />
+
+<h2>Configuration</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#alfred" data-toggle="tab" aria-expanded="true">Alfred</a></li>
+  <li class=""><a href="#botman" data-toggle="tab" aria-expanded="false">Botman</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="alfred">
+    <pre><code class="json">
+{
+   "vars" : [
+      "raid_status",
+      "disk_full"
+   ]
+}</code></pre>
+    The vars array contains the list of <code>custom variables</code> to be shown when the <code>.sysinfo</code> command will list matching bots.
+  </div>
+  <div class="tab-pane fade in" id="botman">
+    <pre><code class="json">
+{
+   "hw" : [{
+      "manufacturer" : "/usr/local/sbin/dmidecode -t system | grep 'Manufacturer:' | cut -d: -f2",
+      "product_name" : "/usr/local/sbin/dmidecode -t system | grep 'Product Name:' | cut -d: -f2",
+      "serial_number" : "/usr/local/sbin/dmidecode -t system | grep 'Serial Number:' | cut -d: -f2"
+   }],
+   "commands" : [{
+      ".uptime" : "/usr/bin/uptime",
+      ".psax" : "/bin/ps ax",
+      ".reboot" : "/sbin/reboot"
+   }]
+}</code></pre>
+  </div>
+</div>
+<br /><br />
+
+<h2>Example use</h2>
+<h3>List system infos of a particular bot</h3>
+<p><span class="label label-success">Alfred</span></p>
+<pre>
+<span style="color:blue">(09:49:42) guillaume.friloux@botnet.master.com:</span> .sysinfo xxx
+<span style="color:red">(09:49:42) Alfred Pennyworth:</span>
+Contacts that matched :
+   online botman-xxx@botnet.master.com
+
+online botman-xxx@botnet.master.com :
+   manufacturer : Dell Inc.
+   serial_number : XXXXX
+   product_name : OptiPlex 780</pre>

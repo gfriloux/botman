@@ -1,0 +1,84 @@
+---
+layout: default
+title: Install
+---
+
+<h1>Install module</h1>
+<p><span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module Is in charge of running installation of package or system upgrades.
+
+<h2>Configuration</h2>
+You need to write a configuration file for this module.<br />
+Create the file <code>/etc/gotham/modules.conf.d/install.conf</code> that might look as follows :
+<pre>
+<code class="json">
+{
+   "install": [{
+      "pre": "",
+      "cmd": "yes | pkg install %s",
+      "post": ""
+   }],
+   "upgrade": [{
+      "pre": "freebsd-update cron",
+      "cmd": "freebsd-update install",
+      "post": ""
+   }],
+   "vars": [
+   ]
+}</code></pre>
+You have to specify the commands you need to execute for installation of upgrade to be effective.<br />
+This allows the module to adapt itself to various distros.
+<br /><br />
+
+<h3>Example use</h3>
+
+<h4>Install a package</h4>
+<pre>
+<span style="color:blue">(31/07/2015 08:45:26) guillaume.friloux@botnet.master.com:</span> .install htop
+<span style="color:red">(08:45:26) botman-xxxx:</span> {
+   "command":  ".install_begins",
+   "parameters":  "htop",
+   "status":   "ok",
+   "content":  ["Software(s) install/upgrade will begin in a few seconds."]
+}
+<span style="color:red">(08:45:45) botman-xxxx:</span> {
+   "command":  ".install",
+   "parameters":  "htop",
+   "status":   "ok",
+   "content":  [
+      "Updating private repository catalogue...",
+      "Fetching meta.txz: . done",
+      "Fetching packagesite.txz: .. done",
+      "Processing entries: ..... done",
+      "amtrust repository update completed. 40 packages processed.",
+      "Updating FreeBSD repository catalogue...",
+      "Fetching meta.txz: . done",
+      "Fetching packagesite.txz: .......... done",
+      "Processing entries: .......... done",
+      "FreeBSD repository update completed. 24389 packages processed.",
+      "Updating database digests format: .. done",
+      "The following 2 package(s) will be affected (of 0 checked):",
+      "New packages to be INSTALLED:",
+      "\thtop: 1.0.3 [FreeBSD]",
+      "\tlsof: 4.89.e,8 [FreeBSD]",
+      "The process will require 377 KiB more space.",
+      "170 KiB to be downloaded.",
+      "Proceed with this action? [y/N]: Fetching htop-1.0.3.txz: ....... done",
+      "Fetching lsof-4.89.e,8.txz: .......... done",
+      "Checking integrity... done (0 conflicting)",
+      "[1/2] Installing lsof-4.89.e,8...",
+      "[1/2] Extracting lsof-4.89.e,8: .......... done",
+      "[2/2] Installing htop-1.0.3...",
+      "[2/2] Extracting htop-1.0.3: ....... done",
+      "Message for htop-1.0.3:",
+      "***********************************************************",
+      "htop(1) requires linprocfs(5) to be mounted. If you don't",
+      "have it mounted already, please add this line to /etc/fstab",
+      "and run `mkdir -p /usr/compat/linux/proc; ln -s /usr/compat /compat; mount linproc`:",
+      "linproc /compat/linux/proc linprocfs rw,late 0 0",
+      "***********************************************************"
+   ]
+}
+</pre>

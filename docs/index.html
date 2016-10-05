@@ -1,0 +1,26 @@
+---
+layout: default
+section: index
+---
+
+<div class="home">
+
+  <h1 class="page-heading">Botman</h1>
+   Botman is a project that aims to ease management of multiple servers.<br />
+   Focus is put around a few concepts :
+   <ul>
+      <li>Modularity : Everything is a module. This force clean isolation of functions,
+                       making the addition of functionnalities a lot easier.
+      </li>
+      <li>Spam : We focus on making it easy to send commands to servers using patterns,
+                 allowing to query every server or once or only a subset of them.
+      </li>
+   </ul>
+
+   <h1 class="page-heading">Modules</h1>
+   <ul>
+   {% for module in site.modules %}
+      <li><a href="{{ module.url | prepend: site.baseurl }}" class="post-link">{{module.title}}</a></li>
+   {% endfor %}
+   </ul>
+</div>

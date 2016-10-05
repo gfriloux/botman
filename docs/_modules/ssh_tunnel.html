@@ -1,0 +1,71 @@
+---
+layout: default
+title: Ssh Tunnel
+---
+
+<h1>SSH Tunnel</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module will make the botman to start an SSH Tunnel.<br />
+This may allow you to get an ssh access to a NATed bot.
+<br /><br />
+
+<h2>Configuration</h2>
+You need a configuration file (<code>/usr/local/etc/gotham/modules.conf.d/ssh_tunnel.conf</code>)
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#alfred" data-toggle="tab" aria-expanded="true">Alfred</a></li>
+  <li class=""><a href="#botman" data-toggle="tab" aria-expanded="false">Botman</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="alfred">
+    <pre><code class="json">
+{
+   "vars" : [
+      "raid_status",
+      "disk_full"
+   ]
+}</code></pre>
+    The <code>vars</code> array contains the list of <code>custom variables</code> the will be shown when showing bots affected by the <code>.ssh</code> commands.
+  </div>
+  <div class="tab-pane fade in" id="botman">
+    <pre><code class="json">
+{
+   "host" : "ssh.master.com",
+   "login" : "support",
+   "key" : "/usr/local/share/gotham/modules.d/ssh_tunnel/id_rsa_support",
+   "port" : 22
+}</code></pre>
+    This file contains informations needed to start a reverse ssh tunnel on the <code>host</code>.
+  </div>
+</div>
+<br /><br />
+
+<h2>Example use</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List tunnels</a></li>
+  <li class=""><a href="#open" data-toggle="tab" aria-expanded="false">Open tunnel</a></li>
+  <li class=""><a href="#close" data-toggle="tab" aria-expanded="false">Close tunnel</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="list">
+    <p><span class="label label-success">Alfred</span></p>
+    <pre>
+<span style="color:blue">(16:27:43) guillaume.friloux@botman.master.com:</span> .ssh
+<span style="color:red">(16:27:43) Alfred Pennyworth:</span>
+Contacts with an opened tunnel :
+   online botman.1@botman.master.com : Port 42461
+   online botman.2@botman.master.com : Port 57887</pre>
+  </div>
+  <div class="tab-pane fade in" id="open">
+  <pre>
+<span style="color:blue">(16:41:18) guillaume.friloux@botman.master.com:</span> .ssh on
+<span style="color:red">(16:41:18) botman:</span> Tunnel opened on port 58462, pid 37669</pre>
+  </div>
+  <div class="tab-pane fade in" id="close">
+  <pre>
+<span style="color:blue">(16:43:37) guillaume.friloux@botman.master.com:</span> .ssh off
+<span style="color:red">(16:43:37) botman:</span> Tunnel has died</pre>
+  </div>
+</div>
+

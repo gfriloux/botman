@@ -1,0 +1,57 @@
+---
+layout: default
+title: Module
+---
+
+<h1>Module Module</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+This module allows to list, load and unload modules.<br />
+This module is mostly a POC, but could be used for example to update an alfred module without restart alfred. 
+<br /><br />
+
+<h2>Configuration</h2>
+There isnt any configuration to be done for this module. 
+<br /><br />
+
+<h2>Example use</h2>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List modules</a></li>
+  <li class=""><a href="#load" data-toggle="tab" aria-expanded="false">Load module</a></li>
+  <li class=""><a href="#unload" data-toggle="tab" aria-expanded="false">Unload module</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="list">
+    <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+    <pre>                   
+<span style="color:blue">(16:58:10) guillaume.friloux@botnet.master.com:</span> .module
+<span style="color:red">(16:58:10) botman:</span>
+Loaded modules :
+   Version (/usr/local/lib/gotham/freebsd10.1-amd64/version.so)
+   Install (/usr/local/lib/gotham/freebsd10.1-amd64/install.so)
+   Info (/usr/local/lib/gotham/freebsd10.1-amd64/info.so)
+   Alert (/usr/local/lib/gotham/freebsd10.1-amd64/alert.so)
+   Module (/usr/local/lib/gotham/freebsd10.1-amd64/module.so)
+   Ssh_Tunnel (/usr/local/lib/gotham/freebsd10.1-amd64/ssh_tunnel.so)
+   Sysinfo (/usr/local/lib/gotham/freebsd10.1-amd64/sysinfo.so)
+   Prosave_Backup (/usr/local/lib/gotham/freebsd10.1-amd64/prosave_backup.so)
+   Access (/usr/local/lib/gotham/freebsd10.1-amd64/access.so)
+   GDB (/usr/local/lib/gotham/freebsd10.1-amd64/gdb.so)
+   Help (/usr/local/lib/gotham/freebsd10.1-amd64/help.so)
+   Save (/usr/local/lib/gotham/freebsd10.1-amd64/save.so)</pre>
+  </div>
+  <div class="tab-pane fade in" id="load">
+    <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+    <pre>
+<span style="color:blue">(17:04:28) guillaume.friloux@botnet.master.com:</span> .module load gdb
+<span style="color:red">(17:04:29) botman:</span> Module gdb successfully loaded.</pre>
+  </div>
+  <div class="tab-pane fade in" id="unload">
+    <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+  <pre>
+<span style="color:blue">(17:02:34) guillaume.friloux@botnet.master.com:</span> .module unload gdb
+<span style="color:red">(17:02:34) botman:</span> Module gdb successfully unloaded.</pre>
+  </div>
+</div>

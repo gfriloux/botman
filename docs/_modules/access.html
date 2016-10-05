@@ -1,0 +1,113 @@
+---
+layout: default
+title: Access
+---
+
+<h1>Access Module</h1>
+<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+
+<h2>Description</h2>
+
+This module adds support for access rights over commands exported
+by modules.<br />
+The access module uses a configuration file having 2 arrays :
+<ul>
+  <li>An array of commands, defining each command and the access level needed
+      to use it.
+  </li>
+  <li>An array of users, having the username (patterns accepted), and its associated
+      userlevel.
+  </li>
+</ul>
+The higher the access level, the more commands you can use.
+
+<h2>Configuration</h2>
+For this module to work, you need a minimal json file used
+as configuration file (<code>/etc/gotham/modules.conf.d/access.conf</code>)
+<pre><code class="json">
+{
+   "revision": 1,
+   "citizens": [{
+         "pattern":     "admin.*",
+         "level":       10,
+         "description": "Access rights for admins"
+      }, {
+         "pattern":     "support.*",
+         "level":       5,
+         "description": "Access rights for support guys"
+   }],
+   "commands": [{
+         "pattern":     ".ssh *",
+         "level":       5,
+         "description": "Open or close a maintenance tunnel"
+      }, {
+         "pattern":     ".reboot *",
+         "level":       10,
+         "description": "Reboot system"
+   }]
+}</code></pre>
+The revision number is used to synchronize access rights over the botmans.<br />
+It will grow automatically as you set rights using `.access set` command.
+
+<h2>Example use</h2>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List</a></li>
+  <li class=""><a href="#add" data-toggle="tab" aria-expanded="false">Add</a></li>
+  <li class=""><a href="#set" data-toggle="tab" aria-expanded="false">Set</a></li>
+  <li class=""><a href="#delete" data-toggle="tab" aria-expanded="false">Delete</a></li>
+  <li class=""><a href="#sync" data-toggle="tab" aria-expanded="false">Sync</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="list">
+    <span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span><br />
+    This command will list every access entry set.<br />
+    Only user access can be managed here. For commands level, it has to be done
+    manually in the configuration file.
+
+    <pre>
+<span style="color:blue">(23/11/2015 15:00:12) guillaume.friloux@botman.master.com:</span> .access
+<span style="color:red">(15:00:12) Alfred Pennyworth:</span>
+List of access rights :
+   0/ Pattern [botman.*] → Access level [1]
+       Bots group
+   1/ Pattern [admin.*] → Access level [10]
+       Admins group
+   2/ Pattern [dev.*] → Access level [8]
+       Devs group
+   3/ Pattern [support.*] → Access level [5]
+       Supports group</pre>
+  </div>
+  <div class="tab-pane fade in" id="add">
+    <span class="label label-success">Alfred</span><br />
+      This command allows you to add a pattern matching users to set access level.<br />
+      The access right will be immediately applied to every bots.
+
+      <pre>
+<span style="color:blue">(15:11:25) guillaume.friloux@botman.master.com:</span> .access add demo.* 1 Demonstration
+<span style="color:red">(15:11:25) Alfred Pennyworth:</span> Modification done</pre>
+  </div>
+  <div class="tab-pane fade in" id="set">
+    <span class="label label-success">Alfred</span><br />
+    This command will update an access entry to change the affected access level.
+
+    <pre>
+<span style="color:blue">(15:13:05) guillaume.friloux@botman.master.com:</span> .access set demo.* 2
+<span style="color:red">(15:13:05) Alfred Pennyworth:</span> Modification done</pre>
+  </div>
+  <div class="tab-pane fade in" id="delete">
+    <span class="label label-success">Alfred</span><br />
+
+<pre>
+<span style="color:blue">(15:26:33) guillaume.friloux@botman.master.com:</span> .access del demo.*
+<span style="color:red">(15:26:33) Alfred Pennyworth:</span> Modification done</pre>
+  </div>
+  <div class="tab-pane fade in" id="sync">
+    <span class="label label-success">Alfred</span><br />
+    This command will sync current access rights to all the bots.<br />
+    This might be usefull if one bot missed an update due to being offline by the
+    time the update happenned.
+    <pre>
+<span style="color:blue">(15:36:28) guillaume.friloux@botman.master.com:</span> .access sync
+<span style="color:red">(15:36:28) Alfred Pennyworth:</span> Everyone seems to be up2date</pre>
+  </div>
+</div>
