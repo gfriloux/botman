@@ -57,7 +57,7 @@ configuration file :
 }</code></pre>
 <br /><br />
 
-<h2>Example use</h2>
+<h2>Commands</h2>
 
 <ul class="nav nav-tabs">
   <li class="active"><a href="#notification" data-toggle="tab" aria-expanded="true">Notification</a></li>
@@ -68,9 +68,12 @@ configuration file :
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="notification">
     Using the <code>notification</code> module, you will be warned when a new coredump is created.<br />
+    There is nothing to do, once the notification group exists and you're in. This is event-like messages.<br />
     <pre>Notification from botman-xxx@domain.lan  : New coredump detected : /var/dumps/botman.35709.core</pre>
   </div>
   <div class="tab-pane fade in" id="list">
+    This command allows you to list every coredump found by botman.<br />
+    For each coredump, you will know its size and creation date.<br />
     <pre>
 <span style="color:blue">(30/07/2015 14:07:33) guillaume.friloux@botnet.master.com:</span> .gdb list
 <span style="color:red">(14:07:33) botman-xxx:</span>
@@ -86,6 +89,8 @@ List of coredumps :
 </table></pre>
   </div>
   <div class="tab-pane fade in" id="delete">
+  Deleting a coredump.<br />
+  You may want to delete a coredump to save diskspace, or make it easier to spot new coredumps.<br />
   <pre>
 <span style="color:blue">(14:57:34) guillaume.friloux@botnet.master.com:</span> .gdb delete xxxxx.58349.core
 <span style="color:red">(14:57:34) botman-xxxx:</span>
@@ -103,6 +108,9 @@ Deleted coredumps :
    /var/dumps/xxxxx.71316.core</pre>
   </div>
   <div class="tab-pane fade in" id="get">
+  Retrieve backtrace from a coredump.<br />
+  This commands makes it easier to retrieve backtrace from a coredump without
+  actually connecting to the server.<br />
   <pre>
 <span style="color:blue">(16:05:25) guillaume.friloux@botnet.master.com:</span> .gdb fetch xxxxx.58587.core
 <span style="color:red">(16:05:26) botman-xxxx:</span> Coredump file : /var/dumps/xxxxx.58587.core

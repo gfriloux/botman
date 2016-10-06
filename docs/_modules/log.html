@@ -23,14 +23,16 @@ everything, and thus, a better place for logs.
 This module does not need any configuration file.
 <br /><br />
 
-<h3>Example use</h3>
-
+<h3>Commands</h3>
+There is only one command available through the XMPP protocol : <code>.log last</code>.<br />
+But as it might be a little tricky, lets show 2 cases.
 <ul class="nav nav-tabs">
   <li class="active"><a href="#last5" data-toggle="tab" aria-expanded="true">Last 5</a></li>
   <li class=""><a href="#last1" data-toggle="tab" aria-expanded="false">Last 1, 2nd page</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="last5">
+    Lets see the first basic case : Showing only the last 5 logs.
     <pre>
 <span style="color:blue">(11:26:00) guillaume.friloux@botnet.master.com:</span> .log last 5
 <span style="color:red">(11:26:00) Alfred Pennyworth:</span>
@@ -73,6 +75,8 @@ This module does not need any configuration file.
 }</pre>
   </div>
   <div class="tab-pane fade in" id="last1">
+    Now, lets see about pagination : Showing the second page of last logs, showing
+    only one log per page.
     <pre>
 <span style="color:blue">(11:35:00) guillaume.friloux@botnet.master.com:</span> .log last 1 2
 <span style="color:red">(11:35:00) Alfred Pennyworth:</span>

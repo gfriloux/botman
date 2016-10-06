@@ -63,10 +63,30 @@ configuration file :
 }</code></pre>
 <br /><br />
 
-<h2>Example use</h2>
+<h2>Commands</h2>
 
-<h3>Install a package</h3>
-<pre>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#install" data-toggle="tab" aria-expanded="true">Install</a></li>
+  <li class=""><a href="#upgrade" data-toggle="tab" aria-expanded="false">Upgrade</a></li>
+  <li class=""><a href="#jobs" data-toggle="tab" aria-expanded="false">Jobs</a></li>
+  <li class=""><a href="#kill" data-toggle="tab" aria-expanded="false">Kill</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="install">
+    The <code>.install</code> command will allow you to install packages
+    on the system.<br />
+    This command will return the output created by the package manager, and the
+    end of installation.
+
+    <div class="alert alert-dismissible alert-warning">
+      If you are using this command through the
+      <a href="{{ site.github.url }}/modules/spam.html">spam module</a>,
+      you have to be aware that the spam module will timeout after 5 minutes.<br />
+      This means that is the installation of the package lasts more than 5 minutes,
+      you are going to receive a timeout notification from the spam module, and you
+      will never get the output from the .install command.
+    </div>
+    <pre>
 <span style="color:blue">(31/07/2015 08:45:26) guillaume.friloux@botnet.master.com:</span> .install htop
 <span style="color:red">(08:45:26) botman-xxxx:</span> {
    "command":  ".install_begins",
@@ -111,5 +131,12 @@ configuration file :
       "linproc /compat/linux/proc linprocfs rw,late 0 0",
       "***********************************************************"
    ]
-}
-</pre>
+}</pre>
+  </div>
+  <div class="tab-pane fade in" id="upgrade">
+  </div>
+  <div class="tab-pane fade in" id="jobs">
+  </div>
+  <div class="tab-pane fade in" id="kill">
+  </div>
+</div>
