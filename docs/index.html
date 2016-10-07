@@ -48,6 +48,11 @@ section: index
     <h2>Access module</h2>
       It is possible to give access levels to both commands and users, to restrict
       certains user to only a subset of available ones.
+    <h2>HTTPd module</h2>
+      This module does not support any kind of authentification mechanism, and offer a direct
+      gateway to Alfred's internals.<br />
+      So you might either filter access to port 5128 or completely deny it, and proxify it through
+      nginx/apache, adding http auth in the middle.
   <br /><br />
 
   <h1>Modules</h1>
