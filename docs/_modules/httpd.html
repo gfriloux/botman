@@ -1,0 +1,191 @@
+---
+layout: default
+title: HTTPd
+---
+
+<h1>HTTPd Module</h1>
+<p><span class="label label-success">Alfred</span></p>
+<b>Compatibility :</b>
+<img src={{ site.github.url }}/img/icon-linux.png>
+<img src={{ site.github.url }}/img/icon-freebsd.png>
+<br /><br />
+
+<h2>Description</h2>
+This module runs a webserver, exposing an API to interact with
+Alfred and botmans.<br />
+It also includes a basic website providing a GUI over this API.<br />
+Exposed webserver will bind on port 5128.
+
+<h2>Configuration</h2>
+This module does not need any configuration file.
+<br /><br />
+
+<h2>API</h2>
+
+<h3>/stats/commands/list</h3>
+This API call will let you retrieve the list of API calls available through this web service.
+
+<h4>Using from curl</h4>
+<pre><code class="bash">curl http://127.0.0.1:5128/stats/commands/list</code></pre>
+
+<h4>Output format</h4>
+<pre><code class="json">[{
+   "uri":   "/stats/commands/list",
+   "description": "HTML code describing the URI"
+},
+...
+]</code></pre>
+<br /><br />
+
+<h3>/seen</h3>
+This command allows you to search for botmans.<br />
+It uses JID or custom variables to match them.
+
+<h4>Querying every botman</h4>
+<pre><code class="bash">curl http://127.0.0.1:5128/seen</code></pre>
+
+<h4>Querying only botmans matching a pattern</h4>
+<pre><code class="bash">curl http://127.0.0.1:5128/*backup*</code></pre>
+Given pattern will be match against JID and custom variables defined
+inside <code>seen.conf</code>
+(from the <a href="{{ site.github.url }}/modules/seen.html">Seen module</a>.
+
+<h4>Possible returned HTTP codes</h4>
+<table class="table table-striped table-hover">
+  <tbody>
+      <tr class="success"><td>200</td><td>Query OK.</td></tr>
+      <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
+  </tbody>
+</table>
+
+<h4>Returned data</h4>
+Data returned will be in JSON format.<br />
+It will be an array of contacts matching your pattern.
+<pre><code class="json">[
+   {
+      "jid":   "botman-bull@xmpp-test.asp64.lan",
+      "state": "online",
+      "vars":  [
+        {
+          "name":  "version_ecore",
+          "value": "1.7.12"
+        },
+        ...
+      ]
+   },
+   ... ]</code></pre>
+<br /><br />
+
+<h3>/spam</h3>
+This API call will let you send commands to multiple bots at once.
+<pre><code class="bash">curl http://127.0.0.1:5128/spam/*</code></pre>
+
+<h4>Possible returned HTTP codes</h4>
+<table class="table table-striped table-hover">
+  <tbody>
+      <tr class="success"><td>200</td><td>Every queried bots answered.</td></tr>
+      <tr class="warning"><td>204</td><td>Your given pattern did not match any bots (no data will be sent).</td></tr>
+      <tr class="info"><td>206</td><td>Some (or all) bots did not answered. In this case, bots that did not answered will have a 0 length message in the returned JSON.</td></tr>
+  </tbody>
+</table>
+
+<h4>Returned data</h4>
+Data returned will be in JSON format.<br />
+It will be an array of answers from bots.
+<pre><code class="json">[
+   {
+      "jid" : "botman-test@xmpp-server.lan",
+      "message" : "Data returned by botman-test"
+   }
+]</code></pre>
+<br /><br />
+
+<h3>/uptime</h3>
+This API call will let you retrieve output of the uptime command.
+<div class="alert alert-dismissible alert-info">
+As this command is ran through the spam module, you can query multiple bots at once.<br />
+Returned data will be equal to the /spam URI.
+</div>
+<pre><code class="bash">curl http://127.0.0.1:5128/uptime/*backup*</code></pre>
+<br /><br />
+
+<h3>/service</h3>
+This API call will give you access to management of services.
+<div class="alert alert-dismissible alert-info">
+As this command is ran through the spam module, you can query multiple bots at once.<br />
+Returned data will be equal to the /spam URI.
+</div>
+URI is separated by at least 2 params :
+<ul>
+  <li>Service operation : start, stop, restart, status</li>
+  <li>Service name</li>
+  <li>Optional pattern matching bots to contact</li>
+</ul>
+<pre><code class="bash">curl http://127.0.0.1:5128/service/start/servicename/*backup*</code></pre>
+<br /><br />
+
+<h3>/network</h3>
+This API call will give you to retrieve network informations, fetch by the
+<a href="{{ site.github.url }}/modules/network.html">Network module</a>.
+<div class="alert alert-dismissible alert-info">
+As this command is ran through the spam module, you can query multiple bots at once.<br />
+Returned data will be equal to the /spam URI.
+</div>
+<pre><code class="bash">curl http://127.0.0.1:5128/network/*backup*</code></pre>
+<br /><br />
+
+<h3>/log/last</h3>
+This command allows you to query logs sorted by insertion order (newest first).<br />
+It is possible to navigate through logs, following the concept of log pages.
+
+<h4>Getting last 5 logs</h4>
+<pre><code class="bash">curl http://127.0.0.1:5128/log/last/5</code></pre>
+
+<h4>Getting 2nd page of logs, following 5 logs per page</h4>
+<pre><code class="bash">curl http://127.0.0.1:5128/log/last/5/2</code></pre>
+
+<h4>Filters</h4>
+Filters can be applied using the SQL language.<br />
+Possible fields to filter :
+<ul>
+  <li>id : INTEGER : Unique log identifier.</li>
+  <li>date : DATE : Date of event.</li>
+  <li>type : INTEGER : 0(Connection) 1(Disconnection) 2(Message)</li>
+  <li>source : TEXT : JID of user that created event</li>
+  <li>data : TEXT : if type is 2, contains the XMPP message.</li>
+</ul>
+
+<h5>Getting last 5 commands from a given user</h5>
+<pre><code class="bash">curl -d '[ "source = \"JID@domain\"", "data != \"\"" ]' http://127.0.0.1:5128/log/last/5</code></pre>
+<br /><br />
+
+<h3>/stats</h3>
+This API call will give out various stats about Alfred's process.
+
+<h4>Possible returned HTTP codes</h4>
+<table class="table table-striped table-hover">
+  <tbody>
+      <tr class="success"><td>200</td><td>Query OK.</td></tr>
+      <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
+  </tbody>
+</table>
+
+<h4>Returned data</h4>
+Data returned will be in JSON format.
+<pre><code class="json">{
+   "uptime":   3,
+   "memory":   {
+      "used":  64163840
+   },
+   "contacts": [{
+      "jid":   "botman-testdev@xmpp-test.asp64.lan",
+      "type":  "Botman",
+      "online":   true
+   }],
+   "queries":  [{
+      "ip": "127.0.0.1",
+      "uri":   "/seen",
+      "data":  "",
+      "timestamp":   1463730596
+   }]
+}</code></pre>
