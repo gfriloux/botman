@@ -6,21 +6,39 @@ section: index
 <div class="home">
 
   <h1 class="page-heading">Botman</h1>
-   Botman is a project that aims to ease management of multiple servers.<br />
-   Focus is put around a few concepts :
-   <ul>
+    Botman is a project that aims to ease management of multiple servers.<br />
+    Focus is put around a few concepts :
+    <ul>
       <li>Modularity : Everything is a module. This force clean isolation of functions,
                        making the addition of functionnalities a lot easier.
       </li>
       <li>Spam : We focus on making it easy to send commands to servers using patterns,
                  allowing to query every server or once or only a subset of them.
       </li>
-   </ul>
+    </ul>
+    <br /><br />
 
-   <h1 class="page-heading">Modules</h1>
-   <ul>
-   {% for module in site.modules %}
-      <li><a href="{{ module.url | prepend: site.github.url }}" class="post-link">{{module.title}}</a></li>
-   {% endfor %}
-   </ul>
+  <h1>How it works</h1>
+  This project create 2 apps :
+  <ul>
+    <li>Botman : Simple bot installed on servers to manage.</li>
+    <li>Alfred : Bot assistant installed on an external machine.</li>
+  </ul>
+  Botman & Alfred will talk through an XMPP server.<br />
+  We chose XMPP over other networks because its open, standardized,
+  extendable, and have multiple servers and clients available (as well as libraries).<br />
+  The way Botman & Alfred talk depends heavily on how modules are written (as each of them
+  if somewhat independant), but everything tends to work around commands.<br />
+  The best practice seems to only talk to Alfred, and have it dispatch your commands
+  to botmans.<br />
+  Talking with Alfred can be done through the XMPP network, or through the
+  <a href="{{ site.github.url }}/modules/httpd.html">HTTPd module</a>.
+  <br /><br />
+
+  <h1>Modules</h1>
+  <ul>
+  {% for module in site.modules %}
+    <li><a href="{{ module.url | prepend: site.github.url }}" class="post-link">{{module.title}}</a></li>
+  {% endfor %}
+  </ul>
 </div>
