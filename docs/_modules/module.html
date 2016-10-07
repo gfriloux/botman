@@ -5,6 +5,10 @@ title: Module
 
 <h1>Module Module</h1>
 <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+<b>Compatibility :</b>
+<img src={{ site.github.url }}/img/icon-linux.png>    
+<img src={{ site.github.url }}/img/icon-freebsd.png>
+<br /><br />
 
 <h2>Description</h2>
 This module allows to list, load and unload modules.<br />
@@ -15,8 +19,9 @@ This module is mostly a POC, but could be used for example to update an alfred m
 There isnt any configuration to be done for this module. 
 <br /><br />
 
-<h2>Example use</h2>
-
+<h2>Commands</h2>
+Loading and unload modules might be handy for debugging
+purposes, or if only a few modules gets updated.
 <ul class="nav nav-tabs">
   <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List modules</a></li>
   <li class=""><a href="#load" data-toggle="tab" aria-expanded="false">Load module</a></li>
@@ -25,6 +30,7 @@ There isnt any configuration to be done for this module.
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="list">
     <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+    This command allows you to list the name and fullpath of any loaded module.
     <pre>                   
 <span style="color:blue">(16:58:10) guillaume.friloux@botnet.master.com:</span> .module
 <span style="color:red">(16:58:10) botman:</span>
@@ -44,12 +50,14 @@ Loaded modules :
   </div>
   <div class="tab-pane fade in" id="load">
     <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+    This command allows you to load a module identified by its name (not path).<br />
     <pre>
 <span style="color:blue">(17:04:28) guillaume.friloux@botnet.master.com:</span> .module load gdb
 <span style="color:red">(17:04:29) botman:</span> Module gdb successfully loaded.</pre>
   </div>
   <div class="tab-pane fade in" id="unload">
     <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
+    Unloads module by name.
   <pre>
 <span style="color:blue">(17:02:34) guillaume.friloux@botnet.master.com:</span> .module unload gdb
 <span style="color:red">(17:02:34) botman:</span> Module gdb successfully unloaded.</pre>
