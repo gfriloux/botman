@@ -48,22 +48,22 @@ configuration file :
    "name" : ".install",
    "filter" : ".install*",
    "rule" : "sed -r 's/^.install *([^ ]*) (.*)/.spam \\1 .install \\2/'",
-   "description" : ".install <pattern> <softwarelist>"
+   "description" : ".install &lt;pattern> &lt;softwarelist>"
 }, {
    "name" : ".upgrade",
    "filter" : ".upgrade*",
    "rule" : "sed -r 's/^.upgrade (.*)/.spam \\1 .upgrade/'",
-   "description" : ".upgrade <pattern>"
+   "description" : ".upgrade &lt;pattern>"
 }, {
    "name" : ".jobs",
    "filter" : ".jobs*",
    "rule" : "sed -r 's/^.jobs (.*)/.spam \\1 .jobs/'",
-   "description" : ".jobs <pattern>"
+   "description" : ".jobs &lt;pattern>"
 }, {
    "name" : ".kill",
    "filter" : ".kill * *",
    "rule" : "sed -r 's/^.kill *([^ ]*) (.*)/.spam \\1 .kill \\2/'",
-   "description" : ".kill <pattern> <job_id>"
+   "description" : ".kill &lt;pattern> &lt;job_id>"
 }</code></pre>
 <br /><br />
 

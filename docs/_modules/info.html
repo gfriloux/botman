@@ -45,12 +45,12 @@ configuration file :
    "name" : ".info list",
    "filter" : ".info * list",
    "rule" : "sed -r 's/^.info *([^ ]*) list/.spam \\1 .info list/'",
-   "description" : ".info <pattern> list"
+   "description" : ".info &lt;pattern> list"
 }, {
    "name" : ".info get",
    "filter" : ".info * get *",
    "rule" : "sed -r 's/^.info *([^ ]*) get (.*)/.spam \\1 .info get \\2/'",
-   "description" : ".info <pattern> get <variable>"
+   "description" : ".info &lt;pattern> get &lt;variable>"
 }</code></pre>
 <br /><br />
 

@@ -48,17 +48,17 @@ configuration file :
    "name" : ".gdb list",
    "filter" : ".gdb list *",
    "rule" : "sed -r 's/^.gdb list (.*)/.spam \\1 .gdb list/'",
-   "description" : ".gdb list <pattern>"
+   "description" : ".gdb list &lt;pattern>"
 }, {
    "name" : ".gdb delete",
    "filter" : ".gdb delete *",
    "rule" : "sed -r 's/^.gdb delete *([^ ]*) (.*)/.spam \\1 .gdb delete \\2/'",
-   "description" : ".gdb delete <licence_pattern> <coredump_pattern>"
+   "description" : ".gdb delete &lt;licence_pattern> &lt;coredump_pattern>"
 }, {
    "name" : ".gdb fetch",
    "filter" : ".gdb fetch *",
    "rule" : "sed -r 's/^.gdb fetch *([^ ]*) (.*)/.spam \\1 .gdb fetch \\2/'",
-   "description" : ".gdb fetch <licence_pattern> <coredump>"
+   "description" : ".gdb fetch &lt;licence_pattern> &lt;coredump>"
 }</code></pre>
 <br /><br />
 
@@ -133,9 +133,9 @@ No symbol table info available.
      at ecore_main.c:1480
      tv = {tv_sec = 29, tv_usec = 945528}
      t = (struct timeval *) 0x7fffffffebc0
-     rfds = {__fds_bits = {11920, 0 <repeats 15 times>}}
-     wfds = {__fds_bits = {0 <repeats 16 times>}}
-     exfds = {__fds_bits = {0 <repeats 16 times>}}
+     rfds = {__fds_bits = {11920, 0 &lt;repeats 15 times>}}
+     wfds = {__fds_bits = {0 &lt;repeats 16 times>}}
+     exfds = {__fds_bits = {0 &lt;repeats 16 times>}}
      fdh = (Ecore_Fd_Handler *) 0x0
      l = (Eina_List *) 0x0
      max_fd = 13

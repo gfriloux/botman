@@ -35,7 +35,7 @@ Example configuration file (<code>/usr/local/etc/gotham/modules.conf.d/rewrite.c
          "name" : ".install",
          "filter" : ".install*",
          "rule" : "sed -r 's/^.install *([^ ]*) (.*)/.spam \\1 .install \\2/'",
-         "description" : ".install <pattern> <softwarelist>"
+         "description" : ".install &lt;pattern> &lt;softwarelist>"
       }
 }</code></pre>
 This one rule allows you to declare a .install command inside alfred.<br />
