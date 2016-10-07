@@ -55,6 +55,7 @@ configuration file :
   <li class="active"><a href="#start" data-toggle="tab" aria-expanded="true">Start</a></li>
   <li class=""><a href="#stop" data-toggle="tab" aria-expanded="false">Stop</a></li>
   <li class=""><a href="#restart" data-toggle="tab" aria-expanded="false">Restart</a></li>
+  <li class=""><a href="#status" data-toggle="tab" aria-expanded="false">Status</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="start">
@@ -71,5 +72,14 @@ configuration file :
     <pre>
 <span style="color:blue">(11:18:45) guillaume.friloux@botman.master.com:</span> .service restart YYYY
 <span style="color:red">(11:18:46) botman-xxxx::</span> Service restarted</pre>
+  </div>
+  <div class="tab-pane fade in" id="status">
+    <div class="alert alert-dismissible alert-warning">
+      .service status will only work on windows ATM.<br />
+      If you try it on any other OS, it will stop the service.
+    </div>
+    <pre>
+<span style="color:blue">(16:41:32) guillaume.friloux@botman.master.com:</span> .service status YYYY
+<span style="color:red">(16:41:32) botman-xxxx::</span> The service is running.</pre>
   </div>
 </div>
