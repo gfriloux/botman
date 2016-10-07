@@ -35,6 +35,21 @@ section: index
   <a href="{{ site.github.url }}/modules/httpd.html">HTTPd module</a>.
   <br /><br />
 
+  <h1>Security</h1>
+    <h2>XMPP Server</h2>
+      You should limit access to your XMPP server :
+      <ul>
+        <li>Turn off account registration : Only admins can create new accounts.</li>
+        <li>Restrict IP access to your XMPP server if your servers and users only connects from known locations.</li>
+      </ul>
+    <h2>Alfred/Botman friendlist</h2>
+      You can set <code>JID patterns</code> in both alfred.conf and botman.conf, to filter
+      contacts allowed to add them as friends and talk to them.
+    <h2>Access module</h2>
+      It is possible to give access levels to both commands and users, to restrict
+      certains user to only a subset of available ones.
+  <br /><br />
+
   <h1>Modules</h1>
   <ul>
   {% for module in site.modules %}
