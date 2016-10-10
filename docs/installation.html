@@ -1,0 +1,169 @@
+---
+layout: default
+title: Installation Guide
+---
+
+<h1>Installation guide</h1>
+
+<div class="alert alert-dismissible alert-info">
+It is easier to build botman if you're using pacman or rpm as package
+managers. see <code>pkgbuild/</code> & <code>rpmbuild/</code> directories.
+</div>
+
+<h2>Dependencies</h2>
+
+<h3>EFL</h3>
+You will need <a href="https://www.enlightenment.org/" target=_blank>EFL</a>
+to build botman.<br />
+Since 1.8, EFL merged and you are now forced to build the whole project
+(including GUI libs) to be able to use them (even if you dont need the GUI
+stuff).<br />
+This is the reason i forked branch 1.7 to be able to only build a portion
+of them.
+
+<h4>Building latest EFL</h4>
+You might have them packages for your distribution, otherwise go to
+<a href="https://www.enlightenment.org/" target=_blank>https://www.enlightenment.org/</a>
+
+<h4>Building branch 1.7</h4>
+You need to build libs in this order :
+<ul>
+  <li><a href="https://github.com/gfriloux/evil">evil</a> <b>Only if you are building for windows</b></li>
+  <li><a href="https://github.com/gfriloux/eina">eina</a></li>
+  <li><a href="https://github.com/gfriloux/eet">eet</a></li>
+  <li><a href="https://github.com/gfriloux/ecore">ecore</a></li>
+  <li><a href="https://github.com/gfriloux/eio">eio</a></li>
+</ul>
+If you are going to build for windows, i recommend you to use <a href="http://win-builds.org/" target=_blank>Win-builds</a>.
+<br /><br />
+
+<h3>Maelstrom</h3>
+This EFL library (which isnt part of EFL tree) implements 5 network protocols :
+<ul>
+  <li>IMAP</li>
+  <li>POP3</li>
+  <li>SMTP</li>
+  <li>HTTP</li>
+  <li>XMPP</li>
+</ul>
+We will be using it for HTTP & XMPP (maybe we could later use the emails
+protocols if we need read/send emails).<br />
+<br />
+The HTTP library is mostly used for :
+<ul>
+  <li>Its serialization library allowing us to quickly work with JSON.</li>
+  <li>Its functions to create web requests</li>
+  <li>Its ability to create a web server (used by the <a href="{{ site.github.url }}/modules/httpd.html">HTTPd module</a>)</li>
+</ul>
+You can get the source code of this library <a href="https://github.com/gfriloux/maelstrom" target=_blank>here</a>.
+<br /><br />
+
+<h3>Esskyuehl</h3>
+This EFL library (which isnt part of EFL tree) allows to do async SQL queries.<br />
+You can get the source code of this library <a href="https://github.com/gfriloux/esskyuehl" target=_blank>here</a>.
+<br /><br />
+
+<h3>libssh</h3>
+This library should be included for every distro out there.<br />
+You can download its code here : <a href="https://www.libssh.org/">libssh.org</a>
+<br /><br />
+
+
+<h2>Building botman</h2>
+
+<h3>Building Alfred</h3>
+Alfred is used to to talk to botmans, so you should not install it
+into a server you wish to monitor.<br />
+<pre><code class="bash">./autogen.sh --disable-botman
+make
+make install</code></pre>
+<br /><br />
+
+<h3>Building Botman</h3>
+<pre><code class="bash">./autogen.sh --disable-alfred
+make
+make install</code></pre>
+<br /><br />
+
+<h2>Configuring Botman/Alfred</h2>
+The main difference between both configuration file is that
+in the case of Alfred, <code>.login</code> should be equal to <code>.alfred</code>.<br />
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#Alfred" data-toggle="tab" aria-expanded="true">Alfred</a></li>
+  <li class=""><a href="#Botman" data-toggle="tab" aria-expanded="false">Botman</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="Alfred">
+    <pre><code class="json">{
+   "xmpp":  {
+      "server":   "botnet.master.com",
+      "login": "alfred",
+      "passwd":   "eg7iegeeyi4quah7wei4",
+      "resource": "alfred",
+      "alfred": "alfred"
+   },
+   "modules":  [
+      "access",
+      "asp64",
+      "help",
+      "module",
+      "register",
+      "save",
+      "seen",
+      "version",
+      "rewrite",
+      "spam",
+      "asp64_repo",
+      "asp64_key",
+      "ssh_tunnel",
+      "sysinfo",
+      "gdb",
+      "alert",
+      "httpd",
+      "notification",
+      "info",
+      "log"
+   ],
+   "friends":  [
+      "botman.*",
+      "support.*",
+      "guillaume.friloux*"
+   ]
+}</code></pre>
+  </div>
+  <div class="tab-pane fade in" id="Botman">
+    <pre><code class="json">{
+  "xmpp": {
+    "server": "botnet.master.com",
+    "login": "botman-test",
+    "passwd": "wi9oowohwaith4Mieshu",
+    "resource": "botman",
+    "alfred": "alfred"
+  },
+  "modules": [
+    "access",
+    "help",
+    "module",
+    "install",
+    "save",
+    "version",
+    "sysinfo",
+    "ssh_tunnel",
+    "gdb",
+    "alert",
+    "info"
+  ],
+  "friends": [
+    "sav.*",
+    "guillaume.friloux*"
+  ]
+}</code></pre>
+  </div>
+</div>
+<br /><br />
+
+
+<h2>Configuring modules</h2>
+You should see which modules you wish to use, and take configuration examples
+from their own pages.
+<br /><br /><br /><br />
