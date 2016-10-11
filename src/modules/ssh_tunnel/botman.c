@@ -340,7 +340,11 @@ ssh_tunnel_off(void *data,
    eina_stringshare_del(cmd);
 #else
    h = OpenProcess(SYNCHRONIZE|PROCESS_TERMINATE, TRUE, obj->tunnel.pid);
-   TerminateProcess(h,0);
+   if (h)
+     {
+        TerminateProcess(h,0);
+        CloseHandle(h);
+     }
 #endif
 
    _tunnel_closed_send(obj, command);
