@@ -25,6 +25,7 @@ typedef struct _Module_Ssh_Tunnel
       unsigned int port;
       pid_t pid;
       Ecore_Event_Handler *eh_data,
+                          *eh_error,
                           *eh_end;
       Ecore_Exe *exe;
    } tunnel;

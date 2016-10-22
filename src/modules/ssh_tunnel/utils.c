@@ -21,7 +21,7 @@ ssh_tunnel_utils_ssh_command(Module_Ssh_Tunnel *obj)
    }
 #else
    s = escarg(ESCARG_MODE_POSIX,
-              "ssh -p %u -i %s -N -R0:localhost:%d -l %s %s 2>&1",
+              "ssh -p %u -i %s -N -R0:localhost:%d -l %s %s",
               obj->conf->port, obj->conf->key, obj->conf->forwarded_port,
               obj->conf->login, obj->conf->host);
 #endif
