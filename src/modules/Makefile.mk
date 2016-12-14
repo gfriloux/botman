@@ -257,10 +257,10 @@ mod_LTLIBRARIES += \
    src/modules/sysinfo.la \
    src/modules/version.la \
    src/modules/gdb.la \
-   src/modules/httpd.la \
-   src/modules/log.la
+   src/modules/httpd.la
 
 if BUILD_LOG
+mod_LTLIBRARIES += src/modules/log.la
 src_modules_log_la_SOURCES = \
    src/modules/log/log.c \
    src/modules/log/log.h \
