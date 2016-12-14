@@ -34,16 +34,34 @@ You can also abuse this module to create access to various system commands.
   <div class="tab-pane fade in" id="botman">
     <pre><code class="json">
 {
-   "hw" : [{
-      "manufacturer" : "/usr/local/sbin/dmidecode -t system | grep 'Manufacturer:' | cut -d: -f2",
-      "product_name" : "/usr/local/sbin/dmidecode -t system | grep 'Product Name:' | cut -d: -f2",
-      "serial_number" : "/usr/local/sbin/dmidecode -t system | grep 'Serial Number:' | cut -d: -f2"
-   }],
-   "commands" : [{
-      ".uptime" : "/usr/bin/uptime",
-      ".psax" : "/bin/ps ax",
-      ".reboot" : "/sbin/reboot"
-   }]
+   "hw" : [
+      {
+         "name" : "manufacturer",
+         "command" : "/usr/local/sbin/dmidecode -t system | grep 'Manufacturer:' | cut -d: -f2"
+      },
+      {
+         "name" : "product_name",
+         "command" : "/usr/local/sbin/dmidecode -t system | grep 'Product Name:' | cut -d: -f2"
+      },
+      {
+         "name" : "serial_number",
+         "command" : "/usr/local/sbin/dmidecode -t system | grep 'Serial Number:' | cut -d: -f2"
+      }
+   ],
+   "commands" : [
+      {
+         "name" : ".uptime",
+         "command" : "/usr/bin/uptime"
+      },
+      {
+         "name" : ".psax",
+         "command" : "/bin/ps ax"
+      },
+      {
+         "name" : ".reboot",
+         "command" : "/sbin/reboot"
+      }
+   ]
 }</code></pre>
   </div>
 </div>
