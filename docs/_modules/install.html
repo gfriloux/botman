@@ -19,16 +19,16 @@ Create the file <code>/etc/gotham/modules.conf.d/install.conf</code> that might 
 <pre>
 <code class="json">
 {
-   "install": [{
+   "install": {
       "pre": "",
       "cmd": "yes | pkg install %s",
       "post": ""
-   }],
-   "upgrade": [{
+   },
+   "upgrade": {
       "pre": "",
       "cmd": "freebsd-update install",
       "post": ""
-   }],
+   },
    "vars": [
    ]
 }</code></pre>
