@@ -49,8 +49,10 @@ package_gotham-modules()
    options=(debug !strip)
 
    mkdir -p -m0755 ${pkgdir}/usr/local/lib/gotham
+   mkdir -p -m0755 ${pkgdir}/usr/local/share/gotham/modules.d
 
    cp -ar ${tmpdir}/usr/local/lib/gotham ${pkgdir}/usr/local/lib/
+   cp -ar ${tmpdir}/usr/local/share/gotham/modules.d/httpd ${pkgdir}/usr/local/share/gotham/modules.d/
 }
 
 package_alfred()
