@@ -231,7 +231,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 %config(noreplace) %{_sysconfdir}/gotham/modules.conf.d/*
 %dir %{_libdir}/gotham
 %{_libdir}/gotham/*.so*
-%dir %{_datadir}/gotham/modules.d/*
+%{_datadir}/gotham/modules.d/*
 
 %files -n libgotham-devel
 %defattr(-,root,root,-)
