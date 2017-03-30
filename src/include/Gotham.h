@@ -31,6 +31,8 @@
 # endif
 #endif /* ! _WIN32 */
 
+#include <Gotham_Common.h>
+
 GOTHAM_API extern int GOTHAM_EVENT_CONNECT;
 GOTHAM_API extern int GOTHAM_EVENT_DISCONNECT;
 GOTHAM_API extern int GOTHAM_EVENT_MODULES_SINGLE_READY;
@@ -47,7 +49,6 @@ GOTHAM_API extern int GOTHAM_EVENT_CITIZEN_LEAVE;
 typedef struct _Gotham Gotham;
 typedef struct _Gotham_Citizen Gotham_Citizen;
 typedef struct _Gotham_Module Gotham_Module;
-typedef struct Gotham_Conf Gotham_Conf;
 typedef Eina_Bool (*Gotham_Deserialization_Function)(const Eina_Value *, void **);
 typedef Eina_Value * (*Gotham_Serialization_Function)(const void *);
 

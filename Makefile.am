@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = subdir-objects
 AM_MAKEFLAGS = --no-print-directory
 AM_CPPFLAGS = -DDATA_DIR=\"$(datadir)\" @CPPFLAGS@                             \
-   -I$(top_srcdir) -I$(top_srcdir)/src/include
+   -I$(top_srcdir) -I$(top_srcdir)/src/include -I$(top_srcdir)/src/lib/gotham
 
 EXTRA_DIST = rpmbuild/SPECS/@PACKAGE@.spec.in
 
