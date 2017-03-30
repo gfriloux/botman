@@ -180,7 +180,7 @@ find %{buildroot}%{_libdir}/gotham -name "*.so" \
 
 # Create a data directory for each module in /usr/share/gotham/modules.conf.d/
 %__mkdir -p %{buildroot}%{_datadir}/gotham/modules.d/
-find %{buildroot}%{_libdir}/gotham -name "*.so" \
+find %{buildroot}%{_libdir}/gotham -name "*.so" ! -name "httpd.so" \
 	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_datadir}/gotham/modules.d/\1|p' \
 	| xargs mkdir
 
