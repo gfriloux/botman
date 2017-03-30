@@ -106,7 +106,7 @@ modules used by the Gotham library.
 
 
 %package -n libgotham-modules-devel
-Summary:	Gotham modules, Alfred and Botmans functionnalities
+Summary:	Gotham modules, Alfred and Botmans functionalities
 Group:		Development/Libraries
 Requires:	libssh2
 Requires:	libgotham-devel = %{version}-%{release}
