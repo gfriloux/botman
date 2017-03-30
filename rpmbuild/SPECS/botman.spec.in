@@ -96,6 +96,7 @@ Requires:	libssh2
 Requires:	libgotham = %{version}-%{release}
 Requires:	eina >= %{EFL_version}
 Requires:	ecore >= %{EFL_version}
+Obsoletes:	libgotham-module-httpd
 
 %description -n libgotham-modules
 Botman is a project that aims to ease management of servers throught the use of 
