@@ -96,6 +96,7 @@ Requires:	libssh2
 Requires:	libgotham = %{version}-%{release}
 Requires:	eina >= %{EFL_version}
 Requires:	ecore >= %{EFL_version}
+Requires:	libesskyuehl
 Obsoletes:	libgotham-module-httpd
 
 %description -n libgotham-modules
@@ -253,6 +254,8 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 - Version 2.0.0
 - The Gotham HTTP module is now part of the project and added to the 
  libgotham-modules subpackage.
+- Rebuild with log Gotham module support (add requirement on libesskyuehl for
+ libgotham-modules subpackage)
 
 * Tue May  3 2016 Davy Defaud <davy@defaud.net> - 1.2.17-5
 - Add a sysconfig file for alfred and botman daemons. The sysconfig file is
