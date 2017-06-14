@@ -5,9 +5,9 @@ title: HTTPd
 
 <h1>HTTPd Module</h1>
 <p><span class="label label-success">Alfred</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
@@ -25,7 +25,7 @@ This module does not need any configuration file.
 <h3>/stats/commands/list</h3>
 This API call will let you retrieve the list of API calls available through this web service.
 
-<h4>Using from curl</h4>
+<h4>Using from cURL</h4>
 <pre><code class="bash">curl http://127.0.0.1:5128/stats/commands/list</code></pre>
 
 <h4>Output format</h4>
@@ -48,13 +48,13 @@ It uses JID or custom variables to match them.
 <pre><code class="bash">curl http://127.0.0.1:5128/*backup*</code></pre>
 Given pattern will be match against JID and custom variables defined
 inside <code>seen.conf</code>
-(from the <a href="{{ site.github.url }}/modules/seen.html">Seen module</a>.
+(from the <a href="{{ site.github.url }}/modules/seen.html">Seen module</a>).
 
 <h4>Possible returned HTTP codes</h4>
 <table class="table table-striped table-hover">
   <tbody>
-      <tr class="success"><td>200</td><td>Query OK.</td></tr>
-      <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
+    <tr class="success"><td>200</td><td>Query OK.</td></tr>
+    <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
   </tbody>
 </table>
 
@@ -85,7 +85,7 @@ This API call will let you send commands to multiple bots at once.
   <tbody>
       <tr class="success"><td>200</td><td>Every queried bots answered.</td></tr>
       <tr class="warning"><td>204</td><td>Your given pattern did not match any bots (no data will be sent).</td></tr>
-      <tr class="info"><td>206</td><td>Some (or all) bots did not answered. In this case, bots that did not answered will have a 0 length message in the returned JSON.</td></tr>
+      <tr class="info"><td>206</td><td>Some (or all) bots did not answer. In this case, bots that did not answer will have a 0 length message in the returned JSON.</td></tr>
   </tbody>
 </table>
 
@@ -115,9 +115,9 @@ This API call will give you access to management of services.
 As this command is ran through the spam module, you can query multiple bots at once.<br />
 Returned data will be equal to the /spam URI.
 </div>
-URI is separated by at least 2 params :
+URI is separated by at least 2 params:
 <ul>
-  <li>Service operation : start, stop, restart, status</li>
+  <li>Service operation: start, stop, restart, status</li>
   <li>Service name</li>
   <li>Optional pattern matching bots to contact</li>
 </ul>
@@ -146,13 +146,13 @@ It is possible to navigate through logs, following the concept of log pages.
 
 <h4>Filters</h4>
 Filters can be applied using the SQL language.<br />
-Possible fields to filter :
+Possible fields to filter:
 <ul>
-  <li>id : INTEGER : Unique log identifier.</li>
-  <li>date : DATE : Date of event.</li>
-  <li>type : INTEGER : 0(Connection) 1(Disconnection) 2(Message)</li>
-  <li>source : TEXT : JID of user that created event</li>
-  <li>data : TEXT : if type is 2, contains the XMPP message.</li>
+  <li>id: INTEGER: Unique log identifier.</li>
+  <li>date: DATE: Date of event.</li>
+  <li>type: INTEGER: 0 (connection) 1 (disconnection) 2 (message)</li>
+  <li>source: TEXT: JID of user that created event</li>
+  <li>data: TEXT: if type is 2, contains the XMPP message.</li>
 </ul>
 
 <h5>Getting last 5 commands from a given user</h5>
@@ -160,13 +160,13 @@ Possible fields to filter :
 <br /><br />
 
 <h3>/stats</h3>
-This API call will give out various stats about Alfred's process.
+This API call will give out various stats about Alfred’s process.
 
 <h4>Possible returned HTTP codes</h4>
 <table class="table table-striped table-hover">
   <tbody>
-      <tr class="success"><td>200</td><td>Query OK.</td></tr>
-      <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
+    <tr class="success"><td>200</td><td>Query OK.</td></tr>
+    <tr class="danger"><td>500</td><td>HTTPd module encountered an internal error.</td></tr>
   </tbody>
 </table>
 
@@ -192,21 +192,21 @@ Data returned will be in JSON format.
 <br /><br />
 
 <h2>Web UI</h2>
-As of version 2.0.0 of botman, the web UI is only 4 pages.
+As of version 2.0.0 of botman, the Web UI is only 4 pages.
 
 <h3>Dashboard (mainpage)</h3>
 <div class="row">
   <div class="col-lg-6">
-    This page groups 3 kind of informations :
+    This page groups 3 kind of informations:
     <ul>
-      <li>System informations : Alfred's uptime and used memory.</li>
-      <li>Last 20 queries : Last 20 received queries, be it over XMPP or HTTP.</li>
-      <li>List of contacts : List alfred's contacts, online status, and type (alfred, botman, user).</li>
+      <li>System informations: Alfred’s uptime and used memory.</li>
+      <li>Last 20 queries: Last 20 received queries, be it over XMPP or HTTP.</li>
+      <li>List of contacts: List alfred's contacts, online status, and type (alfred, botman, user).</li>
     </ul>
 
     Informations displayed on this webpage comes from data returned by the <code>/stats</code> URI.<br />
     This page only allows to display informations. Later versions should allow to fetch more informations
-    such as display contact's <code>custom variable</code>.
+    such as display contact’s <code>custom variable</code>.
   </div>
   <div class="col-lg-6">
   <a href="{{ site.github.url }}/img/httpd-dash.png" target=_blank><img src="{{ site.github.url }}/img/httpd-dash.small.png"></a>
@@ -220,11 +220,11 @@ As of version 2.0.0 of botman, the web UI is only 4 pages.
   This webpage is a frontend to the <code>/spam</code> URI.<br />
   It will allow you to send various commands to botmans, and to set filters
   to have more control over which botmans to query.<br />
-  Some of these commands have special JS code to enhance their display on the web
+  Some of these commands have special JS code to enhance their display on the Web
   app.
   </div>
   <div class="col-lg-6">
-  <a href="{{ site.github.url }}/img/httpd-query.png" target=_blank><img src="{{ site.github.url }}/img/httpd-query.small.png"></a>
+  <a href="{{ site.github.url }}/img/httpd-query.png" target=_blank><img src="{{ site.github.url }}/img/httpd-query.small.png" /></a>
   </div>
 </div>
 <br /><br />
@@ -233,11 +233,11 @@ As of version 2.0.0 of botman, the web UI is only 4 pages.
 <div class="row">
   <div class="col-lg-6">
   This webpage makes it easier to call the <code>/log/last</code> URI.<br />
-  It doesnt allow to set the number of results ATM, but it supports pagination
+  It doesn’t allow to set the number of results ATM, but it supports pagination
   and filters.
   </div>
   <div class="col-lg-6">
-  <a href="{{ site.github.url }}/img/httpd-logs.png" target=_blank><img src="{{ site.github.url }}/img/httpd-logs.small.png"></a>
+  <a href="{{ site.github.url }}/img/httpd-logs.png" target=_blank><img src="{{ site.github.url }}/img/httpd-logs.small.png" /></a>
   </div>
 </div>
 <br /><br />
@@ -251,6 +251,6 @@ As of version 2.0.0 of botman, the web UI is only 4 pages.
   This can be helpful for lazy people like me.
   </div>
   <div class="col-lg-6">
-  <a href="{{ site.github.url }}/img/httpd-api.png" target=_blank><img src="{{ site.github.url }}/img/httpd-api.small.png"></a>
+  <a href="{{ site.github.url }}/img/httpd-api.png" target=_blank><img src="{{ site.github.url }}/img/httpd-api.small.png" /></a>
   </div>
 </div>

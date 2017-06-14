@@ -5,17 +5,17 @@ title: Install
 
 <h1>Install module</h1>
 <p><span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
-This module Is in charge of running installation of package or system upgrades.
+This module is in charge of running installation of a package or system upgrades.
 
 <h2>Configuration</h2>
 You need to write a configuration file for this module.<br />
-Create the file <code>/etc/gotham/modules.conf.d/install.conf</code> that might look as follows :
+Create the file <code>/etc/gotham/modules.conf.d/install.conf</code> that might look as follows:
 <pre>
 <code class="json">
 {
@@ -37,12 +37,12 @@ This allows the module to adapt itself to various distros.
 <br /><br />
 
 <h2>Query botmans through Alfred</h2>
-It is possible to make alfred able to query botmans for you by  
-combining the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
-and <a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
+It is possible to make Alfred able to query botmans for you by combining the 
+power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a> and
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
 You can add the following JSON object as a new rule of the
-<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>'s  
-configuration file :
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>’s 
+configuration file:
 <pre><code class="json">
 {
    "name" : ".install",
@@ -68,7 +68,6 @@ configuration file :
 <br /><br />
 
 <h2>Commands</h2>
-
 <ul class="nav nav-tabs">
   <li class="active"><a href="#install" data-toggle="tab" aria-expanded="true">Install</a></li>
   <li class=""><a href="#upgrade" data-toggle="tab" aria-expanded="false">Upgrade</a></li>
@@ -81,12 +80,11 @@ configuration file :
     on the system.<br />
     This command will return the output created by the package manager, and the
     end of installation.
-
     <div class="alert alert-dismissible alert-warning">
       If you are using this command through the
       <a href="{{ site.github.url }}/modules/spam.html">spam module</a>,
       you have to be aware that the spam module will timeout after 5 minutes.<br />
-      This means that is the installation of the package lasts more than 5 minutes,
+      This means that if the installation of the package lasts more than 5 minutes,
       you are going to receive a timeout notification from the spam module, and you
       will never get the output from the .install command.
     </div>
@@ -94,13 +92,13 @@ configuration file :
 <span style="color:blue">(31/07/2015 08:45:26) guillaume.friloux@botnet.master.com:</span> .install htop
 <span style="color:red">(08:45:26) botman-xxxx:</span> {
    "command":  ".install_begins",
-   "parameters":  "htop",
+   "parameters": "htop",
    "status":   "ok",
    "content":  ["Software(s) install/upgrade will begin in a few seconds."]
 }
 <span style="color:red">(08:45:45) botman-xxxx:</span> {
    "command":  ".install",
-   "parameters":  "htop",
+   "parameters": "htop",
    "status":   "ok",
    "content":  [
       "Updating private repository catalogue...",

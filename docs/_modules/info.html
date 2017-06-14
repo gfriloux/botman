@@ -5,10 +5,10 @@ title: Info
 
 <h1>Info Module</h1>
 <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-windows.png> 
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-windows.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
@@ -23,7 +23,7 @@ Custom variables being sent to alfred, it would be possible to search for them u
 
 <h3>Alfred</h3>
 You can add <code>custom variables</code> to be searchable as <code>&lt;pattern></code>.<br />
-These variables must be referenced inside the configuration file (<code>/usr/local/etc/gotham/modules.conf.d/info.conf</code>) :
+These variables must be referenced inside the configuration file (<code>/usr/local/etc/gotham/modules.conf.d/info.conf</code>):
 <pre>
 <code class="json">
 {
@@ -34,12 +34,12 @@ These variables must be referenced inside the configuration file (<code>/usr/loc
 <br /><br />
 
 <h2>Query botmans through Alfred</h2>
-It is possible to make alfred able to query botmans for you by  
+It is possible to make Alfred able to query botmans for you by 
 combining the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
 and <a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
 You can add the following JSON object as a new rule of the
-<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>'s  
-configuration file :
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>’s 
+configuration file:
 <pre><code class="json">
 {
    "name" : ".info list",
@@ -64,7 +64,7 @@ configuration file :
   <div class="tab-pane fade active in" id="list">
     The <code>.info</code> command allows you to list every <code>custom variables</code>
     registered on the botman.
-    <pre>   
+    <pre>
 <span style="color:blue">(11:35:51) guillaume.friloux@botnet.master.com:</span> .info
 <span style="color:red">(11:35:51) botman-xxxx:</span> {
    "command":  ".info",
@@ -90,8 +90,8 @@ configuration file :
   <div class="tab-pane fade in" id="get">
   The <code>.info get variable</code> command allows you to retrieve the value of a given
   <code>custom variable</code>.<br />
-  It only exists to make it easier to parse results, especially
-  when using this command through the
+  It only exists to make it easier to parse results, especially when using this 
+  command through the
   <a href="{{ site.github.url }}/modules/spam.html">Spam module</a>
   <pre>
 <span style="color:blue">(11:31:31) guillaume.friloux@botnet.master.com:</span> .info get zpool_status
