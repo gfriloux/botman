@@ -5,13 +5,13 @@ title: Save
 
 <h1>Save Module</h1>
 <p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png"/>
+<img src="{{ site.github.url }}/img/icon-freebsd.png"/>
 <br /><br />
 
 <h2>Description</h2>
-This module will backup any informations botman/alfred has, including but not limited to :
+This module will backup any informations botman/alfred has, including but not limited to:
 <ul>
    <li>Known contacts.</li>
    <li>custom variables.</li>
@@ -24,16 +24,15 @@ form any botman after restarting alfred, which can be handy for offline bots.
 <br /><br />
 
 <h2>Configuration</h2>
-Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/save.conf</code> :
+Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/save.conf</code>:
 <pre>
 <code class="json">
 {
-   "interval": 30
+    "interval": 30
 }</code></pre>
-This interval represents the time between two export.<br />
+This interval represents the time between two exports.<br />
 Exported file will be located inside <code>/usr/local/share/gotham/modules.d/save/</code> and will be in JSON. 
 <br /><br />
-
 <h2>Commands</h2>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#get" data-toggle="tab" aria-expanded="true">Get backup infos</a></li>
@@ -41,13 +40,11 @@ Exported file will be located inside <code>/usr/local/share/gotham/modules.d/sav
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="get">
-    <pre>                   
-<span style="color:blue">(15:18:18) guillaume.friloux@botnet.master.com:</span> .save
-<span style="color:red">(15:18:18) Alfred Pennyworth:</span> Dear guillaume.friloux@botnet.master.com, backup is made every 30 seconds. Last backup was on 2015/11/12 at 15:18:04, for a size of 446067 bytes. Sincerly yours, Alfred.</pre>
+    <pre><span style="color:blue">(15:18:18) guillaume.friloux@botnet.master.com:</span> .save
+<span style="color:red">(15:18:18) Alfred Pennyworth:</span> Dear guillaume.friloux@botnet.master.com, backup is made every 30 seconds. Last backup was on 2015/11/12 at 15:18:04, for a size of 446,067 bytes. Sincerly yours, Alfred.</pre>
   </div>
   <div class="tab-pane fade in" id="set">
-  <pre>
-<span style="color:blue">(15:22:10) guillaume.friloux@botnet.master.com:</span> .save set interval 60
+    <pre><span style="color:blue">(15:22:10) guillaume.friloux@botnet.master.com:</span> .save set interval 60
 <span style="color:red">(15:22:11) Alfred Pennyworth:</span> Modification done.</pre>
   </div>
 </div>
