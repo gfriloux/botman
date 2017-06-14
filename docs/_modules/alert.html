@@ -5,10 +5,10 @@ title: Alert
 
 <h1>Alert Module</h1>
 <p><span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-windows.png> 
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-windows.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
@@ -16,17 +16,17 @@ This module will run commands at given intervals, and store their output into
 <code>custom variables</code>.<br />
 If the alert module detects a change since last command run, it will then
 send a notification to <code>Alfred</code> so you can get warned about it.<br />
-Example use cases :
+Example use cases:
 <ul>
   <li>Monitor raid health.</li>
   <li>Monitor smartctl reports.</li>
   <li>Trigger alert on number of processes.</li>
-  <li>Anything that can be summarized into a few values (good/bad etc).</li>
+  <li>Anything that can be summarized into a few values (good/bad, etc.).</li>
 </ul>
 <br /><br />
 
 <h2>Configuration</h2>
-Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/alert.conf</code> :
+Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/alert.conf</code>:
 <pre><code class="json">
 [
    {
@@ -36,7 +36,7 @@ Configuration is done inside <code>/usr/local/etc/gotham/modules.conf.d/alert.co
       "group" : "Support"
    }
 ]</code></pre>
-In this example, we only run one script : <code>zpool_status.sh</code>.
+In this example, we only run one script: <code>zpool_status.sh</code>.
 <pre><code class="bash">
 #!/usr/local/bin/bash
 
@@ -48,4 +48,3 @@ change value to (<code>DEGRADED</code>|<code>FAULTED</code>|<code>OFFLINE</code>
 Every change in the output of commands will be sent to the <code>Support</code> group from the
 <a href="{{ site.github.url }}/modules/notification.html">notification module</a>.
 <br /><br />
-
