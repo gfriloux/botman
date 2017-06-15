@@ -5,27 +5,27 @@ title: Shutdown
 
 <h1>Shutdown Module</h1>
 <p><span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-windows.png> 
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-windows.png" /> 
 <br /><br />
 
 <h2>Description</h2>
-This module allows to restart windows servers.<br />
+This module allows to restart Windows servers.<br />
 It should also allow to halt servers, and run on other OSes, but we only
 need a reboot feature ATM.
 <br /><br />
 
 <h2>Configuration</h2>
-As this module uses the Windows API, we dont need any configuration file.
+As this module uses the Windows API, we don’t need any configuration file.
 <br /><br />
 
 <h2>Query botmans through Alfred</h2>
-It is possible to make alfred able to query botmans for you by
-combining the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
+It is possible to make Alfred able to query botmans for you by combining 
+the power of the <a href="{{ site.github.url }}/modules/spam.html">spam</a>
 and <a href="{{ site.github.url }}/modules/rewrite.html">rewrite</a> modules.<br />
 You can add the following JSON object as a new rule of the
-<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>'s
-configuration file :
+<a href="{{ site.github.url }}/modules/rewrite.html">rewrite module</a>’s
+configuration file:
 <pre><code class="json">
 {
    "name" : ".reboot",
@@ -34,7 +34,7 @@ configuration file :
    "description" : ".reboot &lt;pattern>"
 }</code></pre>
 <div class="alert alert-dismissible alert-warning">
-  It might be dangerous to allow such command to be ran through spam.
+  It might be dangerous to allow such a command to be ran through spam.
 </div>
 <br /><br />
 
@@ -44,4 +44,3 @@ configuration file :
 <span style="color:blue">(11:38:10) guillaume.friloux@botman.master.com:</span> .reboot
 <span style="color:red">(11:38:10) botman-xxxx:</span> Reboot initiated
 </pre>
-
