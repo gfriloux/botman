@@ -5,21 +5,21 @@ title: Seen
 
 <h1>Seen Module</h1>
 <p><span class="label label-success">Alfred</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
 This module allows to search for bots matching a given pattern.<br />
-These patterns, by default, will be its <code>JID</code>. Luckilly it is extendable to what we call <code>custom variables</code>.<br />
+These patterns, by default, will be its <code>JID</code>. Luckilly, it is extendable to what we call <code>custom variables</code>.<br />
 You can make a module that will register <code>custom variables</code> (for example in the sysinfo module), and then adding them in the configuration file of the seen module to be able to make searches over their values.<br />
 This could allow you to search for <code>degraded raids</code>, <code>ip blocs</code>, <code>global health status</code>, whatever you have in mind.
 <br /><br />
 
 <h2>Configuration</h2>
 This module can work with an empty configuration.
-A valid empty configuration file (<code>/usr/local/etc/gotham/modules.conf.d/seen.conf</code>) is :
+A valid empty configuration file (<code>/usr/local/etc/gotham/modules.conf.d/seen.conf</code>) is:
 <pre>
 <code class="json">
 {
@@ -28,7 +28,7 @@ A valid empty configuration file (<code>/usr/local/etc/gotham/modules.conf.d/see
 }</code></pre>
 <br /><br />
 
-If you need to add <code>custom variables</code> to your seen queries, you can add them this way :
+If you need to add <code>custom variables</code> to your seen queries, you can add them this way:
 <pre>
 <code class="json">
 {
@@ -45,14 +45,13 @@ If you need to add <code>custom variables</code> to your seen queries, you can a
   <div class="col-lg-4"><img src="{{ site.github.url }}/img/seen_example.png" /></div>
   <div class="col-lg-4"></div>
 </div>
-</div>
-In this example i searched for <code>botman-k*</code> which is every <code>JID</code> that starts with the string <code>botman-k</code>.
+In this example, I searched for <code>botman-k*</code>, which is every <code>JID</code> that starts with the string <code>botman-k</code>.
 <br /><br />
-The search output is defined as follows :
+The search output is defined as follows:
 <ul>
-  <li>One line per matching botman.</li>
-  <li>We firstly show if botman is or isnt connected to the XMPP server.</li>
-  <li>The <code>JID</code> (first searchable term) of the botman.</li>
-  <li>All other searchable terms (<code>custom variables</code>).</li>
-  <li>If contact is offline, elapsed time since he went offline.</li>
+  <li>one line per matching botman</li>
+  <li>we firstly show if botman is or isn’t connected to the XMPP server</li>
+  <li>the <code>JID</code> (first searchable term) of the botman</li>
+  <li>all other searchable terms (<code>custom variables</code>)</li>
+  <li>if contact is offline, elapsed time since he went offline</li>
 </ul>
