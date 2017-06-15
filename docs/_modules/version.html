@@ -4,15 +4,19 @@ title: Version
 ---
 
 <h1>Version Module</h1>
-<p><span class="label label-success">Alfred</span> <span class="label label-primary">Botman</span></p>
-<b>Compatibility :</b>
-<img src={{ site.github.url }}/img/icon-linux.png>    
-<img src={{ site.github.url }}/img/icon-freebsd.png>
+<p>
+  <span class="label label-success">Alfred</span>
+  <span class="label label-primary">Botman</span>
+</p>
+<b>Compatibility:</b>
+<img src="{{ site.github.url }}/img/icon-linux.png" />
+<img src="{{ site.github.url }}/img/icon-freebsd.png" />
 <br /><br />
 
 <h2>Description</h2>
 This module will fetch version information of various packages (could also be other stuff).<br />
-Informations are put under cache by alfred, allowing you to retrieve latest recieved versions even if bot is offline.
+Informations are put under cache by alfred, allowing you to retrieve latest 
+received versions even if the bot is offline.
 
 <h2>Configuration</h2>
 <ul class="nav nav-tabs">
@@ -28,7 +32,8 @@ Informations are put under cache by alfred, allowing you to retrieve latest reci
       "disk_full"
    ]
 }</code></pre>
-    The vars array contains the list of custom variables to be shown when the .version command will list matching bots.
+    The <code>vars</code> array contains the list of custom variables to be 
+    shown when the .version command will list matching bots.
   </div>
   <div class="tab-pane fade in" id="botman">
     <pre><code class="json">
@@ -42,9 +47,10 @@ Informations are put under cache by alfred, allowing you to retrieve latest reci
    ]
 }</code></pre>
     <ul>
-      <li><code>default_cmd</code> : Default command to use to fetch version of packages.</li>
-      <li><code>versions_list</code> : Array of packages to list.<br />
-          If the array item is a string, then the <code>default_cmd</code> will be used to find version number.<br />
+      <li><code>default_cmd</code>: default command to use to fetch version of packages.</li>
+      <li><code>versions_list</code>: array of packages to list.<br />
+          If the array item is a string, then the <code>default_cmd</code> 
+          will be used to find the version number.<br />
           If the array item is an object, then it will use the given command.
       </li>
     </ul>
@@ -52,7 +58,7 @@ Informations are put under cache by alfred, allowing you to retrieve latest reci
 </div>
 <br /><br />
 
-<h2>Example use</h2>
+<h2>Example use:</h2>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#list" data-toggle="tab" aria-expanded="true">List</a></li>
   <li class=""><a href="#find" data-toggle="tab" aria-expanded="false">Find</a></li>
@@ -73,7 +79,8 @@ online botman-xxx@botnet.master.com :
   <div class="tab-pane fade in" id="find">
     <p><span class="label label-success">Alfred</span></p>
     This function allows to search over the version cache to find bots matching given package version.
-    Supported conditions for package version matching are : &lt;, &lt;=, =, >=, >, !=
+    Supported conditions for package version matching are: 
+    <code>&lt;</code>, <code>&lt;=</code>, <code>=</code>, <code>&gt;=</code>, &gt;</code>, <code>!=</code>.
     <pre>
 <span style="color:blue">(08:59:47) guillaume.friloux@botnet.master.com:</span> .version find botman > 1.2.10
 <span style="color:red">(08:59:47) Alfred Pennyworth:</span>
