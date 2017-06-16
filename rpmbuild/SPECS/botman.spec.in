@@ -169,16 +169,14 @@ install -m0755 resources/%{name}.init %{buildroot}%{_initrddir}/%{name}
 install -m0640 %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/alfred
 install -m0640 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
-# Create config directories and files
+# Create config directories and files for Alfred and Botman
 %__mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 install -m0640 %{SOURCE7} %{buildroot}%{_sysconfdir}/alfred.conf
 install -m0640 %{SOURCE8} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
+# Create config directory and files for Gotham modules
 %__mkdir -p %{buildroot}%{_sysconfdir}/gotham/modules.conf.d/
-# Create empty module config files
-find %{buildroot}%{_libdir}/gotham -name "*.so" \
-	| sed -rn 's|.*/([^/]+)\.so$|%{buildroot}%{_sysconfdir}/gotham/modules.conf.d/\1.conf|p' \
-	| xargs -I{} sh -c 'echo -e "{\n\t\"vars\": [\n\t]\n}" > "$1"' -- {}
+install -m0644 config/modules/*.conf %{buildroot}%{_sysconfdir}/gotham/modules.conf.d
 
 # Create a data directory for each module in /usr/share/gotham/modules.conf.d/
 %__mkdir -p %{buildroot}%{_datadir}/gotham/modules.d/
@@ -249,6 +247,10 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 %changelog
 * %(LANG=C date "+%a %b %d %Y") Auto RPM build - %{version}-%{release}
 - version %{version}
+
+* Fri Jun 16 2017 Davy Defaud <davy@defaud.net> - 2.0.1-1
+- Version 2.0.1 (bug fix release)
+- Add the config files of the Gotham modules now available from the repository
 
 * Thu Mar 30 2017 Davy Defaud <davy@defaud.net> - 2.0.0-1
 - Version 2.0.0
