@@ -142,8 +142,8 @@ network_get_win32_json(void)
 
    s = azy_content_serialize_json(ev);
    eina_value_free(ev);
-   EINA_SAFETY_ON_NULL_GOTO(s, free_adapters);
-
+   Array_Network_Configuration_Adapter_free(adapters);
+   EINA_SAFETY_ON_NULL_RETURN_VAL(s, NULL);
    return s;
 
 free_adapters:

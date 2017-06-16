@@ -11,8 +11,16 @@ int _module_shutdown_log_dom;
 #define _MSG(_a, _b, _c)                                                       \
    do {                                                                        \
       if (_a->citizen->type == GOTHAM_CITIZEN_TYPE_ALFRED)                     \
-        gotham_command_json_answer(".reboot", _b, EINA_TRUE, _c,               \
-                           _a->citizen->gotham, _a->citizen, EINA_FALSE);      \
+        {                                                                      \
+           Eina_Strbuf *buf = eina_strbuf_new();                               \
+           if (buf)                                                            \
+             {                                                                 \
+                eina_strbuf_append(buf, _c);                                   \
+                gotham_command_json_answer(".network", _b, EINA_TRUE, buf,     \
+                                _a->citizen->gotham, _a->citizen, EINA_FALSE); \
+                eina_strbuf_free(buf);                                         \
+             }                                                                 \
+        }                                                                      \
       else gotham_command_send(_a, _c);                                        \
    } while(0)
 /* "debug" */
