@@ -64,6 +64,9 @@ alfred_command_tunnels_show(void *module_data,
         return;
      }
 
+   if (command->command[1])
+     return;
+
    buf = eina_strbuf_new();
    eina_strbuf_append_printf(buf, "\nContacts with an opened tunnel :\n");
 
