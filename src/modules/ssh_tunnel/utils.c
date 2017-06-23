@@ -13,7 +13,7 @@ ssh_tunnel_utils_ssh_command(Module_Ssh_Tunnel *obj)
 
       key = escarg(ESCARG_MODE_WINDOWS, "%s", obj->conf->key);
 
-      if (!obj->conf->command) exe = "ssh";
+      if (!obj->conf->command[0]) exe = "ssh";
       else exe = obj->conf->command;
 
       snprintf(cmd, sizeof(cmd)-1,
