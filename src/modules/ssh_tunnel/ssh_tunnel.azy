@@ -2,6 +2,7 @@ Azy_Namespace Module;
 
 struct Ssh_Tunnel_Conf
 {
+   string command;
    string host;
    string login;
    string key;
