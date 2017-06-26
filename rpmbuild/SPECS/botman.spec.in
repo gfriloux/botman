@@ -176,7 +176,8 @@ install -m0640 %{SOURCE8} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
 # Create config directory and files for Gotham modules
 %__mkdir -p %{buildroot}%{_sysconfdir}/gotham/modules.conf.d/
-install -m0644 config/modules/*.conf %{buildroot}%{_sysconfdir}/gotham/modules.conf.d
+install -m0644 data/config/modules/*.conf \
+	%{buildroot}%{_sysconfdir}/gotham/modules.conf.d
 
 # Create a data directory for each module in /usr/share/gotham/modules.conf.d/
 %__mkdir -p %{buildroot}%{_datadir}/gotham/modules.d/
@@ -250,7 +251,7 @@ install -m0644 emoticons/* %{buildroot}%{_datadir}/alfred/emoticons
 
 * Mon Jun 26 2017 Davy Defaud <davy@defaud.net> - 2.0.2-1
 - Version 2.0.2 (new bug fix release)
-- Workaround the config files deletion of the Gotham modules now available from the repository
+- config files are now in data directory
 
 * Fri Jun 16 2017 Davy Defaud <davy@defaud.net> - 2.0.1-1
 - Version 2.0.1 (bug fix release)
