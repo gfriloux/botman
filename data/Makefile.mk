@@ -1,18 +1,18 @@
 EXTRA_DIST += \
-   config/modules/access.conf \
-   config/modules/alert.conf \
-   config/modules/gdb.conf \
-   config/modules/info.conf \
-   config/modules/install.conf \
-   config/modules/notification.conf \
-   config/modules/rewrite.conf \
-   config/modules/save.conf \
-   config/modules/seen.conf \
-   config/modules/services.conf \
-   config/modules/spam.conf \
-   config/modules/ssh_tunnel.conf \
-   config/modules/sysinfo.conf \
-   config/modules/version.conf \
+   data/config/modules/access.conf \
+   data/config/modules/alert.conf \
+   data/config/modules/gdb.conf \
+   data/config/modules/info.conf \
+   data/config/modules/install.conf \
+   data/config/modules/notification.conf \
+   data/config/modules/rewrite.conf \
+   data/config/modules/save.conf \
+   data/config/modules/seen.conf \
+   data/config/modules/services.conf \
+   data/config/modules/spam.conf \
+   data/config/modules/ssh_tunnel.conf \
+   data/config/modules/sysinfo.conf \
+   data/config/modules/version.conf \
    data/www/index.html \
    data/www/api.html \
    data/www/query.html \
