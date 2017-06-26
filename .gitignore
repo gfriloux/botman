@@ -42,3 +42,7 @@ Httpd_Common*
 Httpd_Serve*
 Network_Common.*
 Network_Common_Azy.*
+/.autotools
+/.cproject
+/.project
+/.gitignore
