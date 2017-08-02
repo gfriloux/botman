@@ -27,7 +27,7 @@ package_gotham()
 {
    pkgdesc="Gotham, Alfred and Botmans playground"
    provides=('gotham')
-   depends=('maelstrom-git')
+   depends=('maelstrom')
    options=(debug !strip)
 
    tmpdir="${pkgdir}.tmp"
