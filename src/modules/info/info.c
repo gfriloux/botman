@@ -15,7 +15,10 @@ module_register(Gotham *gotham)
    info->gotham = gotham;
 
    if (gotham->me->type == GOTHAM_CITIZEN_TYPE_ALFRED)
-     info->conf = gotham_serialize_file_to_struct(MODULE_INFO_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Info_Conf);
+     {
+        info->conf = gotham_serialize_file_to_struct(MODULE_INFO_CONF,  (Gotham_Deserialization_Function)azy_value_to_Module_Info_Conf);
+        info_alfred_commands_register();
+     }
    else
      info->sync = ecore_timer_add(60, info_botman_sync, info);
 
