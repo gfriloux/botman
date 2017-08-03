@@ -168,7 +168,8 @@ gotham_event_command_new(Gotham_Citizen_Command *command)
              size_t len = strlen(module_command->command);
 
              if (strncmp(module_command->command, command->message, len))
-               continue;
+               if (strncmp(module_command->command, command->name, len))
+                 continue;
 
              if (!module_command->cb) continue;
 
