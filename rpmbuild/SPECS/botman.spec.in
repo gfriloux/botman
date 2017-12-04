@@ -137,6 +137,7 @@ install %{SOURCE2} resources/
 install %{SOURCE3} resources/
 install %{SOURCE4} resources/
 
+
 # Remove MODULE_ARCH sub dir from the library path (replace a patch)
 sed -ri 's|(\$\(libdir\)/gotham)(/\$\(MODULE_ARCH\))|\1|' \
 	src/{lib,modules}/Makefile.mk
@@ -162,6 +163,10 @@ sed -ri 's|(\$\(libdir\)/gotham)(/\$\(MODULE_ARCH\))|\1|' \
 install -d %{buildroot}%{_unitdir}
 install -m0644 resources/%{name}.service %{buildroot}%{_unitdir}/
 install -m0644 resources/alfred.service %{buildroot}%{_unitdir}/
+# Create a systemd preset file to enable by default the alfred & botman
+%{__install} -d -m 755 %{buildroot}%{_presetdir}
+echo "enable %{name}.service" > %{buildroot}%{_presetdir}/95-%{name}.preset
+echo "enable alfred.service" > %{buildroot}%{_presetdir}/95-alfred.preset
 %else
 install -d %{buildroot}%{_initrddir}
 install -m0755 resources/alfred.init %{buildroot}%{_initrddir}/alfred
@@ -272,6 +277,7 @@ fi
 %{_bindir}/%{name}
 %if 0%{?with_systemd}
 %{_unitdir}/%{name}.service
+%{_presetdir}/95-%{name}.preset
 %else
 %{_initrddir}/%{name}
 %endif
@@ -285,6 +291,7 @@ fi
 %{_datadir}/alfred/emoticons/*
 %if 0%{?with_systemd}
 %{_unitdir}/alfred.service
+%{_presetdir}/95-alfred.preset
 %else
 %{_initrddir}/alfred
 %endif
@@ -322,6 +329,7 @@ fi
 * Mon Jun 26 2017 Davy Defaud <davy@defaud.net> - 2.0.2-2
 - add Requires and BuildRequires on systemd for rhel >= 7
 - add scriptlets to properly handle botman and alfred daemons
+- systemd presets for botman and alfred daemons
 
 * Mon Jun 26 2017 Davy Defaud <davy@defaud.net> - 2.0.2-1
 - Version 2.0.2 (new bug fix release)
