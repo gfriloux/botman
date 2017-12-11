@@ -9,7 +9,7 @@
 Name:      @PACKAGE@
 Summary:   Server management system using XMPP
 Version:   @VERSION@
-Release:   1%{?dist}
+Release:   3%{?dist}
 Group:     System Environment/Daemons
 URL:       https://github.com/gfriloux/botman/
 License:   GPLv2
@@ -325,6 +325,9 @@ fi
 %changelog
 * %(LANG=C date "+%a %b %d %Y") Auto RPM build - %{version}-%{release}
 - version %{version}
+
+* Mon Dec 11 2017 Davy Defaud <davy@defaud.net> - 2.0.2-3
+- fix alfred and gotham modules configuration to remove errors and warnings
 
 * Mon Jun 26 2017 Davy Defaud <davy@defaud.net> - 2.0.2-2
 - add Requires and BuildRequires on systemd for rhel >= 7
