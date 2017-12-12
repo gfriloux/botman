@@ -1,5 +1,5 @@
 # Uncomment to enable debug
-#export EINA_LOG_LEVEL=5
+#EINA_LOG_LEVEL=5
 
 # Or use EINA_LOG_LEVELS for specific log levels
-#export EINA_LOG_LEVELS=gotham:5,shotgun:5
+#EINA_LOG_LEVELS=gotham:5,shotgun:5
